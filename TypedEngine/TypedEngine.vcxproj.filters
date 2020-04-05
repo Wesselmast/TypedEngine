@@ -18,7 +18,13 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\stb_image\stb_image.cpp">
+    <ClCompile Include="external\stb_image\stb_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\OpenGL\OpenGLShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,16 +32,14 @@
     <None Include="res\shaders\object.shader" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\stb_image\stb_image.h">
+    <ClInclude Include="external\stb_image\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\textures\T_Brick.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\T_Tree.png">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <ClInclude Include="src\Rendering\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\OpenGL\OpenGLShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
