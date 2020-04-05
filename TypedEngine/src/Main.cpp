@@ -112,13 +112,19 @@ int main() {
 	GLint vlen = strlen(source.vertex);
 	GLint flen = strlen(source.fragment);
 
-	glm::vec2 vertices[3] = {
-		{ -0.5f, -0.5f },
+	glm::vec2 vertices[4] = {
+		{ -0.5f,  0.5f },
+		{  0.5f,  0.5f },
 		{  0.5f, -0.5f },
-		{  0.0f,  0.5f }
+		{ -0.5f, -0.5f }
 	};
 
-	GLuint vbo, vs, fs, program;
+	unsigned int indices[6] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	GLuint vbo, ib, vs, fs, program;
 	GLuint colorLocation, mvpMatrixLocation;
 
 	const unsigned short WIDTH = 640;
@@ -150,6 +156,10 @@ int main() {
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ib);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs, 1, &source.vertex, &vlen);
@@ -196,6 +206,7 @@ int main() {
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 	glVertexAttribPointer(0, sizeof(glm::vec2) / sizeof(float), GL_FLOAT, GL_FALSE, 0, 0);
 
 	float previous = glfwGetTime();
@@ -235,7 +246,7 @@ int main() {
 
 		/* render something simple! */
 		glUseProgram(program);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
