@@ -95,9 +95,8 @@ int main() {
 	shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
 
 
-
-
-
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -144,7 +143,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBindVertexArray(vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 		glBindTexture(GL_TEXTURE_2D, textureLocation);
 
