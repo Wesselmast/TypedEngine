@@ -34,5 +34,8 @@
     <Image Include="res\textures\T_Brick.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\T_Tree.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

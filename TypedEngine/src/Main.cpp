@@ -1,13 +1,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <iostream>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include <iostream>
 
 #include "stb_image/stb_image.h"
 
@@ -155,6 +153,9 @@ int main() {
 
 	glewInit();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -172,12 +173,12 @@ int main() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	stbi_set_flip_vertically_on_load(1);
 
 	int texWidth, texHeight, colorChannels;
-	unsigned char* data = stbi_load("res\\textures\\T_Brick.jpg", &texWidth, &texHeight, &colorChannels, 0);
+	unsigned char* data = stbi_load("res\\textures\\T_Tree.png", &texWidth, &texHeight, &colorChannels, 4);
 	if (data) {
-		std::cout << texWidth;
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
@@ -257,14 +258,15 @@ int main() {
 		glViewport(0, 0, width, height);
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(50 / 255.0f, 47 / 255.0f, 44 / 255.0f, 1.0f);
+		glClearColor(1.0f, 207.0f / 255.0f, 207.0f / 255.0f, 1.0f);
+		//glClearColor(50 / 255.0f, 47 / 255.0f, 44 / 255.0f, 1.0f);
 		glUniform4f(colorLocation, 142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f);
 	
 		float zoomSpeed = 3.0f;
 
 		zoom += zoomInput * deltaTime * zoomSpeed;
-		if (zoom <= 0.001f) {
-			zoom = 0.001f;
+		if (zoom <= 0.01f) {
+			zoom = 0.01f;
 		}
 		else if (zoom >= 10) {
 			zoom = 10;
@@ -277,6 +279,9 @@ int main() {
 
 		glm::mat4 mvp = projection * view * model;
 		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, &mvp[0][0]);
+
+		glUniform1i(glGetUniformLocation(program, "uTexture"), 0);
+
 
 		/* render something simple! */
 		glUseProgram(program);
