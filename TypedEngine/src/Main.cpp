@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#include "stb_image/stb_image.h"
+
 struct ShaderProgramSource {
 	const char* vertex;
 	const char* fragment;
@@ -43,7 +45,7 @@ static char* filterShaderCommands(const char* createCommand, const char* deleteC
 	return result;
 }
 
-static void parseShader(const char* path, ShaderProgramSource* source) {
+void parseShader(const char* path, ShaderProgramSource* source) {
 	FILE* shaderFile;
 	fopen_s(&shaderFile, path, "r");
 
@@ -71,7 +73,6 @@ static void parseShader(const char* path, ShaderProgramSource* source) {
 
 	fclose(shaderFile);
 	delete buffer;
-	delete shaderFile;
 }
 
 static void errorCallback(int error, const char* message) {
@@ -112,20 +113,21 @@ int main() {
 	GLint vlen = strlen(source.vertex);
 	GLint flen = strlen(source.fragment);
 
-	glm::vec2 vertices[4] = {
-		{ -0.5f,  0.5f },
-		{  0.5f,  0.5f },
-		{  0.5f, -0.5f },
-		{ -0.5f, -0.5f }
+	const float vertices[] = {
+		//pos			//texcoord
+		-0.5f,  0.5f,	0.0f,  1.0f,
+		 0.5f,  0.5f,	1.0f,  1.0f,
+		 0.5f, -0.5f,	1.0f,  0.0f,
+		-0.5f, -0.5f,	0.0f,  0.0f
 	};
 
-	unsigned int indices[6] = {
+	const unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
 	};
 
 	GLuint vbo, ib, vs, fs, program;
-	GLuint colorLocation, mvpMatrixLocation;
+	GLuint colorLocation, mvpMatrixLocation, textureLocation;
 
 	const unsigned short WIDTH = 640;
 	const unsigned short HEIGHT = 480;
@@ -161,6 +163,34 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+	/* TEXTURE */
+	glGenTextures(1, &textureLocation);
+	glBindTexture(GL_TEXTURE_2D, textureLocation);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+	int texWidth, texHeight, colorChannels;
+	unsigned char* data = stbi_load("res\\textures\\T_Brick.jpg", &texWidth, &texHeight, &colorChannels, 0);
+	if (data) {
+		std::cout << texWidth;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else {
+		std::cout << "texture not loaded";
+	}
+	stbi_image_free(data);
+
+
+
+
+
+
+	/* SHADERS */
 	vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs, 1, &source.vertex, &vlen);
 	glCompileShader(vs);
@@ -204,10 +234,10 @@ int main() {
 	glDetachShader(program, vs);
 	glDetachShader(program, fs);
 
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-	glVertexAttribPointer(0, sizeof(glm::vec2) / sizeof(float), GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
+	glEnableVertexAttribArray(1);
 
 	float previous = glfwGetTime();
 	glm::vec3 position = glm::vec3(0,0,0);
@@ -215,6 +245,10 @@ int main() {
 
 	while (!glfwWindowShouldClose(window))
 	{
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+		glBindTexture(GL_TEXTURE_2D, textureLocation);
+
 		float time = glfwGetTime();
 		float deltaTime = time - previous;
 
@@ -246,7 +280,7 @@ int main() {
 
 		/* render something simple! */
 		glUseProgram(program);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
