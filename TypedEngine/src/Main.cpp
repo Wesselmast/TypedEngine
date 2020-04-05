@@ -1,8 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <iostream>
-
 #include "Rendering/OpenGL/OpenGLShader.h"
 
 #include "glm/glm.hpp"
@@ -19,6 +17,8 @@ static void errorCallback(int error, const char* message) {
 	fprintf(stderr, "Error %d: %s\n", error, message);
 }
 
+
+/* INPUT POLLING STUFF */
 static void recieveInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, 1);
@@ -48,33 +48,11 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 int main() {
-	std::unique_ptr<Shader> shader;
 
-	const float vertices[] = {
-		//pos			//texcoord
-		-0.5f,  0.5f,	0.0f,  1.0f,
-		 0.5f,  0.5f,	1.0f,  1.0f,
-		 0.5f, -0.5f,	1.0f,  0.0f,
-		-0.5f, -0.5f,	0.0f,  0.0f
-	};
-
-	const unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	GLuint vbo, ib, vao;
-	GLuint colorLocation, mvpMatrixLocation, textureLocation;
-
+	/* WINDOW STUFF @Important: look at how I want to separate these */
 	const unsigned short WIDTH = 640;
 	const unsigned short HEIGHT = 480;
 	const glm::vec2 ASPECT(((float)WIDTH / (float)HEIGHT), ((float)HEIGHT / (float)WIDTH));
-
-	glm::mat4 projection;
-	glm::mat4 view;
-	glm::mat4 model = glm::mat4(1.0f);
-
-	/* init glfw */
 
 	if (!glfwInit()) return -1;
 
@@ -89,29 +67,54 @@ int main() {
 	glfwSetKeyCallback(window, recieveInput);
 	glfwSetErrorCallback(errorCallback);
 	glfwSwapInterval(1);
-
 	glewInit();
 
-	shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
 
+	/* SHADER */
+	std::unique_ptr<Shader> shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
 
+	/* VERTEX ARRAY */
+	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	/* VERTEX BUFFER */
+	const float vertices[] = {
+		//pos			//texcoord
+		-0.5f,  0.5f,	0.0f,  1.0f,
+		 0.5f,  0.5f,	1.0f,  1.0f,
+		 0.5f, -0.5f,	1.0f,  0.0f,
+		-0.5f, -0.5f,	0.0f,  0.0f
+	};
+
+	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
+	glEnableVertexAttribArray(0);
 
+	/* INDEX BUFFER */
+	const unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	GLuint ib;
 	glGenBuffers(1, &ib);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
+	glEnableVertexAttribArray(1);
 
 	/* TEXTURE */
-	glGenTextures(1, &textureLocation);
-	glBindTexture(GL_TEXTURE_2D, textureLocation);
+	GLuint tex;
+	glGenTextures(1, &tex);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -127,41 +130,38 @@ int main() {
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
-		std::cout << "texture not loaded";
+		fprintf(stderr, "Error: Texture is not valid");
 	}
 	stbi_image_free(data);
 
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
-	glEnableVertexAttribArray(1);
+	/* @CleanUp: this is just random crap*/
 
 	float previous = (float)glfwGetTime();
 	glm::vec3 position = glm::vec3(0,0,0);
+	glm::vec4 objectColor(142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f); //@Unused: Unused variable but nice color :)
+	glm::vec4 clearColor(1.0f, 207.0f / 255.0f, 207.0f / 255.0f, 1.0f);
+	float zoomSpeed = 3.0f;
 	float zoom = 1;
+	
+	/* RENDERING */
 
-	while (!glfwWindowShouldClose(window))
-	{
+	while (!glfwWindowShouldClose(window)) {
+
+		/* RUNTIME BINDING: SHOULD BE IN RENDERER CLASS */
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-		glBindTexture(GL_TEXTURE_2D, textureLocation);
 
+		/* DELTATIME STUFF */
 		float time = (float)glfwGetTime();
 		float deltaTime = time - previous;
 
+		/* WINDOW STUFF */
 		GLsizei width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(1.0f, 207.0f / 255.0f, 207.0f / 255.0f, 1.0f);
-
-		glm::vec4 color(142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f);
-
-
-		float zoomSpeed = 3.0f;
-
+		/* @CleanUp: This zooming stuf is done directly into the othrographic calculation. Find better way of doing this */
 		zoom += zoomInput * deltaTime * zoomSpeed;
 		if (zoom <= 0.01f) {
 			zoom = 0.01f;
@@ -169,26 +169,32 @@ int main() {
 		else if (zoom >= 10) {
 			zoom = 10;
 		}
-		projection = glm::ortho(-ASPECT.x * zoom, ASPECT.x * zoom, -ASPECT.y * zoom, ASPECT.y * zoom, -1.0f, 1.0f);
 
+		/* CAMERA STUFF */
+		glm::mat4 projection = glm::ortho(-ASPECT.x * zoom, ASPECT.x * zoom, -ASPECT.y * zoom, ASPECT.y * zoom, -1.0f, 1.0f);
+		
 		position += glm::vec3(input, 0.0f) * deltaTime * zoom;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-		view = glm::inverse(transform);
+		glm::mat4 view = glm::inverse(transform);
 
+		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 mvp = projection * view * model;
 
-		shader->setUniformFloat4("uColor", color);
+		/* SHADER RUNTIME STUFF */
 		shader->setUniformMat4("uMvpMatrix", mvp);
 		shader->setUniformSampler("uTexture", 0);
-
-		/* render something simple! */
 		shader->run();
 
+		/* RENDERER STUFF */
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+		/* WINDOW STUFF */
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
+		//
 		previous = time;
 	}
 
