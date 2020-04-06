@@ -9,6 +9,7 @@ OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, unsigned int size) {
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer() {
+	glDeleteBuffers(1, &rendererID);
 }
 
 void OpenGLVertexBuffer::bind() {

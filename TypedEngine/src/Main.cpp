@@ -5,12 +5,13 @@
 #include "Rendering/OpenGL/OpenGLTexture.h"
 #include "Rendering/OpenGL/OpenGLIndexBuffer.h"
 #include "Rendering/OpenGL/OpenGLVertexBuffer.h"
+#include "Rendering/OpenGL/OpenGLVertexArray.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 #include <memory>
-#include <vector>
+#include <iostream>
 
 glm::vec2 input = glm::vec2(0, 0);
 float zoomInput = 0;
@@ -51,7 +52,7 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 
 int main() {
 
-	/* WINDOW STUFF @Important: look at how I want to separate these 
+	/* WINDOW STUFF @Important: look at how I want to separate these
 					@CleanUp: make the width and height values the width and height of the current monitor
 	*/
 	const unsigned short WIDTH = 1920;
@@ -70,41 +71,17 @@ int main() {
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, recieveInput);
 	glfwSetErrorCallback(errorCallback);
-	glfwSwapInterval(1);
+	glfwSwapInterval(1);		//just vSync
 	glewInit();
 
 
 	std::unique_ptr<Shader> shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
-	std::unique_ptr<Texture> texture = std::make_unique<OpenGLTexture>("res/textures/T_Wood.jpg");
+	std::unique_ptr<Texture> texture = std::make_unique<OpenGLTexture>("res/textures/T_Brick.jpg");
+	std::unique_ptr<Texture> textureTree = std::make_unique<OpenGLTexture>("res/textures/T_Tree.png");
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-	/*
-	
-	create varray
-	create vbuffer
-	create ibuffer
-
-	add vertices to vbuffer
-	add incices to ibuffer
-
-	add vbuffer to varray
-	add ibuffer to varray
-	bind varray
-
-	*/
-
-
-
-	/* VERTEX ARRAY */
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	
-	/* VERTEX BUFFER */
 	float vertices[] = {
 		//pos														//texcoord
 		-(float)texture->getWidth(),  (float)texture->getHeight(),	0.0f,  1.0f,
@@ -113,22 +90,39 @@ int main() {
 		-(float)texture->getWidth(), -(float)texture->getHeight(),	0.0f,  0.0f
 	};
 
-	std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<OpenGLVertexBuffer>(vertices, sizeof vertices);
+	float verticesTree[] = {
+		//pos														//texcoord
+		-(float)textureTree->getWidth(),  (float)textureTree->getHeight(),	0.0f,  1.0f,
+		 (float)textureTree->getWidth(),  (float)textureTree->getHeight(),	1.0f,  1.0f,
+		 (float)textureTree->getWidth(), -(float)textureTree->getHeight(),	1.0f,  0.0f,
+		-(float)textureTree->getWidth(), -(float)textureTree->getHeight(),	0.0f,  0.0f
+	};
 
+	unsigned int vertexBufferLayout[] = {
+		2, 2
+	};
 
-	/* SET VBUFFER LAYOUT @CleanUp: This should be in the vertexarray class */
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
-	glEnableVertexAttribArray(1);
-
-	/* INDEX BUFFER */
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
 	};
 
-	std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<OpenGLIndexBuffer>(indices, sizeof indices);
+	std::unique_ptr<VertexArray> vertexArray = std::make_unique<OpenGLVertexArray>();
+	std::unique_ptr<VertexArray> vertexArrayTree = std::make_unique<OpenGLVertexArray>();
+	VertexBuffer* vertexBuffer = new OpenGLVertexBuffer(vertices, sizeof vertices);
+	VertexBuffer* vertexBufferTree = new OpenGLVertexBuffer(verticesTree, sizeof verticesTree);
+	IndexBuffer* indexBuffer = new OpenGLIndexBuffer(indices, sizeof indices);
+
+	vertexBufferTree->setLayout(vertexBufferLayout, sizeof vertexBufferLayout / sizeof(unsigned int));
+	vertexBuffer->setLayout(vertexBufferLayout, sizeof vertexBufferLayout / sizeof(unsigned int));
+
+	vertexArrayTree->setVertexBuffer(vertexBufferTree);
+	vertexArrayTree->setIndexBuffer(indexBuffer);
+	vertexArray->setVertexBuffer(vertexBuffer);
+	vertexArray->setIndexBuffer(indexBuffer);
+
+	vertexArrayTree->bind();
+	vertexArray->bind();
 
 
 	/* @CleanUp: this is just random crap*/
@@ -136,7 +130,7 @@ int main() {
 	float previous = (float)glfwGetTime();
 	glm::vec3 position = glm::vec3(0,0,0);
 	glm::vec4 objectColor(142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f); //@Unused: Unused variable but nice color :)
-	glm::vec4 clearColor(1.0f, 207.0f / 255.0f, 207.0f / 255.0f, 1.0f);
+	glm::vec4 clearColor(233/255.0f, 233 / 255.0f, 245 / 255.0f, 1.0f);
 	const float zoomSpeed = 3.0f;
 	const float panSpeed = 500.0f;
 	float zoom = 1;
@@ -169,23 +163,44 @@ int main() {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
 		glm::mat4 view = glm::inverse(transform);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 mvp = projection * view * model;
-
 
 		/* RENDERER STUFF */
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
-		/* SHADER RUNTIME STUFF */
-		shader->bind();
-		texture->bind();
-		shader->setUniformMat4("uMvpMatrix", mvp);
-		shader->setUniformInt1("uTexture", 0);
+		
+		std::cout << 1/deltaTime << std::endl;
 
-		/* RUNTIME BINDING: SHOULD BE IN RENDERER CLASS */
-		glBindVertexArray(vao);
-		glDrawElements(GL_TRIANGLES, sizeof indices, GL_UNSIGNED_INT, 0);
+
+		/* THESE SHOULD BE RENDER COMMANDS */
+
+		for (int i = 0; i < 2; i++)
+		{
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(i * 1024, 0 ,0));
+			glm::mat4 mvp = projection * view * model;
+
+			shader->bind();
+			texture->bind();
+			shader->setUniformMat4("uMvpMatrix", mvp);
+			shader->setUniformInt1("uTexture", 0);
+
+			vertexArray->bind();
+			glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+		}
+
+		{
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1000, 1250, 0));
+			glm::mat4 mvp = projection * view * model;
+
+			shader->bind();
+			textureTree->bind();
+			shader->setUniformMat4("uMvpMatrix", mvp);
+			shader->setUniformInt1("uTexture", 0);
+
+			vertexArrayTree->bind();
+			glDrawElements(GL_TRIANGLES, vertexArrayTree->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+		}
+		
 
 		/* WINDOW STUFF */
 		glfwSwapBuffers(window);
@@ -194,11 +209,17 @@ int main() {
 		/* Unbind */
 		shader->unbind();
 		texture->unbind();
+		textureTree->unbind();
+		vertexArray->unbind();
+		vertexArrayTree->unbind();
 
 		//
 		previous = time;
 	}
 
 	glfwTerminate();
+
+	delete vertexBuffer;
+	delete indexBuffer;
 	return 0;
 }

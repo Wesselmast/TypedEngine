@@ -5,11 +5,12 @@
 OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int size) {
 	glGenBuffers(1, &rendererID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererID);
-	count = size;
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count, indices, GL_STATIC_DRAW);
+	count = size / sizeof(unsigned int);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer() {
+	glDeleteBuffers(1, &rendererID);
 }
 
 void OpenGLIndexBuffer::bind() {
