@@ -3,11 +3,14 @@
 
 #include "Rendering/OpenGL/OpenGLShader.h"
 #include "Rendering/OpenGL/OpenGLTexture.h"
+#include "Rendering/OpenGL/OpenGLIndexBuffer.h"
+#include "Rendering/OpenGL/OpenGLVertexBuffer.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 #include <memory>
+#include <vector>
 
 glm::vec2 input = glm::vec2(0, 0);
 float zoomInput = 0;
@@ -48,10 +51,12 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 
 int main() {
 
-	/* WINDOW STUFF @Important: look at how I want to separate these */
-	const unsigned short WIDTH = 640;
-	const unsigned short HEIGHT = 480;
-	const glm::vec2 ASPECT(((float)WIDTH / (float)HEIGHT), ((float)HEIGHT / (float)WIDTH));
+	/* WINDOW STUFF @Important: look at how I want to separate these 
+					@CleanUp: make the width and height values the width and height of the current monitor
+	*/
+	const unsigned short WIDTH = 1920;
+	const unsigned short HEIGHT = 1080;
+	const glm::vec2 ASPECT((float)WIDTH, (float)HEIGHT);
 
 	if (!glfwInit()) return -1;
 
@@ -70,48 +75,61 @@ int main() {
 
 
 	std::unique_ptr<Shader> shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
-	shader->bind();
+	std::unique_ptr<Texture> texture = std::make_unique<OpenGLTexture>("res/textures/T_Wood.jpg");
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	/*
+	
+	create varray
+	create vbuffer
+	create ibuffer
+
+	add vertices to vbuffer
+	add incices to ibuffer
+
+	add vbuffer to varray
+	add ibuffer to varray
+	bind varray
+
+	*/
+
+
 
 	/* VERTEX ARRAY */
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 	/* VERTEX BUFFER */
-	const float vertices[] = {
-		//pos			//texcoord
-		-0.5f,  0.5f,	0.0f,  1.0f,
-		 0.5f,  0.5f,	1.0f,  1.0f,
-		 0.5f, -0.5f,	1.0f,  0.0f,
-		-0.5f, -0.5f,	0.0f,  0.0f
+	float vertices[] = {
+		//pos														//texcoord
+		-(float)texture->getWidth(),  (float)texture->getHeight(),	0.0f,  1.0f,
+		 (float)texture->getWidth(),  (float)texture->getHeight(),	1.0f,  1.0f,
+		 (float)texture->getWidth(), -(float)texture->getHeight(),	1.0f,  0.0f,
+		-(float)texture->getWidth(), -(float)texture->getHeight(),	0.0f,  0.0f
 	};
 
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<OpenGLVertexBuffer>(vertices, sizeof vertices);
+
+
+	/* SET VBUFFER LAYOUT @CleanUp: This should be in the vertexarray class */
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
+	glEnableVertexAttribArray(1);
 
 	/* INDEX BUFFER */
-	const unsigned int indices[] = {
+	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
 	};
 
-	GLuint ib;
-	glGenBuffers(1, &ib);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
-	glEnableVertexAttribArray(1);
-	
+	std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<OpenGLIndexBuffer>(indices, sizeof indices);
 
-	std::unique_ptr<Texture> textureBrick = std::make_unique<OpenGLTexture>("res/textures/T_Brick.jpg");
-	std::unique_ptr<Texture> textureTree = std::make_unique<OpenGLTexture>("res/textures/T_Tree.png");
 
 	/* @CleanUp: this is just random crap*/
 
@@ -119,11 +137,11 @@ int main() {
 	glm::vec3 position = glm::vec3(0,0,0);
 	glm::vec4 objectColor(142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f); //@Unused: Unused variable but nice color :)
 	glm::vec4 clearColor(1.0f, 207.0f / 255.0f, 207.0f / 255.0f, 1.0f);
-	float zoomSpeed = 3.0f;
+	const float zoomSpeed = 3.0f;
+	const float panSpeed = 500.0f;
 	float zoom = 1;
 	
 	/* RENDERING */
-
 	while (!glfwWindowShouldClose(window)) {
 
 		/* DELTATIME STUFF */
@@ -147,7 +165,7 @@ int main() {
 		/* CAMERA STUFF */
 		glm::mat4 projection = glm::ortho(-ASPECT.x * zoom, ASPECT.x * zoom, -ASPECT.y * zoom, ASPECT.y * zoom, -1.0f, 1.0f);
 		
-		position += glm::vec3(input, 0.0f) * deltaTime * zoom;
+		position += glm::vec3(input, 0.0f) * deltaTime * zoom * panSpeed;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
 		glm::mat4 view = glm::inverse(transform);
 
@@ -161,13 +179,13 @@ int main() {
 
 		/* SHADER RUNTIME STUFF */
 		shader->bind();
-		textureTree->bind();
+		texture->bind();
 		shader->setUniformMat4("uMvpMatrix", mvp);
 		shader->setUniformInt1("uTexture", 0);
 
 		/* RUNTIME BINDING: SHOULD BE IN RENDERER CLASS */
 		glBindVertexArray(vao);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof indices, GL_UNSIGNED_INT, 0);
 
 		/* WINDOW STUFF */
 		glfwSwapBuffers(window);
@@ -175,7 +193,7 @@ int main() {
 
 		/* Unbind */
 		shader->unbind();
-		textureTree->unbind();
+		texture->unbind();
 
 		//
 		previous = time;

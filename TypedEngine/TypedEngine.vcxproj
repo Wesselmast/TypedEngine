@@ -157,9 +157,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\Rendering\OpenGL\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Rendering\IndexBuffer.h" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\Rendering\OpenGL\OpenGLVertexBuffer.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +170,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\stb_image\stb_image.h" />
+    <ClInclude Include="src\Rendering\OpenGL\OpenGLIndexBuffer.h" />
+    <ClInclude Include="src\Rendering\OpenGL\OpenGLVertexBuffer.h" />
+    <ClInclude Include="src\Rendering\VertexBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Rendering\Shader.h" />

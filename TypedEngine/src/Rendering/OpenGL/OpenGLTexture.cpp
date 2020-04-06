@@ -15,7 +15,7 @@ OpenGLTexture::OpenGLTexture(const char * path) {
 
 	stbi_set_flip_vertically_on_load(1);
 
-	int width, height, colorChannels;
+	int colorChannels;
 	unsigned char* data = stbi_load(path, &width, &height, &colorChannels, 4);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -38,4 +38,12 @@ void OpenGLTexture::bind(unsigned int slot) {
 
 void OpenGLTexture::unbind() {
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+int OpenGLTexture::getWidth() const {
+	return width;
+}
+
+int OpenGLTexture::getHeight() const {
+	return height;
 }
