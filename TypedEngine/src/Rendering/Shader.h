@@ -22,7 +22,7 @@ public:
 
 	virtual void setUniformFloat4(const char* name, glm::vec4 value) = 0;
 	virtual void setUniformMat4(const char* name, glm::mat4 value) = 0;
-	virtual void setUniformSampler(const char* name, int id) = 0;
+	virtual void setUniformInt1(const char* name, int value) = 0;
 
 protected:
 	static void parseShader(const char* path, ShaderProgramSource* source);

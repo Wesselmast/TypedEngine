@@ -110,8 +110,8 @@ int main() {
 	glEnableVertexAttribArray(1);
 	
 
-	std::unique_ptr<Texture> texture = std::make_unique<OpenGLTexture>("res/textures/T_Brick.jpg");
-	texture->bind();
+	std::unique_ptr<Texture> textureBrick = std::make_unique<OpenGLTexture>("res/textures/T_Brick.jpg");
+	std::unique_ptr<Texture> textureTree = std::make_unique<OpenGLTexture>("res/textures/T_Tree.png");
 
 	/* @CleanUp: this is just random crap*/
 
@@ -125,10 +125,6 @@ int main() {
 	/* RENDERING */
 
 	while (!glfwWindowShouldClose(window)) {
-
-		/* RUNTIME BINDING: SHOULD BE IN RENDERER CLASS */
-		glBindVertexArray(vao);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 
 		/* DELTATIME STUFF */
 		float time = (float)glfwGetTime();
@@ -158,19 +154,28 @@ int main() {
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 mvp = projection * view * model;
 
-		/* SHADER RUNTIME STUFF */
-		shader->setUniformMat4("uMvpMatrix", mvp);
-		shader->setUniformSampler("uTexture", 0);
-		shader->bind();
 
 		/* RENDERER STUFF */
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+
+		/* SHADER RUNTIME STUFF */
+		shader->bind();
+		textureTree->bind();
+		shader->setUniformMat4("uMvpMatrix", mvp);
+		shader->setUniformInt1("uTexture", 0);
+
+		/* RUNTIME BINDING: SHOULD BE IN RENDERER CLASS */
+		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		/* WINDOW STUFF */
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		/* Unbind */
+		shader->unbind();
+		textureTree->unbind();
 
 		//
 		previous = time;

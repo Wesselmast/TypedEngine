@@ -39,8 +39,8 @@ void OpenGLShader::setUniformMat4(const char * name, glm::mat4 value) {
 	glUniformMatrix4fv(glGetUniformLocation(rendererID, name), 1, GL_FALSE, &value[0][0]);
 }
 
-void OpenGLShader::setUniformSampler(const char * name, int id) {
-	glUniform1i(glGetUniformLocation(rendererID, name), id);
+void OpenGLShader::setUniformInt1(const char * name, int value) {
+	glUniform1i(glGetUniformLocation(rendererID, name), value);
 }
 
 unsigned int OpenGLShader::createShader(ShaderType type) {

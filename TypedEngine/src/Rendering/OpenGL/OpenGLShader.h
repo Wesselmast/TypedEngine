@@ -15,7 +15,7 @@ public:
 
 	virtual void setUniformFloat4(const char * name, glm::vec4 value) override;
 	virtual void setUniformMat4(const char * name, glm::mat4 value) override;
-	virtual void setUniformSampler(const char * name, int id) override;
+	virtual void setUniformInt1(const char * name, int value) override;
 
 private:
 	unsigned int createShader(ShaderType type);
