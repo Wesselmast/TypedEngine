@@ -159,6 +159,7 @@
     <ClCompile Include="external\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Rendering\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,7 +168,9 @@
   <ItemGroup>
     <ClInclude Include="external\stb_image\stb_image.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Rendering\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Rendering\Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

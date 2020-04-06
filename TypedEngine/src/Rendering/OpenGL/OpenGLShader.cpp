@@ -23,8 +23,12 @@ OpenGLShader::~OpenGLShader() {
 	glDeleteProgram(rendererID);
 }
 
-void OpenGLShader::run() {
+void OpenGLShader::bind() {
 	glUseProgram(rendererID);
+}
+
+void OpenGLShader::unbind() {
+	glUseProgram(0);
 }
 
 void OpenGLShader::setUniformFloat4(const char * name, glm::vec4 value) {

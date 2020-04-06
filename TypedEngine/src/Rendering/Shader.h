@@ -17,7 +17,8 @@ class Shader {
 public:
 	virtual ~Shader() = default;
 
-	virtual void run() = 0;
+	virtual void bind() = 0;
+	virtual void unbind() = 0;
 
 	virtual void setUniformFloat4(const char* name, glm::vec4 value) = 0;
 	virtual void setUniformMat4(const char* name, glm::mat4 value) = 0;

@@ -2,13 +2,12 @@
 #include <GLFW/glfw3.h>
 
 #include "Rendering/OpenGL/OpenGLShader.h"
+#include "Rendering/OpenGL/OpenGLTexture.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 #include <memory>
-
-#include "stb_image/stb_image.h"
 
 glm::vec2 input = glm::vec2(0, 0);
 float zoomInput = 0;
@@ -70,8 +69,8 @@ int main() {
 	glewInit();
 
 
-	/* SHADER */
 	std::unique_ptr<Shader> shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
+	shader->bind();
 
 	/* VERTEX ARRAY */
 	GLuint vao;
@@ -109,31 +108,10 @@ int main() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
 	glEnableVertexAttribArray(1);
+	
 
-	/* TEXTURE */
-	GLuint tex;
-	glGenTextures(1, &tex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	stbi_set_flip_vertically_on_load(1);
-
-	int texWidth, texHeight, colorChannels;
-	unsigned char* data = stbi_load("res/textures/T_Brick.jpg", &texWidth, &texHeight, &colorChannels, 4);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		fprintf(stderr, "Error: Texture is not valid");
-	}
-	stbi_image_free(data);
-
+	std::unique_ptr<Texture> texture = std::make_unique<OpenGLTexture>("res/textures/T_Brick.jpg");
+	texture->bind();
 
 	/* @CleanUp: this is just random crap*/
 
@@ -183,7 +161,7 @@ int main() {
 		/* SHADER RUNTIME STUFF */
 		shader->setUniformMat4("uMvpMatrix", mvp);
 		shader->setUniformSampler("uTexture", 0);
-		shader->run();
+		shader->bind();
 
 		/* RENDERER STUFF */
 		glClear(GL_COLOR_BUFFER_BIT);
