@@ -7,7 +7,7 @@ public:
 
 	void setLayout(unsigned int* layout, unsigned int layoutSize) {
 		this->layout = layout;
-		this->layoutSize = layoutSize;
+		this->layoutSize = layoutSize / sizeof(unsigned int);
 	}
 
 	inline unsigned int* getLayout() const { 

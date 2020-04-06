@@ -113,8 +113,8 @@ int main() {
 	VertexBuffer* vertexBufferTree = new OpenGLVertexBuffer(verticesTree, sizeof verticesTree);
 	IndexBuffer* indexBuffer = new OpenGLIndexBuffer(indices, sizeof indices);
 
-	vertexBufferTree->setLayout(vertexBufferLayout, sizeof vertexBufferLayout / sizeof(unsigned int));
-	vertexBuffer->setLayout(vertexBufferLayout, sizeof vertexBufferLayout / sizeof(unsigned int));
+	vertexBufferTree->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
+	vertexBuffer->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
 
 	vertexArrayTree->setVertexBuffer(vertexBufferTree);
 	vertexArrayTree->setIndexBuffer(indexBuffer);
