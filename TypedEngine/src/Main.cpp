@@ -16,11 +16,6 @@
 glm::vec2 input = glm::vec2(0, 0);
 float zoomInput = 0;
 
-static void errorCallback(int error, const char* message) {
-	fprintf(stderr, "Error %d: %s\n", error, message);
-}
-
-
 /* INPUT POLLING STUFF */
 static void recieveInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -70,9 +65,10 @@ int main() {
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, recieveInput);
-	glfwSetErrorCallback(errorCallback);
 	glfwSwapInterval(1);		//just vSync
-	glewInit();
+	
+	
+	if(glewInit() != GLEW_OK) return -1;
 
 
 	std::unique_ptr<Shader> shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
@@ -141,6 +137,7 @@ int main() {
 		/* DELTATIME STUFF */
 		float time = (float)glfwGetTime();
 		float deltaTime = time - previous;
+		std::cout << 1/deltaTime << std::endl;
 
 		/* WINDOW STUFF */
 		GLsizei width, height;
@@ -169,7 +166,6 @@ int main() {
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
 		
-		std::cout << 1/deltaTime << std::endl;
 
 
 		/* THESE SHOULD BE RENDER COMMANDS */
