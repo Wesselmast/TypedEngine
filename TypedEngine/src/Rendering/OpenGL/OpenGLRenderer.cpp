@@ -17,8 +17,8 @@ void OpenGLRenderer::init() {
 	}
 	setBlending(true);
 
-	setDefaultShader(new OpenGLShader("res/shaders/object.shader"));
-	setDefaultTexture(new OpenGLTexture("res/textures/T_Brick.jpg"));
+	setDefaultShader(new OpenGLShader("res/shaders/default.shader"));
+	setDefaultTexture(new OpenGLTexture("res/textures/T_Default.jpg"));
 }
 
 void OpenGLRenderer::setBlending(bool enabled) {

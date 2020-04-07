@@ -169,7 +169,7 @@
     <ClCompile Include="src\Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\object.shader" />
+    <None Include="res\shaders\default.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\stb_image\stb_image.h" />
@@ -188,6 +188,9 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Window\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\T_Default.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

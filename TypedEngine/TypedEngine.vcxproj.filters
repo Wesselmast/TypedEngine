@@ -50,9 +50,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\object.shader" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="external\stb_image\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,5 +98,13 @@
     <ClInclude Include="src\Rendering\OpenGL\OpenGLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\default.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\T_Default.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

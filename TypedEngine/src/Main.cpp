@@ -64,20 +64,19 @@ int main() {
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, recieveInput);
-	glfwSwapInterval(1);		//just vSync
+	glfwSwapInterval(1); //complex name, just vSync
 	
 	
 	RenderCommand::init();
 
-	Texture* texture = new OpenGLTexture("res/textures/T_Brick.jpg");
-	Texture* textureTree = new OpenGLTexture("res/textures/T_Tree.png");
+	Texture* texture = new OpenGLTexture("res/textures/T_Tree.png");
 
 	float vertices[] = {
-		//pos		//texcoord
-		-1.0,  1.0,	0.0f,  1.0f,
-		 1.0,  1.0,	1.0f,  1.0f,
-		 1.0, -1.0,	1.0f,  0.0f,
-		-1.0, -1.0,	0.0f,  0.0f
+		//pos		  //texcoord
+		-1.0,  1.0,   0.0f,  1.0f,
+		 1.0,  1.0,   1.0f,  1.0f,
+		 1.0, -1.0,   1.0f,  0.0f,
+		-1.0, -1.0,   0.0f,  0.0f
 	};
 
 	unsigned int vertexBufferLayout[] = {
@@ -156,7 +155,7 @@ int main() {
 
 		{
 			Transform transform = { { 1000, 1250.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
-			RenderCommand::drawSprite(transform, projection * view, vertexArray, textureTree);
+			RenderCommand::drawSprite(transform, projection * view, vertexArray, texture);
 		}
 
 		/* WINDOW STUFF */
@@ -168,7 +167,6 @@ int main() {
 		//IMPORTANT @CleanUp: Shader doesn't get unbound
 
 		texture->unbind();
-		textureTree->unbind();
 		vertexArray->unbind();
 
 		//
@@ -178,7 +176,6 @@ int main() {
 	glfwTerminate();
 
 	delete texture;
-	delete textureTree;
 	delete vertexArray;
 	delete vertexBuffer;
 	delete indexBuffer;
