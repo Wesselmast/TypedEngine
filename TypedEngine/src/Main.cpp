@@ -73,19 +73,11 @@ int main() {
 	Texture* textureTree = new OpenGLTexture("res/textures/T_Tree.png");
 
 	float vertices[] = {
-		//pos														//texcoord
-		-(float)texture->getWidth(),  (float)texture->getHeight(),	0.0f,  1.0f,
-		 (float)texture->getWidth(),  (float)texture->getHeight(),	1.0f,  1.0f,
-		 (float)texture->getWidth(), -(float)texture->getHeight(),	1.0f,  0.0f,
-		-(float)texture->getWidth(), -(float)texture->getHeight(),	0.0f,  0.0f
-	};
-
-	float verticesTree[] = {
-		//pos														//texcoord
-		-(float)textureTree->getWidth(),  (float)textureTree->getHeight(),	0.0f,  1.0f,
-		 (float)textureTree->getWidth(),  (float)textureTree->getHeight(),	1.0f,  1.0f,
-		 (float)textureTree->getWidth(), -(float)textureTree->getHeight(),	1.0f,  0.0f,
-		-(float)textureTree->getWidth(), -(float)textureTree->getHeight(),	0.0f,  0.0f
+		//pos		//texcoord
+		-1.0,  1.0,	0.0f,  1.0f,
+		 1.0,  1.0,	1.0f,  1.0f,
+		 1.0, -1.0,	1.0f,  0.0f,
+		-1.0, -1.0,	0.0f,  0.0f
 	};
 
 	unsigned int vertexBufferLayout[] = {
@@ -98,20 +90,14 @@ int main() {
 	};
 
 	VertexArray* vertexArray = new OpenGLVertexArray();
-	VertexArray* vertexArrayTree = new OpenGLVertexArray();
 	VertexBuffer* vertexBuffer = new OpenGLVertexBuffer(vertices, sizeof vertices);
-	VertexBuffer* vertexBufferTree = new OpenGLVertexBuffer(verticesTree, sizeof verticesTree);
 	IndexBuffer* indexBuffer = new OpenGLIndexBuffer(indices, sizeof indices);
 
-	vertexBufferTree->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
 	vertexBuffer->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
 
-	vertexArrayTree->setVertexBuffer(vertexBufferTree);
-	vertexArrayTree->setIndexBuffer(indexBuffer);
 	vertexArray->setVertexBuffer(vertexBuffer);
 	vertexArray->setIndexBuffer(indexBuffer);
 
-	vertexArrayTree->bind();
 	vertexArray->bind();
 
 
@@ -157,6 +143,7 @@ int main() {
 
 		RenderCommand::clear(clearColor);
 
+		//ToDo @Optimization: Add a camera object and check if transforms are in camera viewport (if not, cull them)
 		for (int i = 0; i < 2; i++)
 		{
 			//ToDo @CleanUp: Rotation is reduntant, just make it a float, also its broken
@@ -169,7 +156,7 @@ int main() {
 
 		{
 			Transform transform = { { 1000, 1250.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
-			RenderCommand::drawSprite(transform, projection * view, vertexArrayTree, textureTree);
+			RenderCommand::drawSprite(transform, projection * view, vertexArray, textureTree);
 		}
 
 		/* WINDOW STUFF */
@@ -183,7 +170,6 @@ int main() {
 		texture->unbind();
 		textureTree->unbind();
 		vertexArray->unbind();
-		vertexArrayTree->unbind();
 
 		//
 		previous = time;
@@ -194,9 +180,7 @@ int main() {
 	delete texture;
 	delete textureTree;
 	delete vertexArray;
-	delete vertexArrayTree;
 	delete vertexBuffer;
-	delete vertexBufferTree;
 	delete indexBuffer;
 	return 0;
 }
