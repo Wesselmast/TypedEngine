@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "Rendering/OpenGL/OpenGLShader.h"
@@ -6,11 +5,11 @@
 #include "Rendering/OpenGL/OpenGLIndexBuffer.h"
 #include "Rendering/OpenGL/OpenGLVertexBuffer.h"
 #include "Rendering/OpenGL/OpenGLVertexArray.h"
+#include "Rendering/RenderCommand.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include <memory>
 #include <iostream>
 
 glm::vec2 input = glm::vec2(0, 0);
@@ -68,15 +67,11 @@ int main() {
 	glfwSwapInterval(1);		//just vSync
 	
 	
-	if(glewInit() != GLEW_OK) return -1;
+	RenderCommand::init();
 
-
-	std::unique_ptr<Shader> shader = std::make_unique<OpenGLShader>("res/shaders/object.shader");
-	std::unique_ptr<Texture> texture = std::make_unique<OpenGLTexture>("res/textures/T_Brick.jpg");
-	std::unique_ptr<Texture> textureTree = std::make_unique<OpenGLTexture>("res/textures/T_Tree.png");
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	Shader* shader = new OpenGLShader("res/shaders/object.shader");
+	Texture* texture = new OpenGLTexture("res/textures/T_Brick.jpg");
+	Texture* textureTree = new OpenGLTexture("res/textures/T_Tree.png");
 
 	float vertices[] = {
 		//pos														//texcoord
@@ -103,8 +98,8 @@ int main() {
 		2, 3, 0
 	};
 
-	std::unique_ptr<VertexArray> vertexArray = std::make_unique<OpenGLVertexArray>();
-	std::unique_ptr<VertexArray> vertexArrayTree = std::make_unique<OpenGLVertexArray>();
+	VertexArray* vertexArray = new OpenGLVertexArray();
+	VertexArray* vertexArrayTree = new OpenGLVertexArray();
 	VertexBuffer* vertexBuffer = new OpenGLVertexBuffer(vertices, sizeof vertices);
 	VertexBuffer* vertexBufferTree = new OpenGLVertexBuffer(verticesTree, sizeof verticesTree);
 	IndexBuffer* indexBuffer = new OpenGLIndexBuffer(indices, sizeof indices);
@@ -161,42 +156,19 @@ int main() {
 		glm::mat4 view = glm::inverse(transform);
 
 
-		/* RENDERER STUFF */
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-
-		
-
-
-		/* THESE SHOULD BE RENDER COMMANDS */
+		RenderCommand::clear(clearColor);
 
 		for (int i = 0; i < 2; i++)
 		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(i * 1024, 0 ,0));
-			glm::mat4 mvp = projection * view * model;
-
-			shader->bind();
-			texture->bind();
-			shader->setUniformMat4("uMvpMatrix", mvp);
-			shader->setUniformInt1("uTexture", 0);
-
-			vertexArray->bind();
-			glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+			//ToDo @CleanUp: Rotation is reduntant, just make it a float, also its broken
+			Transform transform = { { 1024.0f * i, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
+			RenderCommand::drawSprite(texture, shader, transform, projection * view, vertexArray);
 		}
 
 		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1000, 1250, 0));
-			glm::mat4 mvp = projection * view * model;
-
-			shader->bind();
-			textureTree->bind();
-			shader->setUniformMat4("uMvpMatrix", mvp);
-			shader->setUniformInt1("uTexture", 0);
-
-			vertexArrayTree->bind();
-			glDrawElements(GL_TRIANGLES, vertexArrayTree->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+			Transform transform = { { 1000, 1250.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
+			RenderCommand::drawSprite(textureTree, shader, transform, projection * view, vertexArrayTree);
 		}
-		
 
 		/* WINDOW STUFF */
 		glfwSwapBuffers(window);
@@ -215,7 +187,13 @@ int main() {
 
 	glfwTerminate();
 
+	delete shader;
+	delete texture;
+	delete textureTree;
+	delete vertexArray;
+	delete vertexArrayTree;
 	delete vertexBuffer;
+	delete vertexBufferTree;
 	delete indexBuffer;
 	return 0;
 }

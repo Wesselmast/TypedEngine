@@ -160,10 +160,12 @@
     <ClCompile Include="src\Rendering\OpenGL\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Rendering\IndexBuffer.h" />
+    <ClCompile Include="src\Rendering\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Rendering\OpenGL\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="src\Rendering\RenderCommand.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,8 +176,11 @@
     <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLIndexBuffer.h" />
+    <ClInclude Include="src\Rendering\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLVertexBuffer.h" />
+    <ClInclude Include="src\Rendering\Renderer.h" />
+    <ClInclude Include="src\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Rendering\VertexArray.h" />
     <ClInclude Include="src\Rendering\VertexBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLShader.h" />
