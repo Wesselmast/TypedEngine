@@ -2,7 +2,7 @@
 
 #include "Renderer.h"
 
-static class RenderCommand {
+class RenderCommand {
 public:
 	inline static void init() {
 		renderer->init();
@@ -16,8 +16,12 @@ public:
 		renderer->clear(backgroundColor);
 	}
 
-	inline static void drawSprite(Texture* texture, Shader* shader, Transform transform, glm::mat4 viewProjection, VertexArray* vertexArray) {
-		renderer->drawSprite(texture, shader, transform, viewProjection, vertexArray);
+	inline static void drawSprite(Transform transform, glm::mat4 viewProjection, VertexArray* vertexArray) {
+		renderer->drawSprite(transform, viewProjection, vertexArray);
+	}
+
+	inline static void drawSprite(Transform transform, glm::mat4 viewProjection, VertexArray* vertexArray, Texture* texture) {
+		renderer->drawSprite(transform, viewProjection, vertexArray, texture);
 	}
 
 private:

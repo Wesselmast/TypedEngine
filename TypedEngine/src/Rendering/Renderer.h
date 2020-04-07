@@ -22,5 +22,31 @@ public:
 	virtual void init() = 0;
 	virtual void setBlending(bool enabled) = 0;
 	virtual void clear(glm::vec4 backgroundColor) = 0;
-	virtual void drawSprite(Texture* texture, Shader* shader, Transform transform, glm::mat4 viewProjection, VertexArray* vertexArray) = 0;
+	virtual void drawSprite(Transform transform, glm::mat4 viewProjection, VertexArray* vertexArray) = 0;
+	virtual void drawSprite(Transform transform, glm::mat4 viewProjection, VertexArray* vertexArray, Texture* texture) = 0;
+
+	virtual ~Renderer() { 
+		delete defaultShader;
+		delete defaultTexture;
+	}
+protected:
+	inline void setDefaultShader(Shader* shader) {
+		defaultShader = shader;
+	}
+
+	inline void setDefaultTexture(Texture* texture) {
+		defaultTexture = texture;
+	}
+
+	inline Shader* getDefaultShader() const {
+		return defaultShader;
+	}
+
+	inline Texture* getDefaultTexture() const {
+		return defaultTexture;
+	}
+
+private:
+	Shader* defaultShader;
+	Texture* defaultTexture;
 };

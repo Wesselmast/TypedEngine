@@ -69,7 +69,6 @@ int main() {
 	
 	RenderCommand::init();
 
-	Shader* shader = new OpenGLShader("res/shaders/object.shader");
 	Texture* texture = new OpenGLTexture("res/textures/T_Brick.jpg");
 	Texture* textureTree = new OpenGLTexture("res/textures/T_Tree.png");
 
@@ -162,12 +161,15 @@ int main() {
 		{
 			//ToDo @CleanUp: Rotation is reduntant, just make it a float, also its broken
 			Transform transform = { { 1024.0f * i, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
-			RenderCommand::drawSprite(texture, shader, transform, projection * view, vertexArray);
+
+			//ToDo @CleanUp: - drawSprite can problably get to a stage where you only need the transform and an optional texture
+			//				 - get to a point where I just have to 'create' a sprite at some point and have the back-end push it onto a runtime loop (hide rendering)
+			RenderCommand::drawSprite(transform, projection * view, vertexArray);
 		}
 
 		{
 			Transform transform = { { 1000, 1250.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
-			RenderCommand::drawSprite(textureTree, shader, transform, projection * view, vertexArrayTree);
+			RenderCommand::drawSprite(transform, projection * view, vertexArrayTree, textureTree);
 		}
 
 		/* WINDOW STUFF */
@@ -175,7 +177,9 @@ int main() {
 		glfwPollEvents();
 
 		/* Unbind */
-		shader->unbind();
+
+		//IMPORTANT @CleanUp: Shader doesn't get unbound
+
 		texture->unbind();
 		textureTree->unbind();
 		vertexArray->unbind();
@@ -187,7 +191,6 @@ int main() {
 
 	glfwTerminate();
 
-	delete shader;
 	delete texture;
 	delete textureTree;
 	delete vertexArray;
