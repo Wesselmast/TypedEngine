@@ -6,9 +6,9 @@
 #include "Rendering/OpenGL/OpenGLVertexBuffer.h"
 #include "Rendering/OpenGL/OpenGLVertexArray.h"
 #include "Rendering/RenderCommand.h"
+#include "Rendering/Camera.h"
 
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 
 #include <iostream>
 
@@ -20,6 +20,7 @@ glm::mat4 projection;
 
 /* INPUT POLLING STUFF */
 static void recieveInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, 1);
 		return;
@@ -47,6 +48,16 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 	}
 }
 
+static void scrollInput(GLFWwindow* window, double xoffset, double yoffset) {
+	zoom += -yoffset * 0.5f; // x = zoomspeed
+	if (zoom <= 0.01f) {
+		zoom = 0.01f;
+	}
+	else if (zoom >= 10) {
+		zoom = 10;
+	}
+}
+
 int main() {
 
 	/* WINDOW STUFF @Important: look at how I want to separate these
@@ -66,10 +77,13 @@ int main() {
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, recieveInput);
+	glfwSetScrollCallback(window, scrollInput);
 	glfwSwapInterval(1); //complex name, just vSync
 	
 	
-	RenderCommand::init();
+	Camera* camera = new Camera(window);
+
+	RenderCommand::init(camera);
 
 	Texture* texture = new OpenGLTexture("res/textures/T_Tree.png");
 
@@ -105,7 +119,7 @@ int main() {
 	/* @CleanUp: this is just random crap */
 
 	float previous = (float)glfwGetTime();
-	glm::vec3 position = glm::vec3(0,0,0);
+	glm::vec2 position = glm::vec3(0,0,0);
 	glm::vec4 objectColor(142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f); //@Unused: Unused variable but nice color :)
 	glm::vec4 clearColor(233/255.0f, 233 / 255.0f, 245 / 255.0f, 1.0f);
 	const float zoomSpeed = 3.0f;
@@ -118,29 +132,18 @@ int main() {
 		/* DELTATIME STUFF */
 		float time = (float)glfwGetTime();
 		float deltaTime = time - previous;
-		//std::cout << 1/deltaTime << std::endl;
+		std::cout << 1/deltaTime << std::endl;
 
-		/* WINDOW STUFF */
+		/* WINDOW STUFF @CleanUp: Really ugly. This is done twice a frame now due to the camera system */
 		GLsizei width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
-		projection = glm::ortho(-width * zoom, width * zoom, -height * zoom, height * zoom, -1.0f, 1.0f);
-
-		/* @CleanUp: This zooming stuf is done directly into the othrographic calculation. Find better way of doing this */
-		zoom += zoomInput * deltaTime * zoomSpeed;
-		if (zoom <= 0.01f) {
-			zoom = 0.01f;
-		}
-		else if (zoom >= 10) {
-			zoom = 10;
-		}
 
 
-		/* CAMERA STUFF */
-		
-		position += glm::vec3(input, 0.0f) * deltaTime * zoom * panSpeed;
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-		glm::mat4 view = glm::inverse(transform);
+
+		position += input * deltaTime * zoom * panSpeed;
+		camera->setPosition(position);
+		camera->setScale(glm::vec2(zoom));
 
 
 		RenderCommand::clear(clearColor);
@@ -149,16 +152,16 @@ int main() {
 		for (int i = 0; i < 2; i++)
 		{
 			//ToDo @CleanUp: Rotation is reduntant, just make it a float, also its broken
-			Transform transform = { { 1024.0f * i, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
+			Transform transform = { { 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f} };
 
 			//ToDo @CleanUp: - drawSprite can problably get to a stage where you only need the transform and an optional texture
 			//				 - get to a point where I just have to 'create' a sprite at some point and have the back-end push it onto a runtime loop (hide rendering)
-			RenderCommand::drawSprite(transform, projection * view, vertexArray);
+			RenderCommand::drawSprite(transform, vertexArray);
 		}
 
 		{
-			Transform transform = { { 1000, 1250.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f } };
-			RenderCommand::drawSprite(transform, projection * view, vertexArray, texture);
+			Transform transform = { { 1000, 1250.0f }, 0.0f, { 1.0f, 1.0f } };
+			RenderCommand::drawSprite(transform, vertexArray, texture);
 		}
 
 		/* WINDOW STUFF */
@@ -168,8 +171,8 @@ int main() {
 
 		/* Unbind */
 		//IMPORTANT @CleanUp: Shader doesn't get unbound
-		texture->unbind();
-		vertexArray->unbind();
+	/*	texture->unbind();
+		vertexArray->unbind();*/
 
 		//
 		previous = time;
@@ -181,5 +184,6 @@ int main() {
 	delete vertexArray;
 	delete vertexBuffer;
 	delete indexBuffer;
+	delete camera;
 	return 0;
 }
