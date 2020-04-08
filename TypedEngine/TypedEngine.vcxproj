@@ -175,6 +175,7 @@
     <ClInclude Include="external\stb_image\stb_image.h" />
     <ClInclude Include="src\Input\Input.h" />
     <ClInclude Include="src\Input\InputManager.h" />
+    <ClInclude Include="src\Rendering\Camera.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLIndexBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLVertexArray.h" />
@@ -188,9 +189,6 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
     <ClInclude Include="src\Window\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\Downloads\T_Default.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

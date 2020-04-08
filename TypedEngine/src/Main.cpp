@@ -13,7 +13,10 @@
 #include <iostream>
 
 glm::vec2 input = glm::vec2(0, 0);
+float zoom = 1;
 float zoomInput = 0;
+glm::mat4 projection;
+
 
 /* INPUT POLLING STUFF */
 static void recieveInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -49,9 +52,8 @@ int main() {
 	/* WINDOW STUFF @Important: look at how I want to separate these
 					@CleanUp: make the width and height values the width and height of the current monitor
 	*/
-	const unsigned short WIDTH = 1920;
-	const unsigned short HEIGHT = 1080;
-	const glm::vec2 ASPECT((float)WIDTH, (float)HEIGHT);
+	const unsigned short WIDTH = 640;
+	const unsigned short HEIGHT = 480;
 
 	if (!glfwInit()) return -1;
 
@@ -100,7 +102,7 @@ int main() {
 	vertexArray->bind();
 
 
-	/* @CleanUp: this is just random crap*/
+	/* @CleanUp: this is just random crap */
 
 	float previous = (float)glfwGetTime();
 	glm::vec3 position = glm::vec3(0,0,0);
@@ -108,20 +110,21 @@ int main() {
 	glm::vec4 clearColor(233/255.0f, 233 / 255.0f, 245 / 255.0f, 1.0f);
 	const float zoomSpeed = 3.0f;
 	const float panSpeed = 500.0f;
-	float zoom = 1;
-	
+
+
 	/* RENDERING */
 	while (!glfwWindowShouldClose(window)) {
 
 		/* DELTATIME STUFF */
 		float time = (float)glfwGetTime();
 		float deltaTime = time - previous;
-		std::cout << 1/deltaTime << std::endl;
+		//std::cout << 1/deltaTime << std::endl;
 
 		/* WINDOW STUFF */
 		GLsizei width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
+		projection = glm::ortho(-width * zoom, width * zoom, -height * zoom, height * zoom, -1.0f, 1.0f);
 
 		/* @CleanUp: This zooming stuf is done directly into the othrographic calculation. Find better way of doing this */
 		zoom += zoomInput * deltaTime * zoomSpeed;
@@ -132,8 +135,8 @@ int main() {
 			zoom = 10;
 		}
 
+
 		/* CAMERA STUFF */
-		glm::mat4 projection = glm::ortho(-ASPECT.x * zoom, ASPECT.x * zoom, -ASPECT.y * zoom, ASPECT.y * zoom, -1.0f, 1.0f);
 		
 		position += glm::vec3(input, 0.0f) * deltaTime * zoom * panSpeed;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
@@ -162,10 +165,9 @@ int main() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
+
 		/* Unbind */
-
 		//IMPORTANT @CleanUp: Shader doesn't get unbound
-
 		texture->unbind();
 		vertexArray->unbind();
 
