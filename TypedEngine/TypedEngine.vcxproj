@@ -168,6 +168,7 @@
     <ClCompile Include="src\Rendering\OpenGL\OpenGLVertexBuffer.cpp" />
     <ClCompile Include="src\Rendering\RenderCommand.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
+    <ClCompile Include="src\Window\OpenGL\OpenGLWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\default.shader" />
@@ -190,6 +191,7 @@
     <ClInclude Include="src\Rendering\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Texture.h" />
+    <ClInclude Include="src\Window\OpenGL\OpenGLWindow.h" />
     <ClInclude Include="src\Window\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

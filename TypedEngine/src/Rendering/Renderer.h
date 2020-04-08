@@ -1,6 +1,5 @@
 #pragma once
 
-// @TryOut: Using a structs for these and forward-declaring them since they are just poiners anyways
 #include "Texture.h"
 #include "Shader.h"
 #include "VertexArray.h"
@@ -14,8 +13,8 @@ public:
 	virtual void init(Camera* camera) = 0;
 	virtual void setBlending(bool enabled) = 0;
 	virtual void clear(glm::vec4 backgroundColor) = 0;
-	virtual void drawSprite(Transform transform, VertexArray* vertexArray) = 0;
-	virtual void drawSprite(Transform transform, VertexArray* vertexArray, Texture* texture) = 0;
+	virtual void drawSprite(Transform transform) = 0;
+	virtual void drawSprite(Transform transform, Texture* texture) = 0;
 
 	virtual ~Renderer() { 
 		delete defaultShader;

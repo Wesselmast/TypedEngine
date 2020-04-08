@@ -1,17 +1,15 @@
 #pragma once
-//#include "glfw/glfw3.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "../Core/Transform.h"
 
-struct GLFWwindow;
+#include "../Window/Window.h"
+#include "../Core/Transform.h"
 
 class Camera {
 public:
 		// @CleanUp: Take in my own window class instead
-	Camera(GLFWwindow* window) {
-		this->window = window;
+	Camera(Window* window) : window(window) {
 	}
 
 	inline void setTransform(Transform transform) { this->transform = transform; }
@@ -26,6 +24,6 @@ public:
 
 	glm::mat4 getViewProjection();
 private:
-	GLFWwindow* window;
+	Window* window;
 	Transform transform;
 };

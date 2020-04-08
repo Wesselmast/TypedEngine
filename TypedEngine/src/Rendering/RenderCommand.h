@@ -16,12 +16,12 @@ public:
 		renderer->clear(backgroundColor);
 	}
 
-	inline static void drawSprite(Transform transform, VertexArray* vertexArray) {
-		renderer->drawSprite(transform, vertexArray);
+	inline static void drawSprite(Transform transform) {
+		renderer->drawSprite(transform);
 	}
 
-	inline static void drawSprite(Transform transform, VertexArray* vertexArray, Texture* texture) {
-		renderer->drawSprite(transform, vertexArray, texture);
+	inline static void drawSprite(Transform transform, Texture* texture) {
+		renderer->drawSprite(transform, texture);
 	}
 
 private:

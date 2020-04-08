@@ -8,7 +8,9 @@
 
 #include "OpenGLShader.h"
 #include "OpenGLTexture.h"
-
+#include "OpenGLIndexBuffer.h"
+#include "OpenGLVertexBuffer.h"
+#include "OpenGLVertexArray.h"
 
 void OpenGLRenderer::init(Camera* camera) {
 	if (glewInit() != GLEW_OK) {
@@ -21,6 +23,34 @@ void OpenGLRenderer::init(Camera* camera) {
 	setCamera(camera);
 	setDefaultShader(new OpenGLShader("res/shaders/default.shader"));
 	setDefaultTexture(new OpenGLTexture("res/textures/T_Default.jpg"));
+
+	float vertices[] = {
+		//pos		  //texcoord
+		-1.0,  1.0,   0.0f,  1.0f,
+		 1.0,  1.0,   1.0f,  1.0f,
+		 1.0, -1.0,   1.0f,  0.0f,
+		-1.0, -1.0,   0.0f,  0.0f
+	};
+
+	unsigned int vertexBufferLayout[] = {
+		2, 2
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	vertexArray = new OpenGLVertexArray();
+	vertexBuffer = new OpenGLVertexBuffer(vertices, sizeof vertices);
+	indexBuffer = new OpenGLIndexBuffer(indices, sizeof indices);
+
+	vertexBuffer->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
+
+	vertexArray->setVertexBuffer(vertexBuffer);
+	vertexArray->setIndexBuffer(indexBuffer);
+
+	vertexArray->bind();
 }
 
 void OpenGLRenderer::setBlending(bool enabled) {
@@ -38,25 +68,28 @@ void OpenGLRenderer::clear(glm::vec4 color) {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLRenderer::drawSprite(Transform transform, VertexArray * vertexArray) {
-	drawSprite(transform, vertexArray, getDefaultTexture());
+void OpenGLRenderer::drawSprite(Transform transform) {
+	drawSprite(transform, getDefaultTexture());
 }
 
-void OpenGLRenderer::drawSprite(Transform transform, VertexArray * vertexArray, Texture * texture) {
+void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
+	texture->bind();
+	vertexArray->bind();
+
+	getDefaultShader()->bind();
+	getDefaultShader()->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
+	getDefaultShader()->setUniformInt1("uTexture", 0);
+
+	glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+}
+
+glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform) {
 	glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position, 0.0f));
 	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), transform.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(transform.scale, 1.0f));
 
 	glm::mat4 model = position * rotation * scale;
 	glm::mat4 mvp = getCamera()->getViewProjection() * model;
-
-	texture->bind();
-	vertexArray->bind();
-
-	getDefaultShader()->bind();
-	getDefaultShader()->setUniformMat4("uMvpMatrix", mvp);
-	getDefaultShader()->setUniformInt1("uTexture", 0);
-
-	glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+	return mvp;
 }
 

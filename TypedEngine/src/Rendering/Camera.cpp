@@ -3,14 +3,11 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 glm::mat4 Camera::getViewProjection() {
+	float w = window->getSize().x;
+	float h = window->getSize().y;
 
-	// ToDo: @CleanUp: Replace this with window->getSize()
-	int width = 1920;
-	int height = 1080;
-	//glfwGetFramebufferSize(window, &width, &height);
-	
 	// ToDo @CleanUp: Recalculating projection should just happen on a window resize event
-	glm::mat4 projection = glm::ortho(-(float)width, (float)width, -(float)height, (float)height, -1.0f, 1.0f);
+	glm::mat4 projection = glm::ortho(-w, w, -h, h, -1.0f, 1.0f);
 
 	glm::mat4 positionMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(glm::rotate(transform.position, transform.rotation), 0.0f));
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), transform.rotation, glm::vec3(0.0f, 0.0f, 1.0f));

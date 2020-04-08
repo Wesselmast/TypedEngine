@@ -1,10 +1,10 @@
 #include <GLFW/glfw3.h>
 
-#include "Rendering/OpenGL/OpenGLShader.h"
+#include "Core/Transform.h"
+
+#include "Window/OpenGL/OpenGLWindow.h"
+
 #include "Rendering/OpenGL/OpenGLTexture.h"
-#include "Rendering/OpenGL/OpenGLIndexBuffer.h"
-#include "Rendering/OpenGL/OpenGLVertexBuffer.h"
-#include "Rendering/OpenGL/OpenGLVertexArray.h"
 #include "Rendering/RenderCommand.h"
 #include "Rendering/Camera.h"
 
@@ -52,62 +52,15 @@ static void scrollInput(GLFWwindow* window, double xoffset, double yoffset) {
 }
 
 int main() {
+	Window* window = new OpenGLWindow({ 1920, 1080 }, "TypedEngine", false);
 
-	/* WINDOW STUFF @Important: look at how I want to separate these
-					@CleanUp: make the width and height values the width and height of the current monitor
-	*/
-	const unsigned short WIDTH = 640;
-	const unsigned short HEIGHT = 480;
-
-	if (!glfwInit()) return -1;
-
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "TestWindow", NULL, NULL);
-	if (!window) {
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-	glfwSetKeyCallback(window, recieveInput);
-	glfwSetScrollCallback(window, scrollInput);
-	glfwSwapInterval(1); //complex name, just vSync
-	
+	//glfwSetKeyCallback(window, recieveInput);
+	//glfwSetScrollCallback(window, scrollInput);
 	
 	Camera* camera = new Camera(window);
 
-	RenderCommand::init(camera);
-
+	RenderCommand::init(camera); // @Security: Add an error message telling people they shouldn't do anything render-related before this
 	Texture* texture = new OpenGLTexture("res/textures/T_Tree.png");
-
-	float vertices[] = {
-		//pos		  //texcoord
-		-1.0,  1.0,   0.0f,  1.0f,
-		 1.0,  1.0,   1.0f,  1.0f,
-		 1.0, -1.0,   1.0f,  0.0f,
-		-1.0, -1.0,   0.0f,  0.0f
-	};
-
-	unsigned int vertexBufferLayout[] = {
-		2, 2
-	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	VertexArray* vertexArray = new OpenGLVertexArray();
-	VertexBuffer* vertexBuffer = new OpenGLVertexBuffer(vertices, sizeof vertices);
-	IndexBuffer* indexBuffer = new OpenGLIndexBuffer(indices, sizeof indices);
-
-	vertexBuffer->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
-
-	vertexArray->setVertexBuffer(vertexBuffer);
-	vertexArray->setIndexBuffer(indexBuffer);
-
-	vertexArray->bind();
-
 
 	/* @CleanUp: this is just random crap */
 
@@ -119,64 +72,46 @@ int main() {
 	const float rotSpeed = 3.0f;
 	const float panSpeed = 750.0f;
 
-
 	/* RENDERING */
-	while (!glfwWindowShouldClose(window)) {
-
+	while (window->isRunning()) {
 		/* DELTATIME STUFF */
 		float time = (float)glfwGetTime();
 		float deltaTime = time - previous;
 		std::cout << 1/deltaTime << std::endl;
 
-		/* WINDOW STUFF @CleanUp: Really ugly. This is done twice a frame now due to the camera system */
-		GLsizei width, height;
-		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width, height);
-
+		RenderCommand::clear(clearColor);
+		window->refreshViewport();
 
 		position += input * deltaTime * zoom * panSpeed;
 		camera->setPosition(position);
 		camera->setScale(glm::vec2(zoom));
 
 
-		RenderCommand::clear(clearColor);
-
-		//ToDo @Optimization: Add a camera object and check if transforms are in camera viewport (if not, cull them)
+		//ToDo @Optimization: check if transforms are in camera viewport (if not, cull them)
 		for (int i = 0; i < 2; i++)
 		{
-			//ToDo @CleanUp: Rotation is reduntant, just make it a float, also its broken
 			Transform transform = { { 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f} };
 
-			//ToDo @CleanUp: - drawSprite can problably get to a stage where you only need the transform and an optional texture
-			//				 - get to a point where I just have to 'create' a sprite at some point and have the back-end push it onto a runtime loop (hide rendering)
-			RenderCommand::drawSprite(transform, vertexArray);
+			//ToDo @CleanUp: get to a point where I just have to 'create' a sprite at some point and have the back-end push it onto a runtime loop (hide rendering)
+			RenderCommand::drawSprite(transform);
 		}
 
 		{
 			Transform transform = { { 1000, 1250.0f }, 0.0f, { 1.0f, 1.0f } };
-			RenderCommand::drawSprite(transform, vertexArray, texture);
+			RenderCommand::drawSprite(transform, texture);
 		}
 
-		/* WINDOW STUFF */
-		glfwSwapBuffers(window);
+		window->swapBuffers();
 		glfwPollEvents();
 
 
-		/* Unbind */
-		//IMPORTANT @CleanUp: Shader doesn't get unbound
-	/*	texture->unbind();
-		vertexArray->unbind();*/
+		/*    WE NEVER UNBIND ANYTHING. THIS MIGHT CAUSE PROBLEMS AT SOME POINT    */
 
 		//
 		previous = time;
 	}
 
-	glfwTerminate();
-
 	delete texture;
-	delete vertexArray;
-	delete vertexBuffer;
-	delete indexBuffer;
 	delete camera;
 	return 0;
 }
