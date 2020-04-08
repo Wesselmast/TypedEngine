@@ -14,9 +14,6 @@
 
 glm::vec2 input = glm::vec2(0, 0);
 float zoom = 1;
-float zoomInput = 0;
-glm::mat4 projection;
-
 
 /* INPUT POLLING STUFF */
 static void recieveInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -31,9 +28,7 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 			case GLFW_KEY_S: input.y   = -1.0f; break;
 			case GLFW_KEY_A: input.x   = -1.0f; break;
 			case GLFW_KEY_D: input.x   =  1.0f; break;
-			case GLFW_KEY_Q: zoomInput =  1.0f; break;
-			case GLFW_KEY_E: zoomInput = -1.0f; break;
-			default: input = glm::vec2(0, 0); zoomInput = 0;
+			default: input = glm::vec2(0, 0);
 		}
 	}
 	if (action == GLFW_RELEASE) {
@@ -42,8 +37,6 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 			case GLFW_KEY_S: input.y   =  0.0f; break;
 			case GLFW_KEY_A: input.x   =  0.0f; break;
 			case GLFW_KEY_D: input.x   =  0.0f; break;
-			case GLFW_KEY_Q: zoomInput =  0.0f; break;
-			case GLFW_KEY_E: zoomInput =  0.0f; break;
 		}
 	}
 }
@@ -51,7 +44,7 @@ static void recieveInput(GLFWwindow* window, int key, int scancode, int action, 
 static void scrollInput(GLFWwindow* window, double xoffset, double yoffset) {
 	zoom += -yoffset * 0.5f; // x = zoomspeed
 	if (zoom <= 0.01f) {
-		zoom = 0.01f;
+		zoom = 0.1f;
 	}
 	else if (zoom >= 10) {
 		zoom = 10;
@@ -119,11 +112,12 @@ int main() {
 	/* @CleanUp: this is just random crap */
 
 	float previous = (float)glfwGetTime();
-	glm::vec2 position = glm::vec3(0,0,0);
+	glm::vec2 position = glm::vec3(0, 0, 0);
+	float rotation = 0.0f;
 	glm::vec4 objectColor(142 / 255.0f, 104 / 255.0f, 70 / 255.0f, 1.0f); //@Unused: Unused variable but nice color :)
 	glm::vec4 clearColor(233/255.0f, 233 / 255.0f, 245 / 255.0f, 1.0f);
-	const float zoomSpeed = 3.0f;
-	const float panSpeed = 500.0f;
+	const float rotSpeed = 3.0f;
+	const float panSpeed = 750.0f;
 
 
 	/* RENDERING */
@@ -138,7 +132,6 @@ int main() {
 		GLsizei width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
-
 
 
 		position += input * deltaTime * zoom * panSpeed;
