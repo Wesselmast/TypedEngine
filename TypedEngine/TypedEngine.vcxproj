@@ -156,6 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Input\Input.cpp" />
+    <ClCompile Include="src\Input\OpenGL\OpenGLInputManager.cpp" />
     <ClCompile Include="user\App.cpp" />
     <ClCompile Include="external\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
@@ -175,12 +177,13 @@
     <None Include="res\shaders\default.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Input\InputManager.h" />
+    <ClInclude Include="src\Input\OpenGL\OpenGLInputManager.h" />
     <ClInclude Include="user\App.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="external\stb_image\stb_image.h" />
     <ClInclude Include="src\Core\Transform.h" />
     <ClInclude Include="src\Input\Input.h" />
-    <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLIndexBuffer.h" />
     <ClInclude Include="src\Rendering\OpenGL\OpenGLRenderer.h" />

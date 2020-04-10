@@ -1,19 +1,9 @@
 #pragma once
 
 #include "Window/Window.h"
+#include "Input/Input.h"
+
 #include "glm/glm.hpp"
-
-enum class Key {
-	THING = 1
-};
-
-enum class Button {
-	THING = 1
-};
-
-enum class Modifier {
-	THING = 1
-};
 
 class Application {
 public:
@@ -22,11 +12,10 @@ public:
 	virtual void end() {}
 
 	virtual void onWindowResized(int width, int height) {}
-	virtual void onWindowRefreshed() {}
 	virtual void onWindowMoved(int posX, int posY) {}
 	
-	virtual void onMousePressed(Button button) {}
-	virtual void onMouseReleased(Button button) {}
+	virtual void onMousePressed(MouseButton button) {}
+	virtual void onMouseReleased(MouseButton button) {}
 	virtual void onMouseMoved(int posX, int posY) {}
 	virtual void onMouseScrolled(float offsetX, float offsetY) {}
 

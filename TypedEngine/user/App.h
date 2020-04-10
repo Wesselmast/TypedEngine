@@ -15,7 +15,6 @@ public:
 	void onKeyPressed(Key key, Modifier mod) override;
 	void onKeyReleased(Key key, Modifier mod) override;
 	void onMouseScrolled(float offsetX, float offsetY) override;
-	void onWindowRefreshed() override;
 	
 private:
 	std::shared_ptr<Camera> camera;

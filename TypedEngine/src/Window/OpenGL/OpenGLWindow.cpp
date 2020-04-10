@@ -74,8 +74,8 @@ void OpenGLWindow::callback_mouseScrolled(GLFWwindow * window, double offsetx, d
 
 void OpenGLWindow::callback_keyAction(GLFWwindow * window, int key, int scancode, int action, int mods) {
 	switch (action) {
-		case GLFW_PRESS: keyPressedFunction((Key)key, (Modifier)mods);
-		case GLFW_RELEASE: keyReleasedFunction((Key)key, (Modifier)mods);
+		case GLFW_PRESS:   keyPressedFunction(Input::convertKey(key), Input::convertMod(mods)); break;
+		case GLFW_RELEASE: keyReleasedFunction(Input::convertKey(key), Input::convertMod(mods)); break;
 	}
 }
 

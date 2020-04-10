@@ -20,6 +20,8 @@ float rotation = 0.0f;
 const float rotSpeed = 3.0f;
 const float panSpeed = 750.0f;
 
+// ToDo: @CleanUp: Move rendercommands to main file (main should handle all rendering, this should handle other stuff)
+
 void App::begin() {
 	camera = std::make_shared<Camera>(window);
 	RenderCommand::init(camera.get()); // @Security: Add an error message telling people they shouldn't do anything render-related before this
@@ -31,7 +33,6 @@ void App::tick(float deltaTime) {
 	position += input * deltaTime * zoom * panSpeed;
 	camera->setPosition(position);
 	camera->setScale(glm::vec2(zoom));
-
 
 	//ToDo @Optimization: check if transforms are in camera viewport (if not, cull them)
 	for (int i = 0; i < 2; i++)
@@ -49,11 +50,21 @@ void App::tick(float deltaTime) {
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {
-
+	switch (key) {
+		case Key::W: input.y =  1.0f; break;
+		case Key::A: input.x = -1.0f; break;
+		case Key::S: input.y = -1.0f; break;
+		case Key::D: input.x =  1.0f; break;
+	}
 }
 
 void App::onKeyReleased(Key key, Modifier mod) {
-	window->close();
+	switch (key) {
+		case Key::W: input.y =  0.0f; break;
+		case Key::A: input.x = -0.0f; break;
+		case Key::S: input.y = -0.0f; break;
+		case Key::D: input.x =  0.0f; break;
+	}
 }
 
 void App::onMouseScrolled(float offsetX, float offsetY) {
@@ -64,8 +75,4 @@ void App::onMouseScrolled(float offsetX, float offsetY) {
 	else if (zoom >= 10) {
 		zoom = 10;
 	}
-}
-
-void App::onWindowRefreshed() {
-	window->refreshViewport();
 }

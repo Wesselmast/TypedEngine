@@ -1,8 +1,7 @@
 #pragma once
-#include "glm/glm.hpp"
 
-enum class Key;
-enum class Modifier;
+#include "../Input/Input.h"
+#include "glm/glm.hpp"
 
 typedef void(*fptr_NoParams)();
 
@@ -23,7 +22,6 @@ public:
 	void callback_mouseScrolled(fptr_MouseScrolled function) { mouseScrolledFunction = function; }
 	void callback_keyPressed(fptr_KeyAction function) { keyPressedFunction = function; }
 	void callback_keyReleased(fptr_KeyAction function) { keyReleasedFunction = function; }
-	void callback_windowRefreshed(fptr_NoParams function) { windowRefreshFunction = function; }
 
 protected:
 	static fptr_MouseScrolled mouseScrolledFunction;

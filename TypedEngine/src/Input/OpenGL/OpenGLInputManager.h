@@ -1,0 +1,13 @@
+#pragma once
+
+#include "../InputManager.h"
+
+static class OpenGLInputManager : public InputManager {
+	virtual int convertKeyToValue(Key key) override;
+	virtual int convertModifierToValue(Modifier mod) override;
+	virtual int convertMouseButtonToValue(MouseButton button) override;
+
+	virtual Key convertValueToKey(int value) override;
+	virtual Modifier convertValueToModifier(int value) override;
+	virtual MouseButton convertValueToMouseButton(int value) override;
+};
