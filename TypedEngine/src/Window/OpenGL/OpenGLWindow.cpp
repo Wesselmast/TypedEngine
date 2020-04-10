@@ -2,6 +2,11 @@
 
 #include <GLFW/glfw3.h>
 
+fptr_MouseScrolled Window::mouseScrolledFunction;
+fptr_KeyAction Window::keyPressedFunction;
+fptr_KeyAction Window::keyReleasedFunction;
+fptr_NoParams Window::windowRefreshFunction;
+
 OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
 
 	if (!glfwInit()) {
@@ -19,8 +24,10 @@ OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
 	}
 
 	glfwMakeContextCurrent(window);
-	/*glfwSetKeyCallback(window, recieveInput);
-	glfwSetScrollCallback(window, scrollInput);*/
+
+	glfwSetScrollCallback(window, callback_mouseScrolled);
+	glfwSetKeyCallback(window, callback_keyAction);
+	glfwSetWindowRefreshCallback(window, callback_windowRefreshed);
 
 	setVSync(true);
 }
@@ -52,4 +59,29 @@ bool OpenGLWindow::isRunning() const {
 
 void OpenGLWindow::swapBuffers() {
 	glfwSwapBuffers(window);
+	
+	//TODO @CleanUp @Important Separate poll events from swapbuffers
+	glfwPollEvents();
+}
+
+void OpenGLWindow::close() {
+	glfwSetWindowShouldClose(window, 1);
+}
+
+void OpenGLWindow::callback_mouseScrolled(GLFWwindow * window, double offsetx, double offsety) {
+	mouseScrolledFunction((float)offsetx, (float)offsety);
+}
+
+void OpenGLWindow::callback_keyAction(GLFWwindow * window, int key, int scancode, int action, int mods) {
+	switch (action) {
+		case GLFW_PRESS: keyPressedFunction((Key)key, (Modifier)mods);
+		case GLFW_RELEASE: keyReleasedFunction((Key)key, (Modifier)mods);
+	}
+}
+
+void OpenGLWindow::callback_windowRefreshed(GLFWwindow * window) {
+	int width;
+	int height;
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
 }

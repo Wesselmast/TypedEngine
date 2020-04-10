@@ -14,6 +14,11 @@ public:
 	virtual void refreshViewport() override;
 	virtual bool isRunning() const override;
 	virtual void swapBuffers() override;
+	virtual void close() override;
+
+	static void callback_mouseScrolled(GLFWwindow* window, double offsetx, double offsety);
+	static void callback_keyAction(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void callback_windowRefreshed(GLFWwindow* window);
 
 private:
 	GLFWwindow* window;

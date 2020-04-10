@@ -9,6 +9,9 @@
 class Camera {
 public:
 		// @CleanUp: Take in my own window class instead
+	Camera() {
+	}
+
 	Camera(Window* window) : window(window) {
 	}
 
