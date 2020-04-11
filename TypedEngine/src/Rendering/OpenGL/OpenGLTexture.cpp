@@ -1,6 +1,6 @@
 #include "OpenGLTexture.h"
 
-#include <GL/glew.h>
+#include "glad/glad.h"
 
 #include "stb_image/stb_image.h"
 

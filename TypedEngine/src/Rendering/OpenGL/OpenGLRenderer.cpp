@@ -1,6 +1,7 @@
 #include "OpenGLRenderer.h"
 
-#include <GL/glew.h>
+#include "glad/glad.h"
+#include "glfw/glfw3.h"
 #include "glm/gtx/quaternion.hpp"
 
 //IMPORTANT @CleanUp: Make own error logging function and include that instead;
@@ -12,9 +13,10 @@
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLVertexArray.h"
 
+
 void OpenGLRenderer::init(Camera* camera) {
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "ERROR: Glew could not be initialized!!");
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		fprintf(stderr, "Failed to initialize GLAD");
 		return;
 	}
 

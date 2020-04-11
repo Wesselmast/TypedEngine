@@ -1,6 +1,6 @@
 #include "OpenGLVertexBuffer.h"
 
-#include "GL/glew.h"
+#include "glad/glad.h"
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, unsigned int size) {
 	glGenBuffers(1, &rendererID);

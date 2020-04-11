@@ -1,19 +1,21 @@
 #include "glfw/glfw3.h"
 
-#include "../user/App.h"
+#include "Application.h"
 
 #include "Window/OpenGL/OpenGLWindow.h"
 #include "Rendering/RenderCommand.h"
 
 #include "glm/glm.hpp"
 
-Application* app = new App();
+Application* app;
 
 static void callback_keyPressed(Key key, Modifier mod) { app->onKeyPressed(key, mod); }
 static void callback_keyReleased(Key key, Modifier mod) { app->onKeyReleased (key, mod); }
 static void callback_mouseScrolled(float offsetx, float offsety) { app->onMouseScrolled(offsetx, offsety); }
 
 int main() {
+	app = createApplication();
+
 	Window* window = new OpenGLWindow({ 680, 480 }, "TypedEngine", false);
 
 	window->callback_keyPressed(callback_keyPressed);

@@ -1,6 +1,6 @@
 #include "OpenGLIndexBuffer.h"
 
-#include "GL/glew.h"
+#include "glad/glad.h"
 
 OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int size) {
 	glGenBuffers(1, &rendererID);

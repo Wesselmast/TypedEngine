@@ -5,6 +5,7 @@
 
 #include "glm/glm.hpp"
 
+
 class Application {
 public:
 	virtual void begin() {}
@@ -26,3 +27,4 @@ public:
 	static Application* application;
 };
 
+extern Application* createApplication();
