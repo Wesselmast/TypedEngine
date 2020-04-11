@@ -1,6 +1,5 @@
 #include "App.h"
 
-/* @CleanUp: Fix these include paths, they are hidious */
 #include "Core/Transform.h"
 
 #include "Window/OpenGL/OpenGLWindow.h"

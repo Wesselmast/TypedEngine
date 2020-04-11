@@ -26,7 +26,7 @@ int main() {
 
 	app->begin();
 
-	float previous = (float)glfwGetTime();
+	float previous = (float)glfwGetTime();			//YUCK! @CleanUp: Make custom deltaTime function, don't want glfw in the main file
 
 	while (window->isRunning()) {
 		float time = (float)glfwGetTime();
