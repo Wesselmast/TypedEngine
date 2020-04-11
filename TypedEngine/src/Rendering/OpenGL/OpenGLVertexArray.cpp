@@ -25,7 +25,7 @@ void OpenGLVertexArray::setVertexBuffer(VertexBuffer * vertexBuffer) {
 		stride += layout[i] * sizeof(float);
 	}
 
-	unsigned int offset = 0;
+	size_t offset = 0;
 	for (unsigned int i = 0; i < layoutSize; i++) {
 		glVertexAttribPointer(i, layout[i], GL_FLOAT, GL_FALSE, stride, (void*)offset);
 		glEnableVertexAttribArray(i);

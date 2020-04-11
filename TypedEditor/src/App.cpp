@@ -107,6 +107,7 @@ void App::begin() {
 			std::string c_path = lua_tostring(L, -1);
 			c_path.append(";");
 			c_path.append(path);
+			c_path.append("\\?.lua");
 			lua_pop(L, 1);
 			lua_pushstring(L, c_path.c_str());
 			lua_setfield(L, -2, "path");
@@ -130,7 +131,7 @@ void App::begin() {
 		char buf[256];
 		GetCurrentDirectoryA(256, buf);
 		dir.append(buf);
-		dir.append("\\..\\TypedGame\\src\\?.lua");
+		dir.append("\\..\\TypedGame\\src");
 		setLuaPath(L, dir.c_str());
 		
 		if (checkLua(L, luaL_dofile(L, "../TypedGame/src/test.lua"))) {

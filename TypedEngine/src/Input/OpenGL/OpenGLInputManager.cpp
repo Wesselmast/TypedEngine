@@ -68,6 +68,7 @@ int OpenGLInputManager::convertKeyToValue(Key key) {
 		case Key::END:             return 269;
 		case Key::SHIFT:           return GLFW_KEY_LEFT_SHIFT;
 	}
+	return -1;
 }
 
 int OpenGLInputManager::convertModifierToValue(Modifier mod) {
@@ -76,6 +77,7 @@ int OpenGLInputManager::convertModifierToValue(Modifier mod) {
 		case Modifier::CONTROL:    return GLFW_MOD_CONTROL;
 		case Modifier::ALT:        return GLFW_MOD_ALT;
 	}
+	return -1;
 }
 
 int OpenGLInputManager::convertMouseButtonToValue(MouseButton button) {
@@ -84,6 +86,7 @@ int OpenGLInputManager::convertMouseButtonToValue(MouseButton button) {
 		case MouseButton::TWO:     return GLFW_MOUSE_BUTTON_2;
 		case MouseButton::MIDDLE:  return GLFW_MOUSE_BUTTON_MIDDLE;
 	}
+	return -1;
 }
 
 Key OpenGLInputManager::convertValueToKey(int value) {

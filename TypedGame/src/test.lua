@@ -3,10 +3,11 @@ require "moreTests/test4"
 
 function main()
 	t = manipulatePosition()
+	t = t + manipulatePosition()
 	print(add(t.x, 50))
 	print(add(t.y, 20))
-	thatTookLong()
-	hidden()
+	-- thatTookLong ()
+	-- computesomethinghard()
 end
 
 function add(a, b) 

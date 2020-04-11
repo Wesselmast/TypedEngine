@@ -50,7 +50,7 @@ void OpenGLWindow::setVSync(bool enabled) {
 
 void OpenGLWindow::refreshViewport() {
 	glm::vec2 size = getSize();
-	glViewport(0, 0, size.x, size.y);
+	glViewport(0, 0, (GLsizei)size.x, (GLsizei)size.y);
 }
 
 bool OpenGLWindow::isRunning() const {

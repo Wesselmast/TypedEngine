@@ -2,7 +2,7 @@
 
 #include "../InputManager.h"
 
-static class OpenGLInputManager : public InputManager {
+class OpenGLInputManager : public InputManager {
 	virtual int convertKeyToValue(Key key) override;
 	virtual int convertModifierToValue(Modifier mod) override;
 	virtual int convertMouseButtonToValue(MouseButton button) override;
