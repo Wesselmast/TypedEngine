@@ -40,8 +40,8 @@ void App::begin() {
 	const char* command = "r = 500 * 2";
 
 	luaL_dostring(L, command);
-	
-	std::cout << "500 * 2 = " << (int)lua_tonumber(L, lua_getglobal(L, "r")) << std::endl;
+	lua_getglobal(L, "r");
+	std::cout << "500 * 2 = " << (int)lua_tonumber(L, 1) << std::endl;
 
 
 
