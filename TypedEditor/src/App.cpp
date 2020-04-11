@@ -10,6 +10,11 @@
 #include "Rendering/Camera.h"
 
 #include <iostream>
+#include <string>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 extern "C" {
 #include "lua/lua.h"
@@ -59,7 +64,7 @@ void App::begin() {
 				luaL_getmetatable(L, "Vector_M");
 				lua_setmetatable(L, -2);
 
-				// pops off metatable
+				// pops off metatable 
 
 				return 1;
 			}
@@ -96,8 +101,22 @@ void App::begin() {
 			}
 		};
 
+		auto setLuaPath = [](lua_State* L, const char* path) -> int {
+			lua_getglobal(L, "package");
+			lua_getfield(L, -1, "path");
+			std::string c_path = lua_tostring(L, -1);
+			c_path.append(";");
+			c_path.append(path);
+			lua_pop(L, 1);
+			lua_pushstring(L, c_path.c_str());
+			lua_setfield(L, -2, "path");
+			lua_pop(L, 1);
+			return 0;
+		};
+
 
 		lua_State* L = luaL_newstate();
+		luaL_openlibs(L);
 
 		lua_pushcfunction(L, Vector2D::createVector2D);
 		lua_setglobal(L, "createVector");
@@ -107,20 +126,19 @@ void App::begin() {
 		lua_pushcfunction(L, Vector2D::__add);
 		lua_settable(L, -3); //because there are 2 other things pushed on
 		
+		std::string dir;
+		char buf[256];
+		GetCurrentDirectoryA(256, buf);
+		dir.append(buf);
+		dir.append("\\..\\TypedGame\\src\\?.lua");
+		setLuaPath(L, dir.c_str());
+		
 		if (checkLua(L, luaL_dofile(L, "../TypedGame/src/test.lua"))) {
-			lua_getglobal(L, "manipulatePosition");
+
+			lua_getglobal(L, "main");
 
 			if (lua_isfunction(L, -1)) {
-				if (checkLua(L, lua_pcall(L, 0, 1, 0))) {
-					lua_pushstring(L, "x");
-					lua_gettable(L, -2);
-					std::cout << "x = " << lua_tonumber(L, -1) << std::endl;
-					lua_pop(L, 1);
-					lua_pushstring(L, "y");
-					lua_gettable(L, -2);
-					std::cout << "y = " << lua_tonumber(L, -1) << std::endl;
-					lua_pop(L, 1);
-				}
+				checkLua(L, lua_pcall(L, 0, 0, 0));
 			}
 		}
 		

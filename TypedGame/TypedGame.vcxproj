@@ -50,12 +50,14 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="src\moreTests\test4.lua" />
+    <None Include="src\test.lua" />
+    <None Include="src\test2.lua" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\TypedEngine\TypedEngine.vcxproj">
       <Project>{81C5F27D-ED7A-6B73-766F-654AE2236277}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\test.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
