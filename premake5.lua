@@ -76,6 +76,62 @@ project "TypedEngine"
 
 
 
+project "TypedGame"
+	location "TypedEditor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir("bin/" .. outputdir .. "/%{prj.name}")
+	objdir("int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"%{prj.location}/src/**.h",
+		"%{prj.location}/src/**.cpp"
+	}
+
+	includedirs {
+		"TypedEngine/src",
+		"TypedEngine/external",
+		"%{IncludeDir.glm}"
+	}
+
+	links {
+		"TypedEngine"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+project "TypedGame"
+	location "TypedGame"
+	kind "None"
+
+	files {
+		"%{prj.location}/src/**.lua"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+
 project "TypedEditor"
 	location "TypedEditor"
 	kind "ConsoleApp"
@@ -92,6 +148,7 @@ project "TypedEditor"
 	}
 
 	includedirs {
+		"TypedGame/src",
 		"TypedEngine/src",
 		"TypedEngine/external",
 		"%{IncludeDir.glm}"

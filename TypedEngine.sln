@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "TypedEngine\external
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TypedEngine", "TypedEngine\TypedEngine.vcxproj", "{81C5F27D-ED7A-6B73-766F-654AE2236277}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TypedGame", "TypedGame\TypedGame.vcxproj", "{A5055D76-1170-11ED-5AAE-C292C657EF41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,6 +41,8 @@ Global
 		{81C5F27D-ED7A-6B73-766F-654AE2236277}.Debug|x64.Build.0 = Debug|x64
 		{81C5F27D-ED7A-6B73-766F-654AE2236277}.Release|x64.ActiveCfg = Release|x64
 		{81C5F27D-ED7A-6B73-766F-654AE2236277}.Release|x64.Build.0 = Release|x64
+		{A5055D76-1170-11ED-5AAE-C292C657EF41}.Debug|x64.ActiveCfg = Debug|x64
+		{A5055D76-1170-11ED-5AAE-C292C657EF41}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
