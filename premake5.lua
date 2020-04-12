@@ -158,6 +158,11 @@ project "TypedEditor"
 		"TypedEngine"
 	}
 
+	postbuildcommands {
+		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
+		'{COPY} "../TypedGame/src" "%{cfg.targetdir}/../TypedGame/src"'
+	}
+
 	filter "system:windows"
 		systemversion "latest"
 
