@@ -9,7 +9,7 @@
 class Application {
 public:
 	virtual void begin() {}
-	virtual void tick(float deltaTime) {}
+	virtual void tick(float deltaTime, float time) {}
 	virtual void end() {}
 
 	virtual void onWindowResized(int width, int height) {}
