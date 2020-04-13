@@ -3,8 +3,8 @@
 #include "Application.h"
 #include <memory>
 
-struct Camera;
-struct Sprite;
+class Camera;
+class Sprite;
 
 class App : public Application {
 
@@ -17,7 +17,5 @@ public:
 	void onMouseScrolled(float offsetX, float offsetY) override;
 	
 private:
-	std::shared_ptr<Camera> camera;
 	std::shared_ptr<Sprite> sprite;
 };
-

@@ -5,7 +5,6 @@
 #include "Window/OpenGL/OpenGLWindow.h"
 
 #include "Rendering/RenderCommand.h"
-#include "Rendering/Camera.h"
 #include "Rendering/Sprite.h"
 
 #include <iostream>
@@ -39,9 +38,6 @@ bool checkLua(lua_State* L, int result) {
 
 // ToDo: @CleanUp: Move rendercommands to main file (main should handle all rendering, this should handle other stuff)
 void App::begin() {
-  camera = std::make_shared<Camera>(window);
-  RenderCommand::init(camera.get()); // @Security: Add an error message telling people they shouldn't do anything render-related before this
-
   sprite = std::make_shared<Sprite>("res/textures/T_Tree.png"); 
   
   
