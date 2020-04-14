@@ -22,7 +22,7 @@ OpenGLTexture::OpenGLTexture(const char * path) {
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
-		fprintf(stderr, "Error: Texture is not valid\n");
+	  fprintf(stderr, "Error: Texture at location %s is not valid!\n", path);
 	}
 	stbi_image_free(data);
 }
