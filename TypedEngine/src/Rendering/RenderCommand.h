@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer.h"
+#include <algorithm>
 
 class RenderCommand {
 public:
@@ -20,22 +21,22 @@ public:
     renderer->drawables.push_back(sprite);
   }
 
-  inline static void run() {
-	  renderer->run();
-  }  
-  
-  inline static void drawSprite(Transform transform) {
-    renderer->drawSprite(transform);
+  inline static void removeSprite(Sprite*  sprite) {
+    renderer->drawables.erase(std::remove(renderer->drawables.begin(), renderer->drawables.end(), sprite), renderer->drawables.end());
   }
+
+  inline static void run() {
+    renderer->run();
+  }  
   
   inline static void drawSprite(Transform transform, Texture* texture) {
     renderer->drawSprite(transform, texture);
   }
-  
-private:
-  ~RenderCommand() {
+
+  inline static void end() {
     delete renderer;
   }
   
+private:  
   static Renderer* renderer;
 };

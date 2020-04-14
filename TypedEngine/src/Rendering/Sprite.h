@@ -6,6 +6,7 @@
 class Sprite : public Drawable {
  public:
   Sprite();
+  ~Sprite();
   Sprite(Transform transform);
   Sprite(const char* texture);
   Sprite(Transform transform, const char* texture);

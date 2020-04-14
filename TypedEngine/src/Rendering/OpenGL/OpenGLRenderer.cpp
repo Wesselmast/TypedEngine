@@ -24,7 +24,6 @@ void OpenGLRenderer::init(Camera* camera) {
 
   setCamera(camera);
   setDefaultShader(new OpenGLShader("res/shaders/default.shader"));
-  setDefaultTexture(new OpenGLTexture("res/textures/T_Default.jpg"));
   
   float vertices[] = {
 		      //pos		  //texcoord
@@ -57,12 +56,7 @@ void OpenGLRenderer::init(Camera* camera) {
 
 void OpenGLRenderer::run() {
   for(Sprite* d : drawables) {
-    if(d->texture != nullptr) {
-      drawSprite(d->transform, d->texture);
-    }
-    else {
-      drawSprite(d->transform);
-    }
+	  drawSprite(d->transform, d->texture);
    }
 }
 
@@ -79,10 +73,6 @@ void OpenGLRenderer::setBlending(bool enabled) {
 void OpenGLRenderer::clear(glm::vec4 color) {
   glClearColor(color.x, color.y, color.z, color.w);
   glClear(GL_COLOR_BUFFER_BIT);
-}
-
-void OpenGLRenderer::drawSprite(Transform transform) {
-  drawSprite(transform, getDefaultTexture());
 }
 
 void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
@@ -106,4 +96,3 @@ glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform) {
   glm::mat4 mvp = getCamera()->getViewProjection() * model;
   return mvp;
 }
-

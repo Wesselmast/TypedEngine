@@ -1,10 +1,6 @@
 #include "App.h"
 
 #include "Core/Transform.h"
-
-#include "Window/OpenGL/OpenGLWindow.h"
-
-#include "Rendering/RenderCommand.h"
 #include "Rendering/Sprite.h"
 
 #include <iostream>
@@ -38,9 +34,14 @@ bool checkLua(lua_State* L, int result) {
 
 // ToDo: @CleanUp: Move rendercommands to main file (main should handle all rendering, this should handle other stuff)
 void App::begin() {
-  sprite = std::make_shared<Sprite>("res/textures/T_Tree.png"); 
-  
-  
+  treeSprite = new Sprite("res/textures/T_True.png"); 
+  treeSprite->transform.position = { 1000, 1250 };
+
+  //ToDo @Optimization: check if transforms are in camera viewport (if not, cull them)
+  for (int i = 0; i < 2; i++) {
+    new Sprite({{ 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f}});
+  }
+
   //LUA SCOPE
   {
     struct Vector2D {
@@ -147,17 +148,7 @@ void App::tick(float deltaTime, float time) {
   camera->setPosition(position);
   camera->setScale(glm::vec2(zoom));
   
-  //ToDo @Optimization: check if transforms are in camera viewport (if not, cull them)
-  for (int i = 0; i < 2; i++)
-    {
-      Transform transform = { { 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f} };
-      
-      //ToDo @CleanUp: get to a point where I just have to 'create' a sprite at some point and have the back-end push it onto a runtime loop (hide rendering)
-      RenderCommand::drawSprite(transform);
-    }
-  
-  sprite->transform.position = { 1000, 1250 };
-  sprite->transform.scale.x = glm::sin(time);
+  treeSprite->transform.scale.x = glm::sin(time);
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {

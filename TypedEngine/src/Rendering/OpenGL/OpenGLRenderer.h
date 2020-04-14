@@ -7,7 +7,6 @@ public:
   virtual void setBlending(bool enabled) override;
   
   virtual void clear(glm::vec4 color) override;
-  virtual void drawSprite(Transform transform) override;
   virtual void drawSprite(Transform transform, Texture * texture) override;
 
   virtual void run() override;
@@ -16,6 +15,7 @@ public:
     delete vertexArray;
     delete vertexBuffer;
     delete indexBuffer;
+    Renderer::~Renderer();
   }
 
 private:
