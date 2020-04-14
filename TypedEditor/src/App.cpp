@@ -34,7 +34,7 @@ bool checkLua(lua_State* L, int result) {
 
 // ToDo: @CleanUp: Move rendercommands to main file (main should handle all rendering, this should handle other stuff)
 void App::begin() {
-  treeSprite = new Sprite("res/textures/T_True.png"); 
+  treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
 
   //ToDo @Optimization: check if transforms are in camera viewport (if not, cull them)
