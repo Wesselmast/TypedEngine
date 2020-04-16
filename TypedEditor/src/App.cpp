@@ -11,12 +11,12 @@
 #endif
 
 extern "C" {
-#include "lua/lua.h"
-#include "lua/lauxlib.h"
-#include "lua/lualib.h"
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
 }
 
-bool checkLua(lua_State* L, int result) {
+static bool checkLua(lua_State* L, int result) {
   if (result != LUA_OK) {
     std::cout << lua_tostring(L, -1) << std::endl;
     return false;
@@ -24,7 +24,7 @@ bool checkLua(lua_State* L, int result) {
   return true;
 }
 
-void compileLua() {
+static void compileLua() {
   struct Vector2D {
     static int createVector2D(lua_State* L) {
       lua_newtable(L);
@@ -42,7 +42,6 @@ void compileLua() {
       lua_setmetatable(L, -2);
       
       // pops off metatable 
-      
       return 1;
     }
     
@@ -157,6 +156,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::A: input.x = -1.0f; break;
   case Key::S: input.y = -1.0f; break;
   case Key::D: input.x =  1.0f; break;
+  case Key::C: luaFuture = std::async(std::launch::async, compileLua); break;
   case Key::ESCAPE: window->close(); break;
   }
 }

@@ -26,20 +26,20 @@ void OpenGLRenderer::init(Camera* camera) {
   setDefaultShader(new OpenGLShader("res/shaders/default.shader"));
   
   float vertices[] = {
-		      //pos		  //texcoord
-		      -1.0,  1.0,   0.0f,  1.0f,
-		       1.0,  1.0,   1.0f,  1.0f,
-		       1.0, -1.0,   1.0f,  0.0f,
-		      -1.0, -1.0,   0.0f,  0.0f
+     //pos	   //texcoord
+     -1.0,  1.0,   0.0f,  1.0f,
+      1.0,  1.0,   1.0f,  1.0f,
+      1.0, -1.0,   1.0f,  0.0f,
+     -1.0, -1.0,   0.0f,  0.0f
   };
   
   unsigned int vertexBufferLayout[] = {
-				       2, 2
+     2, 2
   };
   
   unsigned int indices[] = {
-			    0, 1, 2,
-			    2, 3, 0
+     0, 1, 2,
+     2, 3, 0
   };
 
   vertexArray = new OpenGLVertexArray();

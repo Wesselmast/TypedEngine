@@ -15,15 +15,17 @@ workspace "TypedEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
+IncludeDir["freetype"]  = "TypedEngine/external/freetype/include" 
 IncludeDir["glad"]      = "TypedEngine/external/glad/include" 
 IncludeDir["glfw"]      = "TypedEngine/external/glfw/include" 
 IncludeDir["glm"]       = "TypedEngine/external/glm"
-IncludeDir["lua"]       = "TypedEngine/external/lua/include" 
+IncludeDir["lua"]       = "TypedEngine/external/lua" 
 IncludeDir["stb_image"] = "TypedEngine/external/stb_image" 
 
 group "Dependencies"
 	include "TypedEngine/external/glfw"
 	include "TypedEngine/external/glad"
+	include "TypedEngine/external/freetype"
 	include "TypedEngine/external/lua"
 
 group ""
@@ -51,6 +53,7 @@ project "TypedEngine"
 		"%{prj.location}/src",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glad}",
+		"%{IncludeDir.freetype}",
 		"%{IncludeDir.lua}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}"
@@ -59,46 +62,9 @@ project "TypedEngine"
 	links {
 		"glfw",
 		"glad",
+		"freetype",
 		"lua",
 		"opengl32.lib"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"
-
-
-
-project "TypedGame"
-	location "TypedEditor"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir("bin/" .. outputdir .. "/%{prj.name}")
-	objdir("int/" .. outputdir .. "/%{prj.name}")
-
-	files {
-		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.cpp"
-	}
-
-	includedirs {
-		"TypedEngine/src",
-		"TypedEngine/external",
-		"%{IncludeDir.glm}"
-	}
-
-	links {
-		"TypedEngine"
 	}
 
 	filter "system:windows"
@@ -150,14 +116,13 @@ project "TypedEditor"
 	includedirs {
 		"TypedGame/src",
 		"TypedEngine/src",
-		"TypedEngine/external",
+		"%{IncludeDir.lua}",   --eventually remove this one! Abstract into engine
 		"%{IncludeDir.glm}"
 	}
 
 	links {
 		"TypedEngine"
 	}
-
 
 	-- I dont love this, I should refactor to just have everything in res! 
 	postbuildcommands {
