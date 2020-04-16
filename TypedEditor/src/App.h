@@ -3,6 +3,7 @@
 #include "Application.h"
 #include <memory>
 #include <vector>
+#include <future>
 
 class Sprite;
 
@@ -18,4 +19,5 @@ public:
   
 private:
   Sprite* treeSprite;
+  std::future<void> luaFuture;
 };
