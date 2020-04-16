@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Drawable.h"
+#include "core/entity.h"
 #include "Texture.h"
 
-class Sprite : public Drawable {
+class Sprite : public Entity {
  public:
   Sprite();
   ~Sprite();
@@ -12,4 +12,6 @@ class Sprite : public Drawable {
   Sprite(Transform transform, const char* texture);
 public:
   Texture* texture;
+private:
+  void init(Transform transform, const char* texture);
 };

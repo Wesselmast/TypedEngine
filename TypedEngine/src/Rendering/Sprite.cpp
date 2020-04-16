@@ -6,31 +6,33 @@
 #include "OpenGL/OpenGLTexture.h"
 
 const char* defaultPath = "res/textures/T_Default.jpg";
+const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 
 
 Sprite::Sprite() {
-  this->transform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} };
-  this->texture = new OpenGLTexture(defaultPath);
-  RenderCommand::addSprite(this);
+  init(defaultTransform, defaultPath);
 }
 
 Sprite::Sprite(Transform transform) {
-  this->transform = transform;
-  this->texture = new OpenGLTexture(defaultPath);
-  RenderCommand::addSprite(this);
+  init(transform, defaultPath);
 }
 
 Sprite::Sprite(const char* texture) {
-  this->transform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} };
-  this->texture = new OpenGLTexture(texture);
-  RenderCommand::addSprite(this);
+  init(defaultTransform, texture);
 }
 
 Sprite::Sprite(Transform transform, const char* texture) {
+  init(transform, texture);
+}
+
+void Sprite::init(Transform transform, const char* texture) {
   this->transform = transform;
   this->texture = new OpenGLTexture(texture);
-  RenderCommand::addSprite(this);
+
+  setName("Sprite");
+  RenderCommand::addSprite(this);  
 }
 
 Sprite::~Sprite() {
+  printf("Deleted sprite: %s", name.c_str());
   RenderCommand::removeSprite(this);
 }

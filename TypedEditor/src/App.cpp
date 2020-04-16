@@ -31,7 +31,6 @@ bool checkLua(lua_State* L, int result) {
   return true;
 }
 
-
 // ToDo: @CleanUp: Move rendercommands to main file (main should handle all rendering, this should handle other stuff)
 void App::begin() {
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
@@ -42,10 +41,13 @@ void App::begin() {
     new Sprite({{ 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f}});
   }
 
+  Sprite t;
+  t.setName("t");
+
   //LUA SCOPE
   {
     struct Vector2D {
-      static int createVector2D(lua_State* L) {
+    static int createVector2D(lua_State* L) {
 	lua_newtable(L);
 	lua_pushstring(L, "x");
 	lua_pushnumber(L, 0);

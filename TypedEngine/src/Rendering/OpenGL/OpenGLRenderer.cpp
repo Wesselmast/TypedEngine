@@ -56,8 +56,8 @@ void OpenGLRenderer::init(Camera* camera) {
 
 void OpenGLRenderer::run() {
   for(Sprite* d : drawables) {
-	  drawSprite(d->transform, d->texture);
-   }
+    drawSprite(d->transform, d->texture);
+  }
 }
 
 void OpenGLRenderer::setBlending(bool enabled) {
@@ -76,7 +76,7 @@ void OpenGLRenderer::clear(glm::vec4 color) {
 }
 
 void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
-	texture->bind();
+  texture->bind();
   
   vertexArray->bind();
   
