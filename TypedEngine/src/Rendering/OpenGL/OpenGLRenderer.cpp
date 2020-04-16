@@ -4,8 +4,11 @@
 #include "glfw/glfw3.h"
 #include "glm/gtx/quaternion.hpp"
 
-//IMPORTANT @CleanUp: Make own error logging function and include that instead;
+//@CleanUp: Make own error logging function and include that instead;
 #include <stdio.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include "OpenGLShader.h"
 #include "OpenGLTexture.h"
@@ -14,9 +17,17 @@
 #include "OpenGLVertexArray.h"
 
 
+//@CleanUp: This text stuff all has to be abstracted, for now this is where it'll live!
+
 void OpenGLRenderer::init(Camera* camera) {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD");
+    return;
+  }
+
+  FT_Library ft;
+  if(FT_Init_FreeType(&ft)) {
+    fprintf(stderr, "Failed to initialize FreeType");
     return;
   }
   
