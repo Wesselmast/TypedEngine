@@ -9,6 +9,8 @@ public:
   virtual void clear(glm::vec4 color) override;
   virtual void drawSprite(Transform transform, Texture * texture) override;
 
+  void drawText();
+  
   virtual void run() override;
   
   ~OpenGLRenderer() {
@@ -25,4 +27,7 @@ private:
   VertexArray* vertexArray;
   VertexBuffer* vertexBuffer;
   IndexBuffer* indexBuffer;
+  VertexArray* vertexArrayT;
+  VertexBuffer* vertexBufferT;
+  IndexBuffer* indexBufferT;
 };

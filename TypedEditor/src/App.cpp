@@ -135,7 +135,7 @@ void App::begin() {
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 1; i < 3; i++) {
     new Sprite({{ 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f}});
   }
 

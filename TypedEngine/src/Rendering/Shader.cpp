@@ -51,5 +51,4 @@ char * Shader::filterShaderCommands(const char * createCommand, const char * del
 		fprintf(stderr, "Error: Was not able to filter given shader commands");
 	}
 	return result;
-	return nullptr;
 }
