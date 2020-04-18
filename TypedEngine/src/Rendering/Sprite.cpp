@@ -1,9 +1,7 @@
 #include "sprite.h"
 
-
-//this is very ugly, fix this @CleanUp
 #include "RenderCommand.h"
-#include "OpenGL/OpenGLTexture.h"
+#include "renderAPI.h"
 
 const char* defaultPath = "res/textures/T_Default.jpg";
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 
@@ -26,7 +24,7 @@ Sprite::Sprite(Transform transform, const char* texture) {
 
 void Sprite::init(Transform transform, const char* texture) {
   this->transform = transform;
-  this->texture = new OpenGLTexture(texture);
+  this->texture = RenderAPI::createTexture(texture);
 
   setName("Sprite");
   RenderCommand::addSprite(this);  

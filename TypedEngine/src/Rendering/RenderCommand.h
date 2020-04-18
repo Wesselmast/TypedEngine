@@ -2,6 +2,9 @@
 
 #include "Renderer.h"
 #include <algorithm>
+#include "renderapi.h"
+
+
 
 class RenderCommand {
 public:
@@ -29,10 +32,6 @@ public:
     renderer->run();
   }  
   
-  inline static void drawSprite(Transform transform, Texture* texture) {
-    renderer->drawSprite(transform, texture);
-  }
-
   inline static void end() {
     delete renderer;
   }

@@ -169,7 +169,7 @@ void OpenGLRenderer::drawText() {
     
     glBindTexture(GL_TEXTURE_2D, ch.textureID);
     vertexBufferT->bind();
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    vertexBufferT->addSubData(vertices, sizeof(vertices));
     vertexBufferT->unbind();
     
     glDrawElements(GL_TRIANGLES, vertexArrayT->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);

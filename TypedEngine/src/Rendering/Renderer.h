@@ -8,7 +8,7 @@
 #include "Camera.h"
 
 #include "glm/glm.hpp"
-#include "../Core/Transform.h"
+#include "Core/Transform.h"
 
 #include <vector>
 
@@ -24,7 +24,7 @@ public:
   
   virtual ~Renderer() { 
     for(auto d : drawables) {
-		delete d;
+      delete d;
     }
     delete defaultShader;
     delete defaultTexture;
