@@ -19,11 +19,9 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <iostream>
 
 //@CleanUp: This text stuff all has to be abstracted, for now this is where it'll live!
-
-
-
 
 struct Character {
   GLuint textureID;
@@ -48,7 +46,7 @@ void OpenGLRenderer::init(Camera* camera) {
   }
 
   FT_Face face;
-  if(FT_New_Face(ft, "res/fonts/Menlo-Regular.ttf", 0, &face)) {
+  if(FT_New_Face(ft, "res/fonts/arial.ttf", 0, &face)) {
     fprintf(stderr, "Failed to load font Menlo-Regular.ttf");
     return;
   }
@@ -59,22 +57,20 @@ void OpenGLRenderer::init(Camera* camera) {
 
   for(GLubyte c = 0; c < 128; c++) {
     if(FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-	fprintf(stderr, "Failed to load character X");
-	continue;
+      fprintf(stderr, "Failed to load character");
+      continue;
     }
-    
-    FT_Bitmap bitmap = face->glyph->bitmap;
     
     GLuint fontTextureID;
     glGenTextures(1, &fontTextureID);
     glBindTexture(GL_TEXTURE_2D, fontTextureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, bitmap.width, bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, bitmap.buffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    Character character = { fontTextureID, { bitmap.width, bitmap.rows }, { face->glyph->bitmap_left, face->glyph->bitmap_top }, face->glyph->advance.x };
+    Character character = { fontTextureID, { face->glyph->bitmap.width, face->glyph->bitmap.rows }, { face->glyph->bitmap_left, face->glyph->bitmap_top }, face->glyph->advance.x };
     characters.insert(std::pair<GLchar, Character>(c, character));
   }
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -116,15 +112,14 @@ void OpenGLRenderer::init(Camera* camera) {
 	
   vertexArray->bind();
 
-
   vertexArrayT = new OpenGLVertexArray();
   vertexBufferT = new OpenGLVertexBuffer(vertices, sizeof vertices);
   indexBufferT = new OpenGLIndexBuffer(indices, sizeof indices);
-
+  
   vertexBufferT->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
-
-  vertexArrayT->setVertexBuffer(vertexBuffer);
-  vertexArrayT->setIndexBuffer(indexBuffer);
+  
+  vertexArrayT->setVertexBuffer(vertexBufferT);
+  vertexArrayT->setIndexBuffer(indexBufferT);
 
   vertexArrayT->bind();
 }
@@ -134,7 +129,6 @@ void OpenGLRenderer::run() {
     drawSprite(d->transform, d->texture);
   }
 
-
   // yet more text stuff that needs to be moved!
 
   drawText();
@@ -143,14 +137,14 @@ void OpenGLRenderer::run() {
 
 
 void OpenGLRenderer::drawText() {
+  std::string text = "Hello, World!";
+  Transform transform = { { 25.0f, 25.0f }, 0.0f, { 5.0f, 5.0f } };
+
   defaultTextShader->bind();
+  defaultTextShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
   defaultTextShader->setUniformFloat4("textColor", { 1.0f, 0.0f, 0.0f, 1.0f });
-  defaultTextShader->setUniformInt1("uTexture", 0);
   glActiveTexture(GL_TEXTURE0);
   vertexArrayT->bind();
-  
-  std::string text = "Hello, World!";
-  Transform transform = { { 25.0f, 25.0f }, 0.0f, { 1.0f, 1.0f } };
 
   GLfloat x = transform.position.x;
   GLfloat y = transform.position.y;
@@ -165,27 +159,20 @@ void OpenGLRenderer::drawText() {
 
     GLfloat w = ch.size.x * s.x;
     GLfloat h = ch.size.y * s.y;
-    
+
     GLfloat vertices[] = {
        xpos,     ypos,       0.0f, 1.0f,
        xpos + w, ypos,       1.0f, 1.0f,
-       xpos + w, ypos + h,   1.0f, 0.0f,
+       xpos + w, ypos + w,   1.0f, 0.0f,
        xpos,     ypos + h,   0.0f, 0.0f,
     };
-
+    
     glBindTexture(GL_TEXTURE_2D, ch.textureID);
     vertexBufferT->bind();
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-	unsigned int vertexBufferLayout[] = {
-	  2, 2
-	};
-	vertexBufferT->setLayout(vertexBufferLayout, sizeof vertexBufferLayout);
-	vertexArrayT->setVertexBuffer(vertexBuffer);
-	vertexArrayT->bind();
     vertexBufferT->unbind();
     
     glDrawElements(GL_TRIANGLES, vertexArrayT->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
-
     x += (ch.advance >> 6) * s.x;
   }
   vertexArrayT->unbind();
@@ -196,6 +183,7 @@ void OpenGLRenderer::drawText() {
 
 void OpenGLRenderer::setBlending(bool enabled) {
   if (enabled) {
+    glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
@@ -211,12 +199,12 @@ void OpenGLRenderer::clear(glm::vec4 color) {
 
 void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
   texture->bind();
+  transform.scale.x *= -1.0f;
   
   vertexArray->bind();
   
   getDefaultShader()->bind();
   getDefaultShader()->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
-  getDefaultShader()->setUniformInt1("uTexture", 0);
   
   glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 }

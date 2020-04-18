@@ -157,6 +157,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::S: input.y = -1.0f; break;
   case Key::D: input.x =  1.0f; break;
   case Key::C: luaFuture = std::async(std::launch::async, compileLua); break;
+  case Key::F: position = {0.0f, 0.0f}; break;
   case Key::ESCAPE: window->close(); break;
   }
 }
