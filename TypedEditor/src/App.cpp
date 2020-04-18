@@ -146,8 +146,9 @@ void App::tick(float deltaTime, float time) {
   position += input * deltaTime * zoom * panSpeed;
   camera->setPosition(position);
   camera->setScale(glm::vec2(zoom));
-  
-  treeSprite->transform.scale.x = glm::sin(time);
+
+  const float rotationSpeed = 5.0f;
+  treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed) + 1.0f) / 2;
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {

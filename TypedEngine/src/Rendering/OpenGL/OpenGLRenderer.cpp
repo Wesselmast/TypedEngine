@@ -46,7 +46,7 @@ void OpenGLRenderer::init(Camera* camera) {
   }
 
   FT_Face face;
-  if(FT_New_Face(ft, "res/fonts/arial.ttf", 0, &face)) {
+  if(FT_New_Face(ft, "res/fonts/Menlo-Regular.ttf", 0, &face)) {
     fprintf(stderr, "Failed to load font Menlo-Regular.ttf");
     return;
   }
@@ -64,7 +64,7 @@ void OpenGLRenderer::init(Camera* camera) {
     GLuint fontTextureID;
     glGenTextures(1, &fontTextureID);
     glBindTexture(GL_TEXTURE_2D, fontTextureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -163,7 +163,7 @@ void OpenGLRenderer::drawText() {
     GLfloat vertices[] = {
        xpos,     ypos,       0.0f, 1.0f,
        xpos + w, ypos,       1.0f, 1.0f,
-       xpos + w, ypos + w,   1.0f, 0.0f,
+       xpos + w, ypos + h,   1.0f, 0.0f,
        xpos,     ypos + h,   0.0f, 0.0f,
     };
     
@@ -180,9 +180,9 @@ void OpenGLRenderer::drawText() {
   defaultTextShader->unbind();
 }
 
-
 void OpenGLRenderer::setBlending(bool enabled) {
   if (enabled) {
+    // @CleanUp: Culling should be in a separate function
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
