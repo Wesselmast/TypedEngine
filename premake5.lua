@@ -59,12 +59,24 @@ project "TypedEngine"
 		"%{IncludeDir.stb_image}"
 	}
 
-	links {
-		"glfw",
+	links {	
+		"kernel32.lib",
+		"user32.lib",
+		"gdi32.lib",
+		"winspool.lib",
+		"comdlg32.lib",
+		"advapi32.lib",
+		"shell32.lib",
+		"ole32.lib",
+		"oleaut32.lib",
+		"uuid.lib",
+		"odbc32.lib",
+		"odbccp32.lib",
 		"glad",
 		"freetype",
 		"lua",
-		"opengl32.lib"
+		"opengl32.lib",
+		"glfw"
 	}
 
 	filter "system:windows"
@@ -77,26 +89,6 @@ project "TypedEngine"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
-
-project "TypedGame"
-	location "TypedGame"
-	kind "None"
-
-	files {
-		"%{prj.location}/src/**.lua"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"
-
 
 project "TypedEditor"
 	location "TypedEditor"
