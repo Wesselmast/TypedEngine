@@ -2,7 +2,6 @@
 #include "shader.h"
 
 #include <iostream>
-#include <cstring>
 
 void Shader::parseShader(const char * path, ShaderProgramSource * source) {
   FILE* shaderFile;
