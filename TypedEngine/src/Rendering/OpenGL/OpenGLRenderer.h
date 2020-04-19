@@ -8,8 +8,9 @@ public:
   
   virtual void clear(glm::vec4 color) override;
   virtual void drawSprite(Transform transform, Texture * texture) override;
-
-  void drawText();
+  
+  void drawQuad(Transform transform, glm::vec4 color);
+  void drawText(std::string text, Transform transform);
   
   virtual void run() override;
   
@@ -30,4 +31,7 @@ private:
   VertexArray* vertexArrayT;
   VertexBuffer* vertexBufferT;
   IndexBuffer* indexBufferT;
+  VertexArray* vertexArrayQ;
+  VertexBuffer* vertexBufferQ;
+  IndexBuffer* indexBufferQ;
 };

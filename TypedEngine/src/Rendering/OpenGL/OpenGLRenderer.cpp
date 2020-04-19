@@ -82,17 +82,30 @@ void OpenGLRenderer::init(Camera* camera) {
   this->camera = camera;
   defaultSpriteShader = new OpenGLShader("res/shaders/default.shader");
   defaultTextShader = new OpenGLShader("res/shaders/defaultText.shader");
-
+  defaultQuadShader = new OpenGLShader("res/shaders/defaultQuad.shader");
+  
   float vertices[] = {
      //pos	   //texcoord
-     -1.0,  1.0,   0.0f,  1.0f,
-      1.0,  1.0,   1.0f,  1.0f,
-      1.0, -1.0,   1.0f,  0.0f,
-     -1.0, -1.0,   0.0f,  0.0f
+     -1.0f,  1.0f,   0.0f,  1.0f,
+      1.0f,  1.0f,   1.0f,  1.0f,
+      1.0f, -1.0f,   1.0f,  0.0f,
+     -1.0f, -1.0f,   0.0f,  0.0f
+  };
+
+  float verticesSimple[] = {
+     //pos    
+     -1.0f,  1.0f,  
+      1.0f,  1.0f,
+      1.0f, -1.0f,
+     -1.0f, -1.0f
   };
   
   unsigned int vertexBufferLayout[] = {
      2, 2
+  };
+  
+  unsigned int vertexBufferLayoutSimple[] = {
+     2
   };
   
   unsigned int indices[] = {
@@ -121,6 +134,17 @@ void OpenGLRenderer::init(Camera* camera) {
   vertexArrayT->setIndexBuffer(indexBufferT);
 
   vertexArrayT->bind();
+
+  vertexArrayQ = new OpenGLVertexArray();
+  vertexBufferQ = new OpenGLVertexBuffer(verticesSimple, sizeof verticesSimple);
+  indexBufferQ = new OpenGLIndexBuffer(indices, sizeof indices);
+  
+  vertexBufferQ->setLayout(vertexBufferLayoutSimple, sizeof vertexBufferLayoutSimple);
+  
+  vertexArrayQ->setVertexBuffer(vertexBufferQ);
+  vertexArrayQ->setIndexBuffer(indexBufferQ);
+
+  vertexArrayQ->bind();
 }
 
 void OpenGLRenderer::run() {
@@ -130,13 +154,15 @@ void OpenGLRenderer::run() {
 
   // yet more text stuff that needs to be moved!
 
-  drawText();  
+  std::string text = "PEEEEEEEEP!";
+  Transform transform = { { 25.0f, 25.0f }, 0.0f, { 5.0f, 5.0f } };
+  drawText(text, transform);
+
+
+  drawQuad(transform, { 0.9f, 0.4f, 0.6f, 0.4f });
 }
 
-void OpenGLRenderer::drawText() {
-  std::string text = "Dag, Wessel!";
-  Transform transform = { { 25.0f, 25.0f }, 0.0f, { 5.0f, 5.0f } };
-
+void OpenGLRenderer::drawText(std::string text, Transform transform) {
   defaultTextShader->bind();
   defaultTextShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
   defaultTextShader->setUniformFloat4("textColor", { 1.0f, 0.0f, 0.0f, 1.0f });
@@ -203,6 +229,18 @@ void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
   defaultSpriteShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
   
   glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+  texture->unbind();
+}
+
+void OpenGLRenderer::drawQuad(Transform transform, glm::vec4 color) {
+  transform.scale.x *= -1.0f;
+  vertexArrayQ->bind();
+
+  defaultQuadShader->bind();
+  defaultQuadShader->setUniformFloat4("uColor", color);
+  defaultQuadShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
+  
+  glDrawElements(GL_TRIANGLES, vertexArrayQ->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 }
 
 glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform) {
