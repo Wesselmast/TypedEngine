@@ -148,6 +148,8 @@ void App::tick(float deltaTime, float time) {
   camera->setScale(glm::vec2(zoom));
 
   const float rotationSpeed = 5.0f;
+
+  // @CleanUp: There should be an option for culling to get turned off per object. So the tree can actually be inversed properly.
   treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed) + 1.0f) / 2;
 }
 
