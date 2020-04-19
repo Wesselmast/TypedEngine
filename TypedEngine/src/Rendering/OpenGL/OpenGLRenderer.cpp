@@ -136,7 +136,7 @@ void OpenGLRenderer::run() {
 }
 
 void OpenGLRenderer::drawText() {
-  std::string text = "Hello, World!";
+  std::string text = "Dag, Wessel!";
   Transform transform = { { 25.0f, 25.0f }, 0.0f, { 5.0f, 5.0f } };
 
   defaultTextShader->bind();

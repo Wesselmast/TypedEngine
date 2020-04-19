@@ -132,11 +132,11 @@ const float zoomSpeed = 0.5f;
 const float panSpeed = 750.0f;
 
 void App::begin() {
-  treeSprite = new Sprite("res/textures/T_Tree.png"); 
+  treeSprite = new Sprite("res/textures/T_Tree.jpg"); 
   treeSprite->transform.position = { 1000, 1250 };
 
-  for (int i = 1; i < 3; i++) {
-    new Sprite({{ 1024.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f}});
+  for (int i = 1; i < 50; i++) {
+    new Sprite({{ 512.0f * i, 0.0f }, 0.0f, { 1.0f, 1.0f}});
   }
 
   luaFuture = std::async(std::launch::async, compileLua);
@@ -150,7 +150,7 @@ void App::tick(float deltaTime, float time) {
   const float rotationSpeed = 5.0f;
 
   // @CleanUp: There should be an option for culling to get turned off per object. So the tree can actually be inversed properly.
-  treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed) + 1.0f) / 2;
+  //treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed) + 1.0f) / 2;
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {

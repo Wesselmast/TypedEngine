@@ -22,7 +22,7 @@ ifeq ($(config),debug)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++17
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += external/glad/bin/Debug-windows-x86_64/glad/glad.lib external/freetype/bin/Debug-windows-x86_64/freetype/freetype.lib external/lua/bin/Debug-windows-x86_64/lua/lua.lib external/glfw/bin/Debug-windows-x86_64/glfw/glfw.lib -lkernel32.lib -luser32.lib -lgdi32.lib -lwinspool.lib -lcomdlg32.lib -ladvapi32.lib -lshell32.lib -lole32.lib -loleaut32.lib -luuid.lib -lodbc32.lib -lodbccp32.lib -lopengl32.lib
+  LIBS += external/glad/bin/Debug-windows-x86_64/glad/glad.lib external/freetype/bin/Debug-windows-x86_64/freetype/freetype.lib external/lua/bin/Debug-windows-x86_64/lua/lua.lib external/glfw/bin/Debug-windows-x86_64/glfw/glfw.lib -lopengl32 -lgdi32
   LDDEPS += external/glad/bin/Debug-windows-x86_64/glad/glad.lib external/freetype/bin/Debug-windows-x86_64/freetype/freetype.lib external/lua/bin/Debug-windows-x86_64/lua/lua.lib external/glfw/bin/Debug-windows-x86_64/glfw/glfw.lib
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
   LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
@@ -49,7 +49,7 @@ ifeq ($(config),release)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += external/glad/bin/Release-windows-x86_64/glad/glad.lib external/freetype/bin/Release-windows-x86_64/freetype/freetype.lib external/lua/bin/Release-windows-x86_64/lua/lua.lib external/glfw/bin/Release-windows-x86_64/glfw/glfw.lib -lkernel32.lib -luser32.lib -lgdi32.lib -lwinspool.lib -lcomdlg32.lib -ladvapi32.lib -lshell32.lib -lole32.lib -loleaut32.lib -luuid.lib -lodbc32.lib -lodbccp32.lib -lopengl32.lib
+  LIBS += external/glad/bin/Release-windows-x86_64/glad/glad.lib external/freetype/bin/Release-windows-x86_64/freetype/freetype.lib external/lua/bin/Release-windows-x86_64/lua/lua.lib external/glfw/bin/Release-windows-x86_64/glfw/glfw.lib -lopengl32 -lgdi32
   LDDEPS += external/glad/bin/Release-windows-x86_64/glad/glad.lib external/freetype/bin/Release-windows-x86_64/freetype/freetype.lib external/lua/bin/Release-windows-x86_64/lua/lua.lib external/glfw/bin/Release-windows-x86_64/glfw/glfw.lib
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
   LINKCMD = $(AR) -rcs "$@" $(OBJECTS)

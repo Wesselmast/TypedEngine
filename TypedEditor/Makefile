@@ -22,8 +22,8 @@ ifeq ($(config),debug)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++17
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/Debug-windows-x86_64/TypedEngine/TypedEngine.lib
-  LDDEPS += ../bin/Debug-windows-x86_64/TypedEngine/TypedEngine.lib
+  LIBS += ../bin/Debug-windows-x86_64/TypedEngine/TypedEngine.lib ../TypedEngine/external/glad/bin/Debug-windows-x86_64/glad/glad.lib ../TypedEngine/external/freetype/bin/Debug-windows-x86_64/freetype/freetype.lib ../TypedEngine/external/lua/bin/Debug-windows-x86_64/lua/lua.lib ../TypedEngine/external/glfw/bin/Debug-windows-x86_64/glfw/glfw.lib -lopengl32 -lgdi32
+  LDDEPS += ../bin/Debug-windows-x86_64/TypedEngine/TypedEngine.lib ../TypedEngine/external/glad/bin/Debug-windows-x86_64/glad/glad.lib ../TypedEngine/external/freetype/bin/Debug-windows-x86_64/freetype/freetype.lib ../TypedEngine/external/lua/bin/Debug-windows-x86_64/lua/lua.lib ../TypedEngine/external/glfw/bin/Debug-windows-x86_64/glfw/glfw.lib
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
@@ -52,8 +52,8 @@ ifeq ($(config),release)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += ../bin/Release-windows-x86_64/TypedEngine/TypedEngine.lib
-  LDDEPS += ../bin/Release-windows-x86_64/TypedEngine/TypedEngine.lib
+  LIBS += ../bin/Release-windows-x86_64/TypedEngine/TypedEngine.lib ../TypedEngine/external/glad/bin/Release-windows-x86_64/glad/glad.lib ../TypedEngine/external/freetype/bin/Release-windows-x86_64/freetype/freetype.lib ../TypedEngine/external/lua/bin/Release-windows-x86_64/lua/lua.lib ../TypedEngine/external/glfw/bin/Release-windows-x86_64/glfw/glfw.lib -lopengl32 -lgdi32
+  LDDEPS += ../bin/Release-windows-x86_64/TypedEngine/TypedEngine.lib ../TypedEngine/external/glad/bin/Release-windows-x86_64/glad/glad.lib ../TypedEngine/external/freetype/bin/Release-windows-x86_64/freetype/freetype.lib ../TypedEngine/external/lua/bin/Release-windows-x86_64/lua/lua.lib ../TypedEngine/external/glfw/bin/Release-windows-x86_64/glfw/glfw.lib
   ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS

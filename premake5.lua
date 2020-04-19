@@ -60,23 +60,12 @@ project "TypedEngine"
 	}
 
 	links {	
-		"kernel32.lib",
-		"user32.lib",
-		"gdi32.lib",
-		"winspool.lib",
-		"comdlg32.lib",
-		"advapi32.lib",
-		"shell32.lib",
-		"ole32.lib",
-		"oleaut32.lib",
-		"uuid.lib",
-		"odbc32.lib",
-		"odbccp32.lib",
 		"glad",
 		"freetype",
 		"lua",
-		"opengl32.lib",
-		"glfw"
+		"glfw",
+	 	"opengl32",
+		"gdi32"
 	}
 
 	filter "system:windows"
@@ -113,7 +102,13 @@ project "TypedEditor"
 	}
 
 	links {
-		"TypedEngine"
+		"TypedEngine",
+		"glad",
+		"freetype",
+		"lua",
+		"glfw",
+		"opengl32",
+		"gdi32"
 	}
 
 	-- I dont love this, I should refactor to just have everything in res! 

@@ -63,7 +63,7 @@ ifneq (,$(TypedEngine_config))
 	@${MAKE} --no-print-directory -C TypedEngine -f Makefile config=$(TypedEngine_config)
 endif
 
-TypedEditor: TypedEngine
+TypedEditor: TypedEngine glad freetype lua glfw
 ifneq (,$(TypedEditor_config))
 	@echo "==== Building TypedEditor ($(TypedEditor_config)) ===="
 	@${MAKE} --no-print-directory -C TypedEditor -f Makefile config=$(TypedEditor_config)
