@@ -31,7 +31,6 @@ struct Character {
 };
 
 std::map<GLchar, Character> characters;
-OpenGLShader* defaultTextShader;
 
 void OpenGLRenderer::init(Camera* camera) {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -80,8 +79,8 @@ void OpenGLRenderer::init(Camera* camera) {
   
   setBlending(true);
 
-  setCamera(camera);
-  setDefaultShader(new OpenGLShader("res/shaders/default.shader"));
+  this->camera = camera;
+  defaultSpriteShader = new OpenGLShader("res/shaders/default.shader");
   defaultTextShader = new OpenGLShader("res/shaders/defaultText.shader");
 
   float vertices[] = {
@@ -131,8 +130,7 @@ void OpenGLRenderer::run() {
 
   // yet more text stuff that needs to be moved!
 
-  drawText();
-  
+  drawText();  
 }
 
 void OpenGLRenderer::drawText() {
@@ -199,11 +197,10 @@ void OpenGLRenderer::clear(glm::vec4 color) {
 void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
   texture->bind();
   transform.scale.x *= -1.0f;
-  
   vertexArray->bind();
-  
-  getDefaultShader()->bind();
-  getDefaultShader()->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
+
+  defaultSpriteShader->bind();
+  defaultSpriteShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
   
   glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 }
@@ -214,6 +211,6 @@ glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform) {
   glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(transform.scale, 1.0f));
   
   glm::mat4 model = position * rotation * scale;
-  glm::mat4 mvp = getCamera()->getViewProjection() * model;
+  glm::mat4 mvp = camera->getViewProjection() * model;
   return mvp;
 }

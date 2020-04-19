@@ -26,23 +26,16 @@ public:
     for(auto d : drawables) {
       delete d;
     }
-    delete defaultShader;
-    delete defaultTexture;
+    delete defaultTextShader;
+    delete defaultSpriteShader;
+    delete defaultQuadShader;
     delete camera;
   }
 
   std::vector<Sprite*> drawables;
 protected:
-  inline void setDefaultShader(Shader* shader) { defaultShader = shader; }
-  inline void setDefaultTexture(Texture* texture) { defaultTexture = texture; }
-  inline void setCamera(Camera* camera) { this->camera = camera; }
-  
-  inline Shader* getDefaultShader() const { return defaultShader; }
-  inline Texture* getDefaultTexture() const { return defaultTexture; }
-  inline Camera* getCamera() const { return camera; }
-
-private:  
-  Shader* defaultShader;
-  Texture* defaultTexture;
+  Shader* defaultTextShader;
+  Shader* defaultSpriteShader;
+  Shader* defaultQuadShader;
   Camera* camera;
 };
