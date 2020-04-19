@@ -17,7 +17,7 @@ public:
     delete vertexArray;
     delete vertexBuffer;
     delete indexBuffer;
-    Renderer::~Renderer();
+    //Renderer::~Renderer();
   }
 
 private:
