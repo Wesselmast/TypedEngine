@@ -11,7 +11,7 @@
 **.vcxproj.user
 
 # Makefiles
-Makefile
+/Makefile
 
 # Debug batch scripts
 run_debug.bat
