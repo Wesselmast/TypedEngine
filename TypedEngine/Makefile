@@ -15,7 +15,7 @@ ifeq ($(config),debug)
   TARGETDIR = ../bin/Debug-windows-x86_64/TypedEngine
   TARGET = $(TARGETDIR)/TypedEngine.lib
   OBJDIR = ../int/Debug-windows-x86_64/TypedEngine
-  DEFINES +=
+  DEFINES += -DTE_DEBUG
   INCLUDES += -Isrc -Iexternal/glfw/include -Iexternal/glad/include -Iexternal/freetype/include -Iexternal/lua -Iexternal/glm -Iexternal/stb_image
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)

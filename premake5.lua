@@ -74,6 +74,9 @@ project "TypedEngine"
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
+		defines {
+			"TE_DEBUG"
+		}
 
 	filter "configurations:Release"
 		runtime "Release"

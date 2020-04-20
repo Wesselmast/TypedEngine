@@ -15,12 +15,21 @@ Application* app;
 static void callback_keyPressed(Key key, Modifier mod) { app->onKeyPressed(key, mod); }
 static void callback_keyReleased(Key key, Modifier mod) { app->onKeyReleased (key, mod); }
 static void callback_mouseScrolled(float offsetx, float offsety) { app->onMouseScrolled(offsetx, offsety); }
-  
+
+static std::string getName() {
+  std::string name = "TypedEngine : ";
+#ifdef TE_DEBUG
+  name += "Debug";
+#else
+  name += "Release";
+#endif
+  return name;
+}
 int main() {
 
   app = createApplication();
   
-  Window* window = new OpenGLWindow({ 680, 480 }, "TypedEngine", false);
+  Window* window = new OpenGLWindow({ 680, 480 }, getName().c_str(), false);
   
   window->callback_keyPressed(callback_keyPressed);
   window->callback_keyReleased(callback_keyReleased);
