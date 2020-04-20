@@ -11,4 +11,4 @@
 **.vcxproj.user
 
 # Makefiles
-/Makefile
+**/Makefile
