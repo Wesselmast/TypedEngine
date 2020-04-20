@@ -148,21 +148,18 @@ void OpenGLRenderer::init(Camera* camera) {
 }
 
 void OpenGLRenderer::run() {
-  for(Sprite* d : drawables) {
-    drawSprite(d->transform, d->texture);
+  for(auto& s : sprites) {
+    drawSprite(s->transform, s->texture);
   }
-
-  // yet more text stuff that needs to be moved!
-
-  std::string text = "PEEEEEEEEP!";
-  Transform transform = { { 25.0f, 25.0f }, 0.0f, { 5.0f, 5.0f } };
-  drawText(text, transform);
-
-
-  drawQuad(transform, { 0.9f, 0.4f, 0.6f, 0.4f });
+  for(auto& t : texts) {
+    drawText(t->transform, t->text);
+  }
+  for(auto& q : quads) {
+    drawQuad(q->transform, q->color);
+  }
 }
 
-void OpenGLRenderer::drawText(std::string text, Transform transform) {
+void OpenGLRenderer::drawText(Transform transform, std::string text) {
   defaultTextShader->bind();
   defaultTextShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
   defaultTextShader->setUniformFloat4("textColor", { 1.0f, 0.0f, 0.0f, 1.0f });
@@ -206,12 +203,20 @@ void OpenGLRenderer::drawText(std::string text, Transform transform) {
 void OpenGLRenderer::setBlending(bool enabled) {
   if (enabled) {
     // @CleanUp: Culling should be in a separate function
-    glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
   else {
     glDisable(GL_BLEND);
+  }
+}
+
+void OpenGLRenderer::setCulling(bool enabled) {
+  if(enabled) {
+    glEnable(GL_CULL_FACE);  
+  }
+  else {
+    glDisable(GL_CULL_FACE);
   }
 }
 

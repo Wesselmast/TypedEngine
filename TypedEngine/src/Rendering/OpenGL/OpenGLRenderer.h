@@ -5,12 +5,12 @@ class OpenGLRenderer : public Renderer {
 public:
   virtual void init(Camera* camera) override;
   virtual void setBlending(bool enabled) override;
+  virtual void setCulling(bool enabled) override;
   
   virtual void clear(glm::vec4 color) override;
   virtual void drawSprite(Transform transform, Texture * texture) override;
-  
-  void drawQuad(Transform transform, glm::vec4 color);
-  void drawText(std::string text, Transform transform);
+  virtual void drawText(Transform transform, std::string) override;
+  virtual void drawQuad(Transform transform, glm::vec4 color) override;
   
   virtual void run() override;
   
@@ -18,7 +18,12 @@ public:
     delete vertexArray;
     delete vertexBuffer;
     delete indexBuffer;
-    //Renderer::~Renderer();
+    delete vertexArrayT;
+    delete vertexBufferT;
+    delete indexBufferT;
+    delete vertexArrayQ;
+    delete vertexBufferQ;
+    delete indexBufferQ;
   }
 
 private:

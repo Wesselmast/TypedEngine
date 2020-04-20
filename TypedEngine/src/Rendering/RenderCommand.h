@@ -4,8 +4,6 @@
 #include <algorithm>
 #include "renderapi.h"
 
-
-
 class RenderCommand {
 public:
   inline static void init(Camera* camera) {
@@ -15,19 +13,39 @@ public:
   inline static void setBlending(bool enabled) {
     renderer->setBlending(enabled);
   }
+
+  inline static void setCulling(bool enabled) {
+    renderer->setCulling(enabled);
+  }
   
   inline static void clear(glm::vec4 backgroundColor) {
     renderer->clear(backgroundColor);
   }
 
-  inline static void addSprite(Sprite*  sprite) {
-    renderer->drawables.push_back(sprite);
+  inline static void addSprite(Sprite* sprite) {
+    renderer->sprites.push_back(sprite);
   }
 
-  inline static void removeSprite(Sprite*  sprite) {
-    renderer->drawables.erase(std::remove(renderer->drawables.begin(), renderer->drawables.end(), sprite), renderer->drawables.end());
+  inline static void removeSprite(Sprite* sprite) {
+    renderer->sprites.erase(std::remove(renderer->sprites.begin(), renderer->sprites.end(), sprite), renderer->sprites.end());
+  }
+  
+  inline static void addText(Text* text) {
+    renderer->texts.push_back(text);
+  }
+  
+  inline static void removeText(Text* text) {
+    renderer->texts.erase(std::remove(renderer->texts.begin(), renderer->texts.end(), text), renderer->texts.end());
   }
 
+  inline static void addQuad(Quad* quad) {
+    renderer->quads.push_back(quad);
+  }
+
+  inline static void removeQuad(Quad* quad) {
+    renderer->quads.erase(std::remove(renderer->quads.begin(), renderer->quads.end(), quad), renderer->quads.end());
+  }
+  
   inline static void run() {
     renderer->run();
   }  

@@ -31,6 +31,6 @@ void Sprite::init(Transform transform, const char* texture) {
 }
 
 Sprite::~Sprite() {
-  printf("Deleted sprite: %s", name.c_str());
+  printf("Deleted sprite: %s\n", name.c_str());
   RenderCommand::removeSprite(this);
 }

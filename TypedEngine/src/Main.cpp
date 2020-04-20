@@ -59,7 +59,7 @@ int main() {
   }
 
   // @CleanUp: This doesn't work currently, I should properly clean up though
-  //RenderCommand::end();
+  RenderCommand::end();
   
   delete app;
   return 0;

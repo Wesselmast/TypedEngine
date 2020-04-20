@@ -77,10 +77,12 @@ OBJECTS := \
 	$(OBJDIR)/OpenGLTexture.o \
 	$(OBJDIR)/OpenGLVertexArray.o \
 	$(OBJDIR)/OpenGLVertexBuffer.o \
+	$(OBJDIR)/Quad.o \
 	$(OBJDIR)/RenderAPI.o \
 	$(OBJDIR)/RenderCommand.o \
 	$(OBJDIR)/Shader.o \
 	$(OBJDIR)/Sprite.o \
+	$(OBJDIR)/Text.o \
 	$(OBJDIR)/OpenGLWindow.o \
 
 RESOURCES := \
@@ -176,6 +178,9 @@ $(OBJDIR)/OpenGLVertexArray.o: src/Rendering/OpenGL/OpenGLVertexArray.cpp
 $(OBJDIR)/OpenGLVertexBuffer.o: src/Rendering/OpenGL/OpenGLVertexBuffer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Quad.o: src/Rendering/Quad.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/RenderAPI.o: src/Rendering/RenderAPI.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -186,6 +191,9 @@ $(OBJDIR)/Shader.o: src/Rendering/Shader.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Sprite.o: src/Rendering/Sprite.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Text.o: src/Rendering/Text.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/OpenGLWindow.o: src/Window/OpenGL/OpenGLWindow.cpp
