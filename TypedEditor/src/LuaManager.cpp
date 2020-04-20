@@ -90,7 +90,6 @@ void LuaManager::compileLua() {
     return 0;
   };
   
-    
   lua_State* L = luaL_newstate();
   luaL_openlibs(L);
   
@@ -106,10 +105,11 @@ void LuaManager::compileLua() {
   char buf[256];
   GetCurrentDirectoryA(256, buf);
   dir.append(buf);
-  dir.append("\\..\\TypedGame\\src");
+  dir.append("\\gamefiles");
   setLuaPath(L, dir.c_str());
-  
-  if (checkLua(L, luaL_dofile(L, "../TypedGame/src/test.lua"))) {
+
+  dir.append("\\test.lua");
+  if (checkLua(L, luaL_dofile(L, dir.c_str()))) {
     lua_getglobal(L, "main");
     
     if (lua_isfunction(L, -1)) {

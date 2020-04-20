@@ -33,7 +33,7 @@ ifeq ($(config),debug)
   define POSTBUILDCMDS
 	@echo Running postbuild commands
 	IF EXIST "..\TypedEditor\res"\ (xcopy /Q /E /Y /I "..\TypedEditor\res" "..\bin\Debug-windows-x86_64\TypedEditor\res" > nul) ELSE (xcopy /Q /Y /I "..\TypedEditor\res" "..\bin\Debug-windows-x86_64\TypedEditor\res" > nul)
-	IF EXIST "..\TypedGame\src"\ (xcopy /Q /E /Y /I "..\TypedGame\src" "..\bin\Debug-windows-x86_64\TypedGame\src" > nul) ELSE (xcopy /Q /Y /I "..\TypedGame\src" "..\bin\Debug-windows-x86_64\TypedGame\src" > nul)
+	IF EXIST "..\TypedEditor\gamefiles"\ (xcopy /Q /E /Y /I "..\TypedEditor\gamefiles" "..\bin\Debug-windows-x86_64\TypedEditor\gamefiles" > nul) ELSE (xcopy /Q /Y /I "..\TypedEditor\gamefiles" "..\bin\Debug-windows-x86_64\TypedEditor\gamefiles" > nul)
   endef
 all: prebuild prelink $(TARGET)
 	@:
@@ -63,7 +63,7 @@ ifeq ($(config),release)
   define POSTBUILDCMDS
 	@echo Running postbuild commands
 	IF EXIST "..\TypedEditor\res"\ (xcopy /Q /E /Y /I "..\TypedEditor\res" "..\bin\Release-windows-x86_64\TypedEditor\res" > nul) ELSE (xcopy /Q /Y /I "..\TypedEditor\res" "..\bin\Release-windows-x86_64\TypedEditor\res" > nul)
-	IF EXIST "..\TypedGame\src"\ (xcopy /Q /E /Y /I "..\TypedGame\src" "..\bin\Release-windows-x86_64\TypedGame\src" > nul) ELSE (xcopy /Q /Y /I "..\TypedGame\src" "..\bin\Release-windows-x86_64\TypedGame\src" > nul)
+	IF EXIST "..\TypedEditor\gamefiles"\ (xcopy /Q /E /Y /I "..\TypedEditor\gamefiles" "..\bin\Release-windows-x86_64\TypedEditor\gamefiles" > nul) ELSE (xcopy /Q /Y /I "..\TypedEditor\gamefiles" "..\bin\Release-windows-x86_64\TypedEditor\gamefiles" > nul)
   endef
 all: prebuild prelink $(TARGET)
 	@:

@@ -117,7 +117,7 @@ project "TypedEditor"
 	-- I dont love this, I should refactor to just have everything in res! 
 	postbuildcommands {
 		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedGame/src" "%{cfg.targetdir}/../TypedGame/src"'
+		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"'
 	}
 
 	filter "system:windows"
