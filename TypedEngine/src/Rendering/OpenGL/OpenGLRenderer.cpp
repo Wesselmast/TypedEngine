@@ -86,18 +86,18 @@ void OpenGLRenderer::init(Camera* camera) {
   
   float vertices[] = {
      //pos	   //texcoord
-     -1.0f,  1.0f,   0.0f,  1.0f,
+      0.0f,  1.0f,   0.0f,  1.0f,
       1.0f,  1.0f,   1.0f,  1.0f,
-      1.0f, -1.0f,   1.0f,  0.0f,
-     -1.0f, -1.0f,   0.0f,  0.0f
+      1.0f,  0.0f,   1.0f,  0.0f,
+      0.0f,  0.0f,   0.0f,  0.0f
   };
 
   float verticesSimple[] = {
      //pos    
-     -1.0f,  1.0f,  
+      0.0f,  1.0f,  
       1.0f,  1.0f,
-      1.0f, -1.0f,
-     -1.0f, -1.0f
+      1.0f,  0.0f,
+      0.0f,  0.0f
   };
   
   unsigned int vertexBufferLayout[] = {
@@ -227,7 +227,7 @@ void OpenGLRenderer::clear(glm::vec4 color) {
 
 void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
   texture->bind();
-  transform.scale.x *= -1.0f;
+  // transform.scale.x *= -1.0f;
   vertexArray->bind();
 
   defaultSpriteShader->bind();
@@ -238,7 +238,7 @@ void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
 }
 
 void OpenGLRenderer::drawQuad(Transform transform, glm::vec4 color) {
-  transform.scale.x *= -1.0f;
+  // transform.scale.x *= -1.0f;
   vertexArrayQ->bind();
 
   defaultQuadShader->bind();

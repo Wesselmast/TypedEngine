@@ -113,6 +113,7 @@ void LuaManager::compileLua() {
     lua_getglobal(L, "main");
     
     if (lua_isfunction(L, -1)) {
+
       checkLua(L, lua_pcall(L, 0, 0, 0));
     }
   }
