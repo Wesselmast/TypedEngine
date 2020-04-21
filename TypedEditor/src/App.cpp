@@ -17,6 +17,9 @@ glm::vec2 position = glm::vec3(0, 0, 0);
 const float zoomSpeed = 0.5f;
 const float panSpeed = 750.0f;
 
+
+Text* t =  new Text("");
+
 void App::begin() {
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
@@ -43,7 +46,28 @@ void App::tick(float deltaTime, float time) {
   treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;  
 }
 
+bool consoleEnabled = false;
 void App::onKeyPressed(Key key, Modifier mod) {
+  if(key == Key::ESCAPE) {
+    window->close(); 
+    return;
+  } 
+  
+  if(key == Key::GRAVE) {
+    consoleEnabled = !consoleEnabled;
+    return;
+  }
+  
+  if(consoleEnabled) {
+    if(key == Key::BACKSPACE) {
+      t->text.pop_back();
+    }
+    else {
+      t->text.push_back((char)Input::convertKey(key));
+    }
+    return;
+  }
+
   switch (key) {
   case Key::W: input.y =  1.0f; break;
   case Key::A: input.x = -1.0f; break;
@@ -51,7 +75,6 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::D: input.x =  1.0f; break;
   case Key::C: luaFuture = std::async(std::launch::async, &LuaManager::compileLua); break;
   case Key::F: position = {0.0f, 0.0f}; break;
-  case Key::ESCAPE: window->close(); break;
   }
 }
 
