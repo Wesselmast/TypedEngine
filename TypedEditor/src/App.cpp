@@ -57,12 +57,14 @@ void App::onKeyPressed(Key key, Modifier mod) {
     consoleEnabled = !consoleEnabled;
     return;
   }
-  
+
+
   if(consoleEnabled) {
     if(key == Key::BACKSPACE) {
       t->text.pop_back();
     }
     else {
+      // @CleanUp: convertKey should also take in the mod. So it can propertly convert to the right value
       t->text.push_back((char)Input::convertKey(key));
     }
     return;

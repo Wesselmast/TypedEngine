@@ -100,7 +100,7 @@ project "TypedEditor"
 	includedirs {
 		"TypedGame/src",
 		"TypedEngine/src",
-		"%{IncludeDir.lua}",   --eventually remove this one! Abstract into engine
+		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
 		"%{IncludeDir.glm}"
 	}
 
