@@ -27,7 +27,7 @@ void App::begin() {
   for (int i = 0; i < 50; i++) {
     // @CleanUp: Transforms are still weird right now. Positions have to follow scale
     new Sprite({{ 512.0f * i, 0.0f }, 0.0f, { 2.0f, 2.0f}});
-    new Text({{ 256.0f * i + 128.0f, 128.0f }, 0.0f, { 1.0f, 1.0f}});     //@CleanUp: Add setting color of the text
+    new Text({{ 256.0f * i + 128.0f, 128.0f }, 0.0f, { 1.0f, 1.0f}}, std::to_string(i));     //@CleanUp: Add setting color of the text
   }
   luaFuture = std::async(std::launch::async, &LuaManager::compileLua);
 }
@@ -38,7 +38,6 @@ void App::tick(float deltaTime, float time) {
   camera->setScale(glm::vec2(zoom));
 
   const float rotationSpeed = 5.0f;
-
   // @CleanUp: There should be an option for culling to get turned off per object. So the tree can actually be inversed properly.
   treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed));
   treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;  
