@@ -151,11 +151,11 @@ void OpenGLRenderer::run() {
   for(auto& s : sprites) {
     drawSprite(s->transform, s->texture);
   }
-  for(auto& t : texts) {
-    drawText(t->transform, t->text);
-  }
   for(auto& q : quads) {
     drawQuad(q->transform, q->color);
+  }
+  for(auto& t : texts) {
+    drawText(t->transform, t->text);
   }
 }
 
