@@ -2,71 +2,118 @@
 
 #include "GLFW/glfw3.h"
 
-int OpenGLInputManager::convertKeyToValue(Key key) {
-  switch (key) {
-  case Key::SPACE:           return 32;
-  case Key::APOSTROPHE:      return 39;
-  case Key::COMMA:           return 44;
-  case Key::MINUS:           return 45;
-  case Key::PERIOD:          return 46;
-  case Key::SLASH:           return 47;
-  case Key::ZERO:            return 48;
-  case Key::ONE:             return 49;
-  case Key::TWO:             return 50;
-  case Key::THREE:           return 51;
-  case Key::FOUR:            return 52;
-  case Key::FIVE:            return 53;
-  case Key::SIX:             return 54;
-  case Key::SEVEN:           return 55;
-  case Key::EIGHT:           return 56;
-  case Key::NINE:            return 57;
-  case Key::SEMICOLON:       return 58;
-  case Key::EQUAL:           return 59;
-  case Key::A:               return 65;
-  case Key::B:               return 66;
-  case Key::C:               return 67;
-  case Key::D:               return 68;					   ///////////////////////////////////////
-  case Key::E:               return 69;					   //									//
-  case Key::F:               return 70;					   //  MESSED UP, REPLACE WITH GL ONES  //
-  case Key::G:               return 71;					   //									//
-  case Key::H:               return 72;					   ///////////////////////////////////////
-  case Key::I:               return 73;
-  case Key::J:               return 74;
-  case Key::K:               return 75;
-  case Key::L:               return 76;
-  case Key::M:               return 77;
-  case Key::N:               return 78;
-  case Key::O:               return 79;
-  case Key::P:               return 80;
-  case Key::Q:               return 81;
-  case Key::R:               return 82;
-  case Key::S:               return 83;
-  case Key::T:               return 84;
-  case Key::U:               return 85;
-  case Key::V:               return 86;
-  case Key::W:               return 87;
-  case Key::X:               return 88;
-  case Key::Y:               return 89;
-  case Key::Z:               return 90;
-  case Key::LEFT_BRACKET:    return 91;
-  case Key::BACKSLASH:       return 92;
-  case Key::RIGHT_BRACKET:   return 93;
-  case Key::GRAVE:           return 96;
-  case Key::ESCAPE:          return 256;
-  case Key::ENTER:           return 257;
-  case Key::TAB:             return 258;
-  case Key::BACKSPACE:       return 259;
-  case Key::INSERT:          return 260;
-  case Key::DELETE:          return 261;
-  case Key::RIGHT:           return 262;
-  case Key::LEFT:            return 263;
-  case Key::DOWN:            return 264;
-  case Key::UP:              return 265;
-  case Key::PAGE_UP:         return 266;
-  case Key::PAGE_DOWN:       return 267;
-  case Key::HOME:            return 268;
-  case Key::END:             return 269;
-  case Key::SHIFT:           return GLFW_KEY_LEFT_SHIFT;
+int OpenGLInputManager::convertKeyToValue(Key key, Modifier mod) {
+
+  if(mod == Modifier::SHIFT) {
+    switch(key) {
+    case Key::A:               return 65;
+    case Key::B:               return 66;
+    case Key::C:               return 67;     
+    case Key::D:               return 68;    
+    case Key::E:               return 69;    
+    case Key::F:               return 70;    
+    case Key::G:               return 71;    
+    case Key::H:               return 72;    
+    case Key::I:               return 73;
+    case Key::J:               return 74;
+    case Key::K:               return 75;
+    case Key::L:               return 76;
+    case Key::M:               return 77;
+    case Key::N:               return 78;
+    case Key::O:               return 79;
+    case Key::P:               return 80;
+    case Key::Q:               return 81;
+    case Key::R:               return 82;
+    case Key::S:               return 83;
+    case Key::T:               return 84;
+    case Key::U:               return 85;
+    case Key::V:               return 86;
+    case Key::W:               return 87;
+    case Key::X:               return 88;
+    case Key::Y:               return 89;
+    case Key::Z:               return 90;
+    case Key::ZERO:            return 41;
+    case Key::ONE:             return 33;
+    case Key::TWO:             return 64;
+    case Key::THREE:           return 35;
+    case Key::FOUR:            return 36;
+    case Key::FIVE:            return 37;
+    case Key::SIX:             return 94;
+    case Key::SEVEN:           return 38;
+    case Key::EIGHT:           return 42;
+    case Key::NINE:            return 40;
+    case Key::SLASH:           return 63;
+    case Key::PERIOD:          return 62;
+    case Key::EQUAL:           return 43;
+    case Key::COMMA:           return 60;
+    }
+  }
+  else {
+    switch (key) {
+    case Key::SPACE:           return 32;
+    case Key::APOSTROPHE:      return 39;
+    case Key::COMMA:           return 44;
+    case Key::MINUS:           return 45;
+    case Key::PERIOD:          return 46;
+    case Key::SLASH:           return 47;
+    case Key::ZERO:            return 48;
+    case Key::ONE:             return 49;
+    case Key::TWO:             return 50;
+    case Key::THREE:           return 51;
+    case Key::FOUR:            return 52;
+    case Key::FIVE:            return 53;
+    case Key::SIX:             return 54;
+    case Key::SEVEN:           return 55;
+    case Key::EIGHT:           return 56;
+    case Key::NINE:            return 57;
+    case Key::SEMICOLON:       return 58;
+    case Key::EQUAL:           return 59;
+    case Key::A:               return 97;
+    case Key::B:               return 98;
+    case Key::C:               return 99;     
+    case Key::D:               return 100;    
+    case Key::E:               return 101;    
+    case Key::F:               return 102;    
+    case Key::G:               return 103;    
+    case Key::H:               return 104;    
+    case Key::I:               return 105;
+    case Key::J:               return 106;
+    case Key::K:               return 107;
+    case Key::L:               return 108;
+    case Key::M:               return 109;
+    case Key::N:               return 110;
+    case Key::O:               return 111;
+    case Key::P:               return 112;
+    case Key::Q:               return 113;
+    case Key::R:               return 114;
+    case Key::S:               return 115;
+    case Key::T:               return 116;
+    case Key::U:               return 117;
+    case Key::V:               return 118;
+    case Key::W:               return 119;
+    case Key::X:               return 120;
+    case Key::Y:               return 121;
+    case Key::Z:               return 122;
+    case Key::LEFT_BRACKET:    return 91;
+    case Key::BACKSLASH:       return 92;
+    case Key::RIGHT_BRACKET:   return 93;
+    case Key::GRAVE:           return 96;
+    case Key::ESCAPE:          return 256;
+    case Key::ENTER:           return 257;
+    case Key::TAB:             return 258;
+    case Key::BACKSPACE:       return 259;
+    case Key::INSERT:          return 260;
+    case Key::DELETE:          return 261;
+    case Key::RIGHT:           return 262;
+    case Key::LEFT:            return 263;
+    case Key::DOWN:            return 264;
+    case Key::UP:              return 265;
+    case Key::PAGE_UP:         return 266;
+    case Key::PAGE_DOWN:       return 267;
+    case Key::HOME:            return 268;
+    case Key::END:             return 269;
+    case Key::SHIFT:           return GLFW_KEY_LEFT_SHIFT;
+    }
   }
   return -1;
 }

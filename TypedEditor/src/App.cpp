@@ -60,13 +60,18 @@ void App::onKeyPressed(Key key, Modifier mod) {
 
 
   if(consoleEnabled) {
+    if(key == Key::ENTER) {
+      t->text.clear();
+      return;
+    }
     if(key == Key::BACKSPACE) {
-      t->text.pop_back();
+      if(t->text != "") {
+	t->text.pop_back();
+      }
+      return;
     }
-    else {
-      // @CleanUp: convertKey should also take in the mod. So it can propertly convert to the right value
-      t->text.push_back((char)Input::convertKey(key));
-    }
+    // @CleanUp: convertKey should also take in the mod. So it can propertly convert to the right value
+    t->text.push_back((char)Input::convertKey(key, mod));
     return;
   }
 

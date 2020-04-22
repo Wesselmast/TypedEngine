@@ -8,7 +8,7 @@ public:
   static inline Modifier convertMod(int value) { return inputManager->convertValueToModifier(value); }
   static inline MouseButton convertMouseButton(int value) { return inputManager->convertValueToMouseButton(value); }
   
-  static inline int convertKey(Key key) { return inputManager->convertKeyToValue(key); }
+  static inline int convertKey(Key key, Modifier mod) { return inputManager->convertKeyToValue(key, mod); }
   static inline int convertMod(Modifier mod) { return inputManager->convertModifierToValue(mod); }
   static inline int convertMouseButton(MouseButton button) { return inputManager->convertMouseButtonToValue(button); }
   
