@@ -27,7 +27,7 @@ struct Character {
   GLuint textureID;
   glm::ivec2 size;
   glm::ivec2 bearing;
-  GLuint advance;
+  long int advance;
 };
 
 std::map<GLchar, Character> characters;
