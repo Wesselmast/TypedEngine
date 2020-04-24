@@ -19,6 +19,7 @@ const float panSpeed = 750.0f;
 
 
 Text* t =  new Text("");
+Text* fpsCounter = new Text();
 
 void App::begin() {
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
@@ -43,7 +44,13 @@ void App::tick(float deltaTime, float time) {
   const float rotationSpeed = 5.0f;
   // @CleanUp: There should be an option for culling to get turned off per object. So the tree can actually be inversed properly.
   treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed));
-  treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;  
+  treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;
+  //fpsCounter->transform.position = camera->transform.position * 0.25f + glm::vec2( 10.0f, 10.0f );
+
+  fpsCounter->transform.position = position * 0.25f;
+  fpsCounter->transform.scale = glm::vec2(zoom) * 0.5f;
+  
+  fpsCounter->text = std::to_string(1/deltaTime);
 }
 
 bool consoleEnabled = false;
@@ -102,6 +109,10 @@ void App::onMouseScrolled(float offsetX, float offsetY) {
   else if (zoom >= 10) {
     zoom = 10;
   }
+}
+
+void App::onWindowRefreshed() {
+  t->text.append("BOOYA");
 }
 
 Application* createApplication() {

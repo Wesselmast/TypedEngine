@@ -8,80 +8,81 @@ fptr_KeyAction Window::keyReleasedFunction;
 fptr_NoParams Window::windowRefreshFunction;
 
 OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
+  
+  if (!glfwInit()) {
+    // ERROR MESSAGE
+    return;
+  }
+  
+  GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : NULL;
+  
+  window = glfwCreateWindow((int)size.x, (int)size.y, name, monitor, NULL);
+  if (!window) {
+    glfwTerminate();
+    // ERROR MESSAGE
+    return;
+  }
 
-	if (!glfwInit()) {
-		// ERROR MESSAGE
-		return;
-	}
-
-	GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : NULL;
-
-	window = glfwCreateWindow((int)size.x, (int)size.y, name, monitor, NULL);
-	if (!window) {
-		glfwTerminate();
-		// ERROR MESSAGE
-		return;
-	}
-
-	glfwMakeContextCurrent(window);
-
-	glfwSetScrollCallback(window, callback_mouseScrolled);
-	glfwSetKeyCallback(window, callback_keyAction);
-	glfwSetWindowRefreshCallback(window, callback_windowRefreshed);
-
-	setVSync(true);
+  glfwMakeContextCurrent(window);
+  
+  glfwSetScrollCallback(window, callback_mouseScrolled);
+  glfwSetKeyCallback(window, callback_keyAction);
+  glfwSetWindowRefreshCallback(window, callback_windowRefreshed);
+  
+  setVSync(true);
 }
 
 OpenGLWindow::~OpenGLWindow() {
-	glfwTerminate();
+  glfwTerminate();
 }
 
 glm::vec2 OpenGLWindow::getSize() const {
-	int width;
-	int height;
-	glfwGetFramebufferSize(window, &width, &height);
-	
-	return { (float)width, (float)height };
+  int width;
+  int height;
+  glfwGetFramebufferSize(window, &width, &height);
+  
+  return { (float)width, (float)height };
 }
 
 void OpenGLWindow::setVSync(bool enabled) {
-	glfwSwapInterval(enabled);
+  glfwSwapInterval(enabled);
 }
 
 void OpenGLWindow::refreshViewport() {
-	glm::vec2 size = getSize();
-	glViewport(0, 0, (GLsizei)size.x, (GLsizei)size.y);
+  glm::vec2 size = getSize();
+  glViewport(0, 0, (GLsizei)size.x, (GLsizei)size.y);
 }
 
 bool OpenGLWindow::isRunning() const {
-	return !glfwWindowShouldClose(window);
+  return !glfwWindowShouldClose(window);
 }
 
 void OpenGLWindow::swapBuffers() {
-	glfwSwapBuffers(window);
-	
-	//TODO @CleanUp @Important Separate poll events from swapbuffers
-	glfwPollEvents();
+  glfwSwapBuffers(window);
+  
+  //TODO @CleanUp @Important Separate poll events from swapbuffers
+  glfwPollEvents();
 }
 
 void OpenGLWindow::close() {
-	glfwSetWindowShouldClose(window, 1);
+  glfwSetWindowShouldClose(window, 1);
 }
 
 void OpenGLWindow::callback_mouseScrolled(GLFWwindow * window, double offsetx, double offsety) {
-	mouseScrolledFunction((float)offsetx, (float)offsety);
+  mouseScrolledFunction((float)offsetx, (float)offsety);
 }
 
 void OpenGLWindow::callback_keyAction(GLFWwindow * window, int key, int scancode, int action, int mods) {
-	switch (action) {
-		case GLFW_PRESS:   keyPressedFunction(Input::convertKey(key), Input::convertMod(mods)); break;
-		case GLFW_RELEASE: keyReleasedFunction(Input::convertKey(key), Input::convertMod(mods)); break;
-	}
+  switch (action) {
+  case GLFW_PRESS:   keyPressedFunction(Input::convertKey(key), Input::convertMod(mods)); break;
+  case GLFW_RELEASE: keyReleasedFunction(Input::convertKey(key), Input::convertMod(mods)); break;
+  }
 }
 
 void OpenGLWindow::callback_windowRefreshed(GLFWwindow * window) {
-	int width;
-	int height;
-	glfwGetFramebufferSize(window, &width, &height);
-	glViewport(0, 0, width, height);
+  int width;
+  int height;
+  glfwGetFramebufferSize(window, &width, &height);
+  glViewport(0, 0, width, height);
+  windowRefreshFunction();
 }

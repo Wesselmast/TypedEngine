@@ -15,6 +15,7 @@ Application* app;
 static void callback_keyPressed(Key key, Modifier mod) { app->onKeyPressed(key, mod); }
 static void callback_keyReleased(Key key, Modifier mod) { app->onKeyReleased (key, mod); }
 static void callback_mouseScrolled(float offsetx, float offsety) { app->onMouseScrolled(offsetx, offsety); }
+static void callback_windowRefreshed() { app->onWindowRefreshed(); }
 
 static std::string getName() {
   std::string name = "TypedEngine : ";
@@ -34,6 +35,7 @@ int main() {
   window->callback_keyPressed(callback_keyPressed);
   window->callback_keyReleased(callback_keyReleased);
   window->callback_mouseScrolled(callback_mouseScrolled);
+  window->callback_windowRefreshed(callback_windowRefreshed);
   
   Camera* camera = new Camera(window);
   RenderCommand::init(camera);

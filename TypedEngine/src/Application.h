@@ -15,6 +15,7 @@ public:
   
   virtual void onWindowResized(int width, int height) {}
   virtual void onWindowMoved(int posX, int posY) {}
+  virtual void onWindowRefreshed() {}
   
   virtual void onMousePressed(MouseButton button) {}
   virtual void onMouseReleased(MouseButton button) {}
