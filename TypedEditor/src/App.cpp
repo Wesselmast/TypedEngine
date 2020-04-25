@@ -27,8 +27,6 @@ void App::begin() {
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
   sprite->transform.scale *= -5.0f;
 
-  window->setVSync(false);
-  
   fpsCounter->useScreenPosition(true);
   
   for (int i = 0; i < 50; i++) {
@@ -63,7 +61,6 @@ void App::onKeyPressed(Key key, Modifier mod) {
     return;
   }
 
-
   if(consoleEnabled) {
     if(key == Key::ENTER) {
       t->text.clear();
@@ -78,7 +75,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
     t->text.push_back((char)Input::convertKey(key, mod));
     return;
   }
-
+  
   switch (key) {
   case Key::W: input.y =  1.0f; break;
   case Key::A: input.x = -1.0f; break;
