@@ -11,8 +11,8 @@ uniform mat4 uMvpMatrix;
 out vec2 vTexcoord;
 
 void main() {
-	gl_Position = uMvpMatrix * vec4(position * textureSize(uTexture, 0), 0.0f, 1.0f);
-	vTexcoord = texcoord;
+  gl_Position = uMvpMatrix * vec4(position * textureSize(uTexture, 0), 0.0f, 1.0f);
+  vTexcoord = texcoord;
 };
 
 #endshader vertex
@@ -27,7 +27,7 @@ in vec2 vTexcoord;
 uniform sampler2D uTexture;
 
 void main() {
-	color = texture(uTexture, vTexcoord);
+  color = texture(uTexture, vTexcoord);
 };
 
 #endshader fragment
