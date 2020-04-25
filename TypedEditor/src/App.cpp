@@ -65,17 +65,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
   }
 
   if(consoleEnabled) {
-    if(key == Key::ENTER) {
-      t->text.clear();
-      return;
-    }
-    if(key == Key::BACKSPACE) {
-      if(t->text != "") {
-	t->text.pop_back();
-      }
-      return;
-    }
-    t->text.push_back((char)Input::convertKey(key, mod));
+    console->recieveKey(key, mod);
     return;
   }
   
