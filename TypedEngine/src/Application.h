@@ -6,7 +6,6 @@
 
 #include "glm/glm.hpp"
 
-
 class Application {
 public:
   virtual void begin() {}

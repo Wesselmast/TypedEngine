@@ -16,6 +16,13 @@
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLVertexArray.h"
 
+#include "core/transform.h"
+#include "rendering/camera.h"
+
+#include "rendering/quad.h"
+#include "rendering/text.h"
+#include "rendering/sprite.h"
+
 #include <map>
 #include <utility>
 #include <string>
@@ -149,29 +156,29 @@ void OpenGLRenderer::init(Camera* camera) {
 
 void OpenGLRenderer::run() {
   for(auto& s : sprites) {
-    drawSprite(s->transform, s->texture);
+    drawSprite(s);
   }
   for(auto& q : quads) {
-    drawQuad(q->transform, q->color);
+    drawQuad(q);
   }
   for(auto& t : texts) {
-    drawText(t->transform, t->text);
+    drawText(t);
   }
 }
 
-void OpenGLRenderer::drawText(Transform transform, std::string text) {
+void OpenGLRenderer::drawText(Text* text) {
   defaultTextShader->bind();
-  defaultTextShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
-  defaultTextShader->setUniformFloat4("textColor", { 1.0f, 0.0f, 0.0f, 1.0f });
+  defaultTextShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(text->transform, text->screenPosition));
+  defaultTextShader->setUniformFloat4("textColor", { 1.0f, 0.0f, 0.0f, 1.0f }); //@CleanUp: Add text color
   glActiveTexture(GL_TEXTURE0);
   vertexArrayT->bind();
 
-  GLfloat x = transform.position.x;
-  GLfloat y = transform.position.y;
-  glm::vec2 s = transform.scale;
+  GLfloat x = text->transform.position.x;
+  GLfloat y = text->transform.position.y;
+  glm::vec2 s = text->transform.scale;
   
   std::string::const_iterator c;
-  for(c = text.begin(); c != text.end(); c++) {
+  for(c = text->text.begin(); c != text->text.end(); c++) {
     Character ch = characters[*c];
 
     GLfloat xpos = x + ch.bearing.x * s.x;
@@ -225,35 +232,48 @@ void OpenGLRenderer::clear(glm::vec4 color) {
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLRenderer::drawSprite(Transform transform, Texture * texture) {
-  texture->bind();
+void OpenGLRenderer::drawSprite(Sprite* sprite) {
+  sprite->texture->bind();
   // transform.scale.x *= -1.0f;
   vertexArray->bind();
 
   defaultSpriteShader->bind();
-  defaultSpriteShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
+  defaultSpriteShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(sprite->transform, sprite->screenPosition));
   
   glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
-  texture->unbind();
+  sprite->texture->unbind();
 }
 
-void OpenGLRenderer::drawQuad(Transform transform, glm::vec4 color) {
+void OpenGLRenderer::drawQuad(Quad* quad) {
   // transform.scale.x *= -1.0f;
   vertexArrayQ->bind();
 
   defaultQuadShader->bind();
-  defaultQuadShader->setUniformFloat4("uColor", color);
-  defaultQuadShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(transform));
+  defaultQuadShader->setUniformFloat4("uColor", quad->color);
+  defaultQuadShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(quad->transform, quad->screenPosition));
   
   glDrawElements(GL_TRIANGLES, vertexArrayQ->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 }
 
-glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform) {
+glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform, bool onlyProj) {
   glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position, 0.0f));
   glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), transform.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
   glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(transform.scale, 1.0f));
   
-  glm::mat4 model = position * rotation * scale;
-  glm::mat4 mvp = camera->getViewProjection() * model;
+  glm::mat4 model = position * rotation * scale; 
+  glm::mat4 mvp = (onlyProj ? camera->getProjection() : camera->getViewProjection()) * model; 
   return mvp;
+}
+
+
+OpenGLRenderer::~OpenGLRenderer() {
+  delete vertexArray;
+  delete vertexBuffer;
+  delete indexBuffer;
+  delete vertexArrayT;
+  delete vertexBufferT;
+  delete indexBufferT;
+  delete vertexArrayQ;
+  delete vertexBufferQ;
+  delete indexBufferQ;
 }

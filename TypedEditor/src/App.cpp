@@ -17,7 +17,6 @@ glm::vec2 position = glm::vec3(0, 0, 0);
 const float zoomSpeed = 0.5f;
 const float panSpeed = 750.0f;
 
-
 Text* t =  new Text("");
 Text* fpsCounter = new Text();
 
@@ -27,11 +26,15 @@ void App::begin() {
   
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
   sprite->transform.scale *= -5.0f;
+
+  window->setVSync(false);
+  
+  fpsCounter->useScreenPosition(true);
   
   for (int i = 0; i < 50; i++) {
     // @CleanUp: Transforms are still weird right now. Positions have to follow scale
     new Quad({{ (512.0f + 250.0f) * i, 0.0f }, 0.0f, { 1.0f, 1.0f}}, {1 - i/50.0f, 1 - i/50.0f, 1 - i/50.0f, 1.0f});
-    new Text({{ ((512.0f + 250.0f)/4 * i), 128.0f / 3.0f }, 0.0f, { 3.0f, 3.0f}}, std::to_string(i + 1));     //@CleanUp: Add setting color of the text
+    new Text({{ ((512.0f + 250.0f)/4 * i), 128.0f / 3.0f }, 0.0f, { 3.0f, 3.0f}}, std::to_string(i + 1));   //@CleanUp: Add setting color of the text
   }
   luaFuture = std::async(std::launch::async, &LuaManager::compileLua);
 }
@@ -42,15 +45,10 @@ void App::tick(float deltaTime, float time) {
   camera->setScale(glm::vec2(zoom));
 
   const float rotationSpeed = 5.0f;
-  // @CleanUp: There should be an option for culling to get turned off per object. So the tree can actually be inversed properly.
   treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed));
   treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;
-  //fpsCounter->transform.position = camera->transform.position * 0.25f + glm::vec2( 10.0f, 10.0f );
 
-  fpsCounter->transform.position = position * 0.25f;
-  fpsCounter->transform.scale = glm::vec2(zoom) * 0.5f;
-  
-  fpsCounter->text = std::to_string(1/deltaTime);
+  fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
 }
 
 bool consoleEnabled = false;
@@ -77,7 +75,6 @@ void App::onKeyPressed(Key key, Modifier mod) {
       }
       return;
     }
-    // @CleanUp: convertKey should also take in the mod. So it can propertly convert to the right value
     t->text.push_back((char)Input::convertKey(key, mod));
     return;
   }
@@ -112,7 +109,9 @@ void App::onMouseScrolled(float offsetX, float offsetY) {
 }
 
 void App::onWindowRefreshed() {
-  t->text.append("BOOYA");
+  float w = window->getSize().x;
+  float h = window->getSize().y;
+  fpsCounter->transform.position = { -w/2 + 30.0f, h/2 - 30.0f };
 }
 
 Application* createApplication() {

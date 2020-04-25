@@ -1,19 +1,15 @@
 #pragma once
 
-#include "Sprite.h"
-#include "Text.h"
-#include "Quad.h"
-
-#include "Texture.h"
-#include "Shader.h"
-#include "VertexArray.h"
-#include "Camera.h"
-
 #include "glm/glm.hpp"
-#include "Core/Transform.h"
 
 #include <vector>
 #include <string>
+
+#include "sprite.h"
+#include "shader.h"
+#include "text.h"
+#include "quad.h"
+#include "camera.h"
 
 class Renderer {
 public:
@@ -21,15 +17,14 @@ public:
   virtual void setBlending(bool enabled) = 0;
   virtual void setCulling(bool enabled) = 0;
 
-  virtual void drawSprite(Transform transform, Texture* texture) = 0;
-  virtual void drawQuad(Transform transform, glm::vec4 color) = 0;
-  virtual void drawText(Transform transform, std::string text) = 0;
+  virtual void drawSprite(Sprite* sprite) = 0;
+  virtual void drawQuad(Quad* quad) = 0;
+  virtual void drawText(Text* text) = 0;
   virtual void clear(glm::vec4 color) = 0;
 
   virtual void run() = 0;
-  
-  
-  virtual ~Renderer() { 
+    
+  virtual ~Renderer() {
     for(int i = 0; i < sprites.size(); i++) delete sprites[i];
     sprites.clear();
     for(int i = 0; i < texts.size(); i++) delete texts[i];

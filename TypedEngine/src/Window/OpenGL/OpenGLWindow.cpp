@@ -40,7 +40,7 @@ glm::vec2 OpenGLWindow::getSize() const {
   int width;
   int height;
   glfwGetFramebufferSize(window, &width, &height);
-  
+
   return { (float)width, (float)height };
 }
 

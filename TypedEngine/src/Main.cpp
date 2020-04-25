@@ -11,11 +11,16 @@
 #include "glm/glm.hpp"
 
 Application* app;
+Window* window;
+Camera* camera;
 
 static void callback_keyPressed(Key key, Modifier mod) { app->onKeyPressed(key, mod); }
 static void callback_keyReleased(Key key, Modifier mod) { app->onKeyReleased (key, mod); }
 static void callback_mouseScrolled(float offsetx, float offsety) { app->onMouseScrolled(offsetx, offsety); }
-static void callback_windowRefreshed() { app->onWindowRefreshed(); }
+static void callback_windowRefreshed() {
+  app->onWindowRefreshed();
+  camera->updateProjection();
+}
 
 static std::string getName() {
   std::string name = "TypedEngine : ";
@@ -30,14 +35,14 @@ int main() {
 
   app = createApplication();
   
-  Window* window = new OpenGLWindow({ 680, 480 }, getName().c_str(), false);
-  
+  window = new OpenGLWindow({ 680, 480 }, getName().c_str(), false);
+   
   window->callback_keyPressed(callback_keyPressed);
   window->callback_keyReleased(callback_keyReleased);
   window->callback_mouseScrolled(callback_mouseScrolled);
   window->callback_windowRefreshed(callback_windowRefreshed);
-  
-  Camera* camera = new Camera(window);
+
+  camera = new Camera(window);
   RenderCommand::init(camera);
 
   app->window = window;
@@ -60,9 +65,8 @@ int main() {
     previous = time;
   }
 
-  // @CleanUp: This doesn't work currently, I should properly clean up though
   RenderCommand::end();
-  
+
   delete app;
   return 0;
 }

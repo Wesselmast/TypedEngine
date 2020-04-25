@@ -13,7 +13,8 @@ public:
   
   Camera(Window* window) : window(window) {
   }
-  
+
+  //@CleanUp: This is so ugly... fix this up later!
   inline void setTransform(Transform transform) { this->transform = transform; }
   inline void setPosition(glm::vec2 position) { this->transform.position = position; }
   inline void setScale(glm::vec2 scale) { this->transform.scale = scale; }
@@ -23,9 +24,14 @@ public:
   inline glm::vec2 getPosition() { return transform.position; }
   inline glm::vec2 getScale () { return transform.scale; }
   inline float getRotation() { return transform.rotation; }
-  
+
+  inline glm::mat4 getProjection() { return projection; }
+
+  void updateProjection();
   glm::mat4 getViewProjection();
+
   Transform transform;
 private:
+  glm::mat4 projection;
   Window* window;
 };

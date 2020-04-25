@@ -1,6 +1,12 @@
 #pragma once
 #include "../Renderer.h"
 
+class VertexArray;
+class VertexBuffer;
+class IndexBuffer;
+
+struct Transform;
+
 class OpenGLRenderer : public Renderer {
 public:
   virtual void init(Camera* camera) override;
@@ -8,26 +14,15 @@ public:
   virtual void setCulling(bool enabled) override;
   
   virtual void clear(glm::vec4 color) override;
-  virtual void drawSprite(Transform transform, Texture * texture) override;
-  virtual void drawText(Transform transform, std::string) override;
-  virtual void drawQuad(Transform transform, glm::vec4 color) override;
+  virtual void drawSprite(Sprite* sprite) override;
+  virtual void drawText(Text* text) override;
+  virtual void drawQuad(Quad* quad) override;
   
   virtual void run() override;
   
-  ~OpenGLRenderer() {
-    delete vertexArray;
-    delete vertexBuffer;
-    delete indexBuffer;
-    delete vertexArrayT;
-    delete vertexBufferT;
-    delete indexBufferT;
-    delete vertexArrayQ;
-    delete vertexBufferQ;
-    delete indexBufferQ;
-  }
-
+  ~OpenGLRenderer();
 private:
-  glm::mat4 calculateMVPFromTransform(Transform transform);
+  glm::mat4 calculateMVPFromTransform(Transform transform, bool onlyProj = false);
 
 private:
   VertexArray* vertexArray;
