@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Input/Input.h"
+#include "Input/Input.h"
 #include "glm/glm.hpp"
 
 typedef void(*fptr_NoParams)();

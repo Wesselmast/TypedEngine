@@ -4,6 +4,7 @@
 #include "Rendering/Sprite.h"
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
+#include "Console.h"
 
 #include "luamanager.h"
 
@@ -19,8 +20,10 @@ const float panSpeed = 750.0f;
 
 Text* t =  new Text("");
 Text* fpsCounter = new Text();
+Console* console;
 
 void App::begin() {
+  console = new Console(window);
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
   
@@ -109,6 +112,7 @@ void App::onWindowRefreshed() {
   float w = window->getSize().x;
   float h = window->getSize().y;
   fpsCounter->transform.position = { -w/2 + 30.0f, h/2 - 30.0f };
+  console->refresh();
 }
 
 Application* createApplication() {

@@ -72,6 +72,7 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/App.o \
+	$(OBJDIR)/Console.o \
 	$(OBJDIR)/LuaManager.o \
 
 RESOURCES := \
@@ -132,6 +133,9 @@ $(OBJECTS): | $(OBJDIR)
 endif
 
 $(OBJDIR)/App.o: src/App.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Console.o: src/Console.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/LuaManager.o: src/LuaManager.cpp
