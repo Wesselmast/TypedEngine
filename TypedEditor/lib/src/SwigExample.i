@@ -1,6 +1,7 @@
 %module TypedLuaCollection
 
-%inline %{
-  extern const char name[];
-  extern void print_hello();
+%{
+#include "example.h"
 %}
+
+%include "example.h"

@@ -6,13 +6,9 @@ function main()
    
    -- t = manipulatePosition()
    -- t = t + manipulatePosition()
-   TypedLuaCollection.print_hello()
-   TypedLuaCollection.print_hello()
-   TypedLuaCollection.print_hello()
-   TypedLuaCollection.print_hello()
-   TypedLuaCollection.print_hello()
-   TypedLuaCollection.print_hello()
-   
+
+   t = TypedLuaCollection.Test()
+   t:say_hello()
    -- print(add(t.x, 80))
    -- print(add(t.y, 20))
    -- print(add(t.y, 20))

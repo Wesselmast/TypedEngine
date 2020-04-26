@@ -94,8 +94,10 @@ project "TypedEditor"
 	files {
 		"%{prj.location}/src/**.h",
 		"%{prj.location}/src/**.cpp",
+		"%{prj.location}/lib/src/**.cpp",
+		"%{prj.location}/lib/src/**.h",
+		"%{prj.location}/lib/src/**.cxx",
 		"%{prj.location}/lib/src/**.c",
-		"%{prj.location}/lib/src/**.i"
 	}
 		
 
@@ -137,16 +139,18 @@ project "TypedEditor"
 project "TypedLuaCollection"
 	location "TypedEditor/lib"
 	kind "SharedLib"
-	language "C"
+	language "C++"
+	cppdialect "C++17"
 	staticruntime "off"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"%{prj.location}/src/**.c",
+		"%{prj.location}/src/**.cpp",
+		"%{prj.location}/src/**.cxx",
 		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.i"
+		"%{prj.location}/src/**.c"
 	}
 
 	includedirs {
@@ -166,7 +170,7 @@ project "TypedLuaCollection"
 	}
 
 	prebuildcommands {
-		"swig -lua src/swigexample.i"
+		"swig -c++ -lua src/SwigExample.i"
 	}
 
 	filter "system:windows"

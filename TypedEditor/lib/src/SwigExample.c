@@ -1,20 +1,21 @@
 #include "SwigExample.h"
 
-//extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
-//}
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+#include <string.h>
 #include <stdio.h>
-#include <stdbool.h>
 
 extern int luaopen_TypedLuaCollection(lua_State* L);
 
 #ifndef LUA_EXTRALIBS
 #define LUA_EXTRALIBS	/* empty */
 #endif
-
 
 static const luaL_Reg lualibs[] = {
   {"base", luaopen_base},
@@ -41,7 +42,7 @@ void openLibs(lua_State* L) {
 //void SwigExample::run() {
 void run_lua() {
   //	printf("hi");
-
+  
   lua_State* L = luaL_newstate();
   luaL_openlibs(L);
   openLibs(L);
