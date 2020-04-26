@@ -14,17 +14,10 @@
 extern int luaopen_TypedLuaCollection(lua_State* L);
 
 #ifndef LUA_EXTRALIBS
-#define LUA_EXTRALIBS	/* empty */
+#define LUA_EXTRALIBS
 #endif
 
 static const luaL_Reg lualibs[] = {
-  {"base", luaopen_base},
-  {"table", luaopen_table},
-  {"io", luaopen_io},
-  {"string", luaopen_string},
-  {"math", luaopen_math},
-  {"debug", luaopen_debug},
-  /* add your libraries here */
   {"TypedLuaCollection", luaopen_TypedLuaCollection},
   LUA_EXTRALIBS
   {NULL, NULL}
@@ -33,24 +26,21 @@ static const luaL_Reg lualibs[] = {
 void openLibs(lua_State* L) {
   const luaL_Reg *lib = lualibs;
   for (; lib->func; lib++) {
-    lib->func(L);  /* open library */
-    lua_settop(L, 0);  /* discard any results */
+    lib->func(L);
+    lua_settop(L, 0);
   }
 }
 
+static lua_State* L = NULL;
+char mainFile[256];
 
-//void SwigExample::run() {
-void run_lua() {
-  //	printf("hi");
-  
-  lua_State* L = luaL_newstate();
+void init_lua() {
+  L = luaL_newstate();
   luaL_openlibs(L);
   openLibs(L);
 
   char buf[256];
   GetCurrentDirectoryA(256, buf);
-  char folder[] = "\\gamefiles";
-  strcat(buf, folder);
   
   // BEGIN LUA PATH
   
@@ -61,13 +51,13 @@ void run_lua() {
   strcpy(path, (const char*)lua_tostring(L, -1));
   strcat(path, ";");
   strcat(path, buf);
-  strcat(path, "\\?.lua");
+  strcat(path, "\\gamefiles\\?.lua");
   lua_pop(L, 1);
   
   lua_pushstring(L, path);
   lua_setfield(L, -2, "path");
   lua_pop(L, 1);
-
+  
 
   lua_getglobal(L, "package");
   lua_getfield(L, -1, "cpath");
@@ -76,7 +66,7 @@ void run_lua() {
   strcpy(dllpath, (const char*)lua_tostring(L, -1));
   strcat(dllpath, ";");
   strcat(dllpath, buf);
-  strcat(dllpath, "\\..\\..\\TypedLuaCollection\\?.dll");
+  strcat(dllpath, "\\lib\\?.dll");
   lua_pop(L, 1);
   
   lua_pushstring(L, dllpath);
@@ -84,14 +74,17 @@ void run_lua() {
   lua_pop(L, 1);
   
   // END LUA PATH
-  
-  char mainFile[] = "\\test.lua";
-  strcat(buf, mainFile);
-  
-  if (luaL_dofile(L, buf) != LUA_OK) {
+
+  strcat(mainFile, buf);
+  strcat(mainFile, "\\gamefiles\\main.lua");
+}
+
+void compile_lua() {
+  if (luaL_dofile(L, mainFile) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));
     return;
   }
+  
   lua_getglobal(L, "main");
   
   if (lua_isfunction(L, -1)) {
@@ -100,6 +93,6 @@ void run_lua() {
       return;
     }
   }
-  lua_close(L);
+ // lua_close(L);
   return;
 }

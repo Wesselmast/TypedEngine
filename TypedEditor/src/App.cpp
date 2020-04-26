@@ -36,12 +36,7 @@ void App::begin() {
 
   fpsCounter->useScreenPosition(true);
   
-  for (int i = 0; i < 50; i++) {
-    // @CleanUp: Transforms are still weird right now. Positions have to follow scale
-    new Quad({{ (512.0f + 250.0f) * i, 0.0f }, 0.0f, { 1.0f, 1.0f}}, {1 - i/50.0f, 1 - i/50.0f, 1 - i/50.0f, 1.0f});
-    new Text({{ ((512.0f + 250.0f)/4 * i), 128.0f / 3.0f }, 0.0f, { 3.0f, 3.0f}}, std::to_string(i + 1));   //@CleanUp: Add setting color of the text
-  }
-  luaFuture = std::async(std::launch::async, run_lua);
+  init_lua();
 }
 
 void App::tick(float deltaTime, float time) {
@@ -78,7 +73,8 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::A: input.x = -1.0f; break;
   case Key::S: input.y = -1.0f; break;
   case Key::D: input.x =  1.0f; break;
-  case Key::C: luaFuture = std::async(std::launch::async, run_lua); break;
+  case Key::C: compile_lua(); break; //@CleanUp: Make this async again. Harder now because everything is possible now
+    //luaFuture = std::async(std::launch::async, run_lua); break;
   case Key::F: position = {0.0f, 0.0f}; break;
   }
 }

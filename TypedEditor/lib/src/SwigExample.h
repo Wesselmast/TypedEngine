@@ -1,3 +1,5 @@
 #pragma once
 
-void run_lua();
+void init_lua();
+void compile_lua();
+

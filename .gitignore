@@ -6,3 +6,13 @@
 # Makefiles
 **/Makefile
 **.Make
+
+# Visual Studio Crap
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# Generated swig file
+*.cxx

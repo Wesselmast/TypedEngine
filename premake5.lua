@@ -87,6 +87,7 @@ project "TypedEditor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
@@ -121,7 +122,8 @@ project "TypedEditor"
 	-- I dont love this, I should refactor to just have everything in res! 
 	postbuildcommands {
 		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"'
+		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
+		'{COPY} "../TypedEditor/lib/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/TypedLuaCollection" "%{cfg.targetdir}/lib"'
 	}
 
 	filter "system:windows"
@@ -143,8 +145,8 @@ project "TypedLuaCollection"
 	cppdialect "C++17"
 	staticruntime "off"
 
-	targetdir("bin/" .. outputdir .. "/%{prj.name}")
-	objdir("int/" .. outputdir .. "/%{prj.name}")
+	targetdir("%{prj.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir("%{prj.location}/int/" .. outputdir .. "/%{prj.name}")
 
 	files {
 		"%{prj.location}/src/**.cpp",

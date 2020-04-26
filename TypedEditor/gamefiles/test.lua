@@ -8,7 +8,7 @@ function main()
    -- t = t + manipulatePosition()
 
    t = TypedLuaCollection.Test()
-   t:say_hello()
+   t:say_hello(20)
    -- print(add(t.x, 80))
    -- print(add(t.y, 20))
    -- print(add(t.y, 20))

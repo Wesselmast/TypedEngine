@@ -2,5 +2,5 @@
 
 class Test {
  public:
-  void say_hello();
+  void say_hello(int amt);
 };
