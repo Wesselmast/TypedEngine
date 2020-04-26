@@ -1,4 +1,4 @@
-%module TypedLuaCollection_dll
+%module TypedLuaCollection
 
 %inline %{
   extern const char name[];

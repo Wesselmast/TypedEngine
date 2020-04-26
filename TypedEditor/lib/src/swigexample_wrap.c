@@ -2675,11 +2675,11 @@ static swig_module_info swig_module = {swig_types, 0, 0, 0, 0, 0};
 
 /* -------- TYPES TABLE (END) -------- */
 
-#define SWIG_name      "TypedLuaCollection_dll"
-#define SWIG_init      luaopen_TypedLuaCollection_dll
-#define SWIG_init_user luaopen_TypedLuaCollection_dll_user
+#define SWIG_name      "TypedLuaCollection"
+#define SWIG_init      luaopen_TypedLuaCollection
+#define SWIG_init_user luaopen_TypedLuaCollection_user
 
-#define SWIG_LUACODE   luaopen_TypedLuaCollection_dll_luacode
+#define SWIG_LUACODE   luaopen_TypedLuaCollection_luacode
 
   extern const char name[];
   extern void print_hello();
@@ -2739,7 +2739,7 @@ static swig_lua_namespace* swig_SwigModule_namespaces[] = {
 };
 
 static swig_lua_namespace swig_SwigModule = {
-    "TypedLuaCollection_dll",
+    "TypedLuaCollection",
     swig_SwigModule_methods,
     swig_SwigModule_attributes,
     swig_SwigModule_constants,

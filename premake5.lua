@@ -93,8 +93,11 @@ project "TypedEditor"
 
 	files {
 		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.cpp"
+		"%{prj.location}/src/**.cpp",
+		"%{prj.location}/lib/src/**.c",
+		"%{prj.location}/lib/src/**.i"
 	}
+		
 
 	includedirs {
 		"TypedEngine/src",
@@ -105,7 +108,6 @@ project "TypedEditor"
 
 	links {
 		"TypedEngine",
-		"TypedLuaCollection_static",
 		"glad",
 		"freetype",
 		"lua",
@@ -132,50 +134,7 @@ project "TypedEditor"
 		optimize "on"
 
 
-project "TypedLuaCollection_static"
-	location "TypedEditor/lib"
-	kind "StaticLib"
-	language "C"
-	staticruntime "on"
-
-	targetdir("bin/" .. outputdir .. "/%{prj.name}")
-	objdir("int/" .. outputdir .. "/%{prj.name}")
-
-	files {
-		"%{prj.location}/src/**.c",
-		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.i"
-	}
-
-	includedirs {
-		"TypedEngine/src",
-		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
-		"%{IncludeDir.glm}"
-	}
-
-	links {
-		"TypedEngine",
-		"glad",
-		"freetype",
-		"lua",
-		"glfw",
-		"opengl32",
-		"gdi32"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"
-
-
-project "TypedLuaCollection_dll"
+project "TypedLuaCollection"
 	location "TypedEditor/lib"
 	kind "SharedLib"
 	language "C"
@@ -204,6 +163,10 @@ project "TypedLuaCollection_dll"
 		"glfw",
 		"opengl32",
 		"gdi32"
+	}
+
+	prebuildcommands {
+		"swig -lua src/swigexample.i"
 	}
 
 	filter "system:windows"

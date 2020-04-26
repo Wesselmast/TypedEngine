@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-extern int luaopen_TypedLuaCollection_dll(lua_State* L);
+extern int luaopen_TypedLuaCollection(lua_State* L);
 
 #ifndef LUA_EXTRALIBS
 #define LUA_EXTRALIBS	/* empty */
@@ -24,7 +24,7 @@ static const luaL_Reg lualibs[] = {
   {"math", luaopen_math},
   {"debug", luaopen_debug},
   /* add your libraries here */
-  {"TypedLuaCollection_dll", luaopen_TypedLuaCollection_dll},
+  {"TypedLuaCollection", luaopen_TypedLuaCollection},
   LUA_EXTRALIBS
   {NULL, NULL}
 };
@@ -75,7 +75,7 @@ void run_lua() {
   strcpy(dllpath, (const char*)lua_tostring(L, -1));
   strcat(dllpath, ";");
   strcat(dllpath, buf);
-  strcat(dllpath, "\\..\\..\\TypedLuaCollection_dll\\?.dll");
+  strcat(dllpath, "\\..\\..\\TypedLuaCollection\\?.dll");
   lua_pop(L, 1);
   
   lua_pushstring(L, dllpath);

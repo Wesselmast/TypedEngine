@@ -1,12 +1,17 @@
 require "test2"
 require "moreTests/test4"
-require "TypedLuaCollection_dll"
+require "TypedLuaCollection"
 
 function main()
    
    -- t = manipulatePosition()
    -- t = t + manipulatePosition()
-   TypedLuaCollection_dll.print_hello()
+   TypedLuaCollection.print_hello()
+   TypedLuaCollection.print_hello()
+   TypedLuaCollection.print_hello()
+   TypedLuaCollection.print_hello()
+   TypedLuaCollection.print_hello()
+   TypedLuaCollection.print_hello()
    
    -- print(add(t.x, 80))
    -- print(add(t.y, 20))
