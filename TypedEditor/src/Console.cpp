@@ -19,6 +19,7 @@ Console::Console(Window* window) : window(window) {
 }
 
 void Console::refresh() {
+	if (!this) return;
   float w = window->getSize().x;
   float h = window->getSize().y;
   float wS = w / startSize.x;

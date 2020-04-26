@@ -109,6 +109,7 @@ void LuaManager::compileLua() {
   setLuaPath(L, dir.c_str());
 
   dir.append("\\test.lua");
+
   if (checkLua(L, luaL_dofile(L, dir.c_str()))) {
     lua_getglobal(L, "main");
     

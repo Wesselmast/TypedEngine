@@ -1,20 +1,24 @@
 require "test2"
 require "moreTests/test4"
+require "TypedLuaCollection_dll"
 
 function main()
-   t = manipulatePosition()
-   t = t + manipulatePosition()
-   print(add(t.x, 80))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
-   print(add(t.y, 20))
+   
+   -- t = manipulatePosition()
+   -- t = t + manipulatePosition()
+   TypedLuaCollection_dll.print_hello()
+   
+   -- print(add(t.x, 80))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
+   -- print(add(t.y, 20))
    -- thatTookLong ()
    -- computesomethinghard()
 
@@ -31,12 +35,12 @@ function add(a, b)
    return a + b 
 end
 
-function manipulatePosition()
-   t1 = createVector()
-   t2 = createVector()
-   t1.x = 60
-   t1.y = 2.5
-   t2.y = 25
-   t2.x = 195
-   return t1 + t2
-end
+-- function manipulatePosition()
+--  --  t1 = createVector()
+--  --  t2 = createVector()
+--    t1.x = 60
+--    t1.y = 2.5
+--    t2.y = 25
+--    t2.x = 195
+--    return t1 + t2
+-- end

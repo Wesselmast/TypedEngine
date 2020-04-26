@@ -23,27 +23,33 @@ public:
   }
 
   inline static void addSprite(Sprite* sprite) {
+	  if (!renderer) return;
     renderer->sprites.push_back(sprite);
   }
 
   inline static void removeSprite(Sprite* sprite) {
+	  if (!renderer) return;
     renderer->sprites.erase(std::remove(renderer->sprites.begin(), renderer->sprites.end(), sprite), renderer->sprites.end());
   }
   
   inline static void addText(Text* text) {
-    renderer->texts.push_back(text);
+	  if (!renderer) return; 
+	  renderer->texts.push_back(text);
   }
   
   inline static void removeText(Text* text) {
-    renderer->texts.erase(std::remove(renderer->texts.begin(), renderer->texts.end(), text), renderer->texts.end());
+	  if (!renderer) return;
+	  renderer->texts.erase(std::remove(renderer->texts.begin(), renderer->texts.end(), text), renderer->texts.end());
   }
 
   inline static void addQuad(Quad* quad) {
-    renderer->quads.push_back(quad);
+	  if (!renderer) return;
+	  renderer->quads.push_back(quad);
   }
 
   inline static void removeQuad(Quad* quad) {
-    renderer->quads.erase(std::remove(renderer->quads.begin(), renderer->quads.end(), quad), renderer->quads.end());
+	  if (!renderer) return;
+	  renderer->quads.erase(std::remove(renderer->quads.begin(), renderer->quads.end(), quad), renderer->quads.end());
   }
   
   inline static void run() {

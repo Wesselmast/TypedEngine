@@ -87,7 +87,6 @@ project "TypedEditor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
@@ -98,7 +97,57 @@ project "TypedEditor"
 	}
 
 	includedirs {
-		"TypedGame/src",
+		"TypedEngine/src",
+		"%{prj.location}/lib/src",
+		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
+		"%{IncludeDir.glm}"
+	}
+
+	links {
+		"TypedEngine",
+		"TypedLuaCollection_static",
+		"glad",
+		"freetype",
+		"lua",
+		"glfw",
+		"opengl32",
+		"gdi32"
+	}
+
+	-- I dont love this, I should refactor to just have everything in res! 
+	postbuildcommands {
+		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
+		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"'
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+
+project "TypedLuaCollection_static"
+	location "TypedEditor/lib"
+	kind "StaticLib"
+	language "C"
+	staticruntime "on"
+
+	targetdir("bin/" .. outputdir .. "/%{prj.name}")
+	objdir("int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"%{prj.location}/src/**.c",
+		"%{prj.location}/src/**.h",
+		"%{prj.location}/src/**.i"
+	}
+
+	includedirs {
 		"TypedEngine/src",
 		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
 		"%{IncludeDir.glm}"
@@ -114,10 +163,47 @@ project "TypedEditor"
 		"gdi32"
 	}
 
-	-- I dont love this, I should refactor to just have everything in res! 
-	postbuildcommands {
-		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"'
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+
+project "TypedLuaCollection_dll"
+	location "TypedEditor/lib"
+	kind "SharedLib"
+	language "C"
+	staticruntime "off"
+
+	targetdir("bin/" .. outputdir .. "/%{prj.name}")
+	objdir("int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"%{prj.location}/src/**.c",
+		"%{prj.location}/src/**.h",
+		"%{prj.location}/src/**.i"
+	}
+
+	includedirs {
+		"TypedEngine/src",
+		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
+		"%{IncludeDir.glm}"
+	}
+
+	links {
+		"TypedEngine",
+		"glad",
+		"freetype",
+		"lua",
+		"glfw",
+		"opengl32",
+		"gdi32"
 	}
 
 	filter "system:windows"

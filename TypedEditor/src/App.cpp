@@ -6,7 +6,11 @@
 #include "Rendering/Quad.h"
 #include "Console.h"
 
-#include "luamanager.h"
+//#include "luamanager.h"
+
+extern "C" {
+  #include "SwigExample.h"
+}
 
 #include <iostream>
 #include <string>
@@ -23,6 +27,7 @@ Text* fpsCounter = new Text();
 Console* console;
 
 void App::begin() {
+  run_lua();
   console = new Console(window);
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
@@ -37,7 +42,7 @@ void App::begin() {
     new Quad({{ (512.0f + 250.0f) * i, 0.0f }, 0.0f, { 1.0f, 1.0f}}, {1 - i/50.0f, 1 - i/50.0f, 1 - i/50.0f, 1.0f});
     new Text({{ ((512.0f + 250.0f)/4 * i), 128.0f / 3.0f }, 0.0f, { 3.0f, 3.0f}}, std::to_string(i + 1));   //@CleanUp: Add setting color of the text
   }
-  luaFuture = std::async(std::launch::async, &LuaManager::compileLua);
+  //luaFuture = std::async(std::launch::async, &LuaManager::compileLua);
 }
 
 void App::tick(float deltaTime, float time) {
@@ -74,7 +79,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::A: input.x = -1.0f; break;
   case Key::S: input.y = -1.0f; break;
   case Key::D: input.x =  1.0f; break;
-  case Key::C: luaFuture = std::async(std::launch::async, &LuaManager::compileLua); break;
+  //case Key::C: luaFuture = std::async(std::launch::async, &LuaManager::compileLua); break;
   case Key::F: position = {0.0f, 0.0f}; break;
   }
 }
