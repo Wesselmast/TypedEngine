@@ -15,6 +15,8 @@ class Console {
   ~Console();
  private:
   Text* text;
+  Quad* topBar;
+  Text* topText;
   Quad* panel;
   Window* window;
 };

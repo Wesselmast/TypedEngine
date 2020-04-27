@@ -10,12 +10,22 @@
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
-  text = new Text(); //@CleanUp: I REALLY WANT TEXT COLOR
+  text = new Text("");
   text->useScreenPosition(true);
   text->transform.scale = { 0.75f, 0.75f };
   text->color = {220 / 255.0f, 220 / 255.0f, 204 / 255.0f, 1.0f};
+
+  topText = new Text("console");
+  topText->useScreenPosition(true);
+  topText->transform.scale = { 0.66f, 0.66f };
+  topText->color = {240 / 255.0f, 223 / 255.0f, 175 / 255.0f, 1.0f};
+  
   panel = new Quad({ 63/255.0f, 63/255.0f, 63/255.0f, 1.0f });
   panel->useScreenPosition(true);
+
+  topBar = new Quad({ 48/255.0f, 48/255.0f, 48/255.0f, 1.0f });
+  topBar->useScreenPosition(true);
+
   startSize = window->getSize();
 }
 
@@ -28,7 +38,10 @@ void Console::refresh() {
   
   panel->transform.position = { -w, -h/2 };
   panel->transform.scale = { 3.0f * wS, -0.5f * hS };
-  text->transform.position = { -w/2 - (40.0f * wS), -h/4 - (40.0f * hS)} ;
+  topBar->transform.position = { -w, -h/2 };
+  topBar->transform.scale = { 3.0f * wS, -0.08f * hS};
+  text->transform.position = { -w/2 - (40.0f * wS), -h/4 - (60.0f * hS)} ;
+  topText->transform.position = { -w/2 - (45.0f * wS), -h/4 - (40.0f * hS)} ;
 }
 
 void Console::recieveKey(Key key, Modifier mod) {
@@ -46,5 +59,7 @@ void Console::recieveKey(Key key, Modifier mod) {
 }
 
 Console::~Console() {
+  delete text;
+  delete topBar;
   delete panel;
 }

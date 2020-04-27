@@ -74,7 +74,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::A: input.x = -1.0f; break;
   case Key::S: input.y = -1.0f; break;
   case Key::D: input.x =  1.0f; break;
-  case Key::C: compile_lua(); break; //@CleanUp: Make this async again. Harder now because everything is possible now
+  case Key::C: compile_lua(); break; //@CleanUp: Make this async again. @Notice: Async actually works, but we get the strange corrupted memory bug again where we can't render anything
     //luaFuture = std::async(std::launch::async, run_lua); break;
   case Key::F: position = {0.0f, 0.0f}; break;
   }
