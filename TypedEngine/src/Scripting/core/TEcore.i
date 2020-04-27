@@ -1,9 +1,7 @@
 %module TEcore
 
 %{
-#include "Wrappers.h"
-#include "../../core/transform.h"
+#include "TEcore.h"
 %}
 
-%include "Wrappers.h"
-%include "../../core/transform.h"
+%include "TEcore.h"

@@ -1,4 +1,4 @@
-#include "Wrappers.h"
+#include "TEcore.h"
 
 #include "Rendering/Sprite.h"
 #include "Core/Transform.h"
