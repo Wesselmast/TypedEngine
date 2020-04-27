@@ -48,6 +48,7 @@ void App::tick(float deltaTime, float time) {
   treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed));
   treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;
 
+  fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
 }
 

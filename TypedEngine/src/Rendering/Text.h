@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/entity.h"
+#include "glm/glm.hpp"
 #include <string>
 
 class Text : public Entity {
@@ -11,6 +12,7 @@ class Text : public Entity {
   Text(const std::string& text);
   Text(Transform transform, const std::string& text);
 public:
+  glm::vec4 color;
   std::string text;
 private:
   void init(Transform transform, const std::string& text);

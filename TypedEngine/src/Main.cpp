@@ -53,7 +53,7 @@ int main() {
     
     app->tick(deltaTime, time);
 
-    RenderCommand::clear(glm::vec4(133 / 255.0f, 133 / 255.0f, 245 / 255.0f, 1.0f));
+    RenderCommand::clear({ 0.9f, 0.9f, 0.9f, 1.0f });
     RenderCommand::run();
     window->swapBuffers();
     

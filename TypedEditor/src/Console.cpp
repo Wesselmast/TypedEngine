@@ -13,7 +13,8 @@ Console::Console(Window* window) : window(window) {
   text = new Text(); //@CleanUp: I REALLY WANT TEXT COLOR
   text->useScreenPosition(true);
   text->transform.scale = { 0.75f, 0.75f };
-  panel = new Quad({0.0f, 0.0f, 0.0f, 1.0f});
+  text->color = {220 / 255.0f, 220 / 255.0f, 204 / 255.0f, 1.0f};
+  panel = new Quad({ 63/255.0f, 63/255.0f, 63/255.0f, 1.0f });
   panel->useScreenPosition(true);
   startSize = window->getSize();
 }

@@ -169,7 +169,7 @@ void OpenGLRenderer::run() {
 void OpenGLRenderer::drawText(Text* text) {
   defaultTextShader->bind();
   defaultTextShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(text->transform, text->screenPosition));
-  defaultTextShader->setUniformFloat4("textColor", { 1.0f, 0.0f, 0.0f, 1.0f }); //@CleanUp: Add text color
+  defaultTextShader->setUniformFloat4("textColor", text->color);
   glActiveTexture(GL_TEXTURE0);
   vertexArrayT->bind();
 
@@ -207,31 +207,6 @@ void OpenGLRenderer::drawText(Text* text) {
   defaultTextShader->unbind();
 }
 
-void OpenGLRenderer::setBlending(bool enabled) {
-  if (enabled) {
-    // @CleanUp: Culling should be in a separate function
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  }
-  else {
-    glDisable(GL_BLEND);
-  }
-}
-
-void OpenGLRenderer::setCulling(bool enabled) {
-  if(enabled) {
-    glEnable(GL_CULL_FACE);  
-  }
-  else {
-    glDisable(GL_CULL_FACE);
-  }
-}
-
-void OpenGLRenderer::clear(glm::vec4 color) {
-  glClearColor(color.x, color.y, color.z, color.w);
-  glClear(GL_COLOR_BUFFER_BIT);
-}
-
 void OpenGLRenderer::drawSprite(Sprite* sprite) {
   sprite->texture->bind();
   // transform.scale.x *= -1.0f;
@@ -265,6 +240,30 @@ glm::mat4 OpenGLRenderer::calculateMVPFromTransform(Transform transform, bool on
   return mvp;
 }
 
+void OpenGLRenderer::setBlending(bool enabled) {
+  if (enabled) {
+    // @CleanUp: Culling should be in a separate function
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
+  else {
+    glDisable(GL_BLEND);
+  }
+}
+
+void OpenGLRenderer::setCulling(bool enabled) {
+  if(enabled) {
+    glEnable(GL_CULL_FACE);  
+  }
+  else {
+    glDisable(GL_CULL_FACE);
+  }
+}
+
+void OpenGLRenderer::clear(glm::vec4 color) {
+  glClearColor(color.x, color.y, color.z, color.w);
+  glClear(GL_COLOR_BUFFER_BIT);
+}
 
 OpenGLRenderer::~OpenGLRenderer() {
   delete vertexArray;
