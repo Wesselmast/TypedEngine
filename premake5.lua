@@ -187,3 +187,6 @@ project "swig"
 	prebuildcommands {
 		"swig -c++ -lua core/TEcore.i"
 	}
+
+	filter "system:windows"
+		systemversion "latest"

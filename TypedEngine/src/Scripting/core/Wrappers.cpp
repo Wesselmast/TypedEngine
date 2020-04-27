@@ -1,49 +1,55 @@
 #include "Wrappers.h"
 
-#include "Rendering/Quad.h"
+#include "Rendering/Sprite.h"
+#include "Core/Transform.h"
 #include <stdio.h>
 
-class Popz {
-public:
-  Popz() {
-    new Quad();
-  }
-};
+Transform* toTransform(TETransform* t) {
+  return new Transform({{t->position.x, t->position.y}, t->rotation, {t->scale.x, t->scale.y}});
+}
 
-TESprite::TESprite() {
-  //new Popz();
-  init();
-  new Quad();
+TETransform* toTETransform(Transform* t) {
+  return new TETransform({{t->position.x, t->position.y}, t->rotation, {t->scale.x, t->scale.y}});
+}
+
+TETransform::TETransform() {
+  ref = new Transform();
+  this->position = { ref->position.x, ref->position.y };
+  this->rotation = ref->rotation;
+  this->scale = { ref->scale.x, ref->scale.y };
+}
+
+TETransform::TETransform(vec2 position, float rotation, vec2 scale) {
+  ref = new Transform({{position.x, position.y}, rotation, {scale.x, scale.y}});
+  this->position = { ref->position.x, ref->position.y };
+  this->rotation = ref->rotation;
+  this->scale = { ref->scale.x, ref->scale.y };
+}
+
+TETransform::~TETransform() {
+  delete ref;
 }
 
 void TESprite::init() {
+  ref = new Sprite();
 }
 
-// TESprite::TESprite(Transform transform) {
-//  new Sprite(transform);
-// }
+void TESprite::init(TETransform* transform) {
+  ref = new Sprite(*toTransform(transform));
+}
 
-// TESprite::TESprite(const char* texture) {
-//  new Sprite(texture);
-// }
+void TESprite::init(const char* texture) {
+  ref = new Sprite(texture);
+}
 
-// TESprite::TESprite(Transform transform, const char* texture) {
-//  new Sprite(transform, texture);
-// }
+void TESprite::init(TETransform* transform, const char* texture) {
+  ref = new Sprite(*toTransform(transform), texture);
+}
 
-// void TESprite::setTransform(Transform transform) {
-//   ref->transform = transform;
-// }
+void TESprite::setTransform(TETransform* transform) {
+  ref->transform = *toTransform(transform);
+}
 
-// Transform TESprite::getTransform() {
-//   return ref->transform;
-// }
-
-
-// TEText::TEText() {
-//   new Text();
-// }
-
-// TEQuad::TEQuad() {
-//   new Quad();
-// }
+TETransform* TESprite::getTransform() {
+  return toTETransform(&ref->transform);
+}

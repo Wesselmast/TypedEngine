@@ -43,7 +43,7 @@ public:
   
   inline static void addQuad(Quad* quad) {
     if (!renderer) return;
-    printf("%p\n", quad);
+    
     renderer->quads.push_back(quad);
   }
   
