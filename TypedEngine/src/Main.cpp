@@ -4,9 +4,6 @@
 
 #include "Window/OpenGL/OpenGLWindow.h"
 #include "Rendering/RenderCommand.h"
-#include "Rendering/Sprite.h"
-
-#include "Core/Transform.h"
 
 #include "glm/glm.hpp"
 
@@ -32,9 +29,6 @@ static std::string getName() {
   return name;
 }
 int main() {
-
-  app = createApplication();
-  
   window = new OpenGLWindow({ 680, 480 }, getName().c_str(), false);
    
   window->callback_keyPressed(callback_keyPressed);
@@ -45,6 +39,7 @@ int main() {
   camera = new Camera(window);
   RenderCommand::init(camera);
 
+  app = createApplication();
   app->window = window;
   app->camera = camera;
   

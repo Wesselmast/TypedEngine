@@ -9,7 +9,7 @@
 //#include "luamanager.h"
 
 extern "C" {
-  #include "SwigExample.h"
+  #include "Scripting/TElua.h"
 }
 
 #include <iostream>

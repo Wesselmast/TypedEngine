@@ -1,9 +1,9 @@
-require "TypedLuaCollection"
+require "TEcore"
 
-te = TypedLuaCollection;
+te = TEcore;
 
 function main()
-   t = te.Test()
-   t:say_hello(1)
+   t = te.TESprite()
+   t:init()
 end
 

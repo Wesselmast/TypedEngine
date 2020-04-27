@@ -2,6 +2,7 @@
 
 #include "RenderCommand.h"
 #include "renderAPI.h"
+#include "Texture.h"
 
 const char* defaultPath = "res/textures/T_Default.jpg";
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 

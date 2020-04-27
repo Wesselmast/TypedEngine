@@ -46,7 +46,9 @@ project "TypedEngine"
 		"%{prj.location}/external/stb_image/**.h",
 		"%{prj.location}/external/stb_image/**.cpp",
 		"%{prj.location}/external/glm/glm/**.hpp",
-		"%{prj.location}/external/glm/glm/**.inl"
+		"%{prj.location}/external/glm/glm/**.inl",
+		"%{prj.location}/src/**.cxx",
+		"%{prj.location}/src/**.c",
 	}
 
 	includedirs {
@@ -60,6 +62,7 @@ project "TypedEngine"
 	}
 
 	links {	
+		"swig",
 		"glad",
 		"freetype",
 		"lua",
@@ -94,11 +97,7 @@ project "TypedEditor"
 
 	files {
 		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.cpp",
-		"%{prj.location}/lib/src/**.cpp",
-		"%{prj.location}/lib/src/**.h",
-		"%{prj.location}/lib/src/**.cxx",
-		"%{prj.location}/lib/src/**.c",
+		"%{prj.location}/src/**.cpp"
 	}
 		
 
@@ -119,11 +118,10 @@ project "TypedEditor"
 		"gdi32"
 	}
 
-	-- I dont love this, I should refactor to just have everything in res! 
 	postbuildcommands {
 		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
 		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
-		'{COPY} "../TypedEditor/lib/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/TypedLuaCollection" "%{cfg.targetdir}/lib"'
+		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"'
 	}
 
 	filter "system:windows"
@@ -138,8 +136,8 @@ project "TypedEditor"
 		optimize "on"
 
 
-project "TypedLuaCollection"
-	location "TypedEditor/lib"
+project "TEcore"  -- lua core library. at some point clean this up for multiple libs
+	location "TypedEngine/src/Scripting"
 	kind "SharedLib"
 	language "C++"
 	cppdialect "C++17"
@@ -149,15 +147,15 @@ project "TypedLuaCollection"
 	objdir("%{prj.location}/int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"%{prj.location}/src/**.cpp",
-		"%{prj.location}/src/**.cxx",
-		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.c"
+		"%{prj.location}/**.h",
+		"%{prj.location}/**.c",
+		"%{prj.location}/**.cxx",
+		"%{prj.location}/**.i"
 	}
 
 	includedirs {
 		"TypedEngine/src",
-		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
+		"%{IncludeDir.lua}",
 		"%{IncludeDir.glm}"
 	}
 
@@ -171,10 +169,6 @@ project "TypedLuaCollection"
 		"gdi32"
 	}
 
-	prebuildcommands {
-		"swig -c++ -lua src/SwigExample.i"
-	}
-
 	filter "system:windows"
 		systemversion "latest"
 
@@ -185,3 +179,11 @@ project "TypedLuaCollection"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
+
+project "swig"
+	location "TypedEngine/src/Scripting"
+	kind "Utility"
+
+	prebuildcommands {
+		"swig -c++ -lua core/TEcore.i"
+	}

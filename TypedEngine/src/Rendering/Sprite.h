@@ -1,7 +1,8 @@
 #pragma once
 
 #include "core/entity.h"
-#include "Texture.h"
+
+class Texture;
 
 class Sprite : public Entity {
  public:
