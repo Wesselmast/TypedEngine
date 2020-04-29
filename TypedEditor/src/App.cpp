@@ -6,10 +6,8 @@
 #include "Rendering/Quad.h"
 #include "Console.h"
 
-//#include "luamanager.h"
-
 extern "C" {
-  #include "Scripting/TElua.h"
+  #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
 }
 
 #include <iostream>
@@ -35,8 +33,6 @@ void App::begin() {
   sprite->transform.scale *= -5.0f;
 
   fpsCounter->useScreenPosition(true);
-  
-  init_lua();
 }
 
 void App::tick(float deltaTime, float time) {

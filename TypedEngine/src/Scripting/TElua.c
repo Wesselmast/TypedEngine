@@ -10,12 +10,15 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h> 
 
 extern int luaopen_TEcore(lua_State* L);
 
 #ifndef LUA_EXTRALIBS
 #define LUA_EXTRALIBS
 #endif
+
+static bool closedLua = false;
 
 static const luaL_Reg lualibs[] = {
   {"TEcore", luaopen_TEcore},
@@ -32,7 +35,6 @@ void openLibs(lua_State* L) {
 }
 
 static lua_State* L = NULL;
-char mainFile[256];
 
 void init_lua() {
   L = luaL_newstate();
@@ -41,8 +43,6 @@ void init_lua() {
 
   char buf[256];
   GetCurrentDirectoryA(256, buf);
-  
-  // BEGIN LUA PATH
   
   lua_getglobal(L, "package");
   lua_getfield(L, -1, "path");
@@ -73,18 +73,19 @@ void init_lua() {
   lua_setfield(L, -2, "cpath");
   lua_pop(L, 1);
   
-  // END LUA PATH
-
+  char mainFile[256];
   strcat(mainFile, buf);
   strcat(mainFile, "\\gamefiles\\main.lua");
-}
 
-void compile_lua() {
   if (luaL_dofile(L, mainFile) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));
     return;
   }
-  
+}
+
+void compile_lua() {
+  if(closedLua) return;
+
   lua_getglobal(L, "main");
   
   if (lua_isfunction(L, -1)) {
@@ -93,6 +94,10 @@ void compile_lua() {
       return;
     }
   }
- // lua_close(L);
-  return;
+}
+
+void close_lua() {
+  if(closedLua) return;
+  closedLua = true;
+  lua_close(L);
 }

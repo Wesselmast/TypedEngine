@@ -1,11 +1,15 @@
-#include "glfw/glfw3.h"
+#include "glfw/glfw3.h"   //@CleanUp: Get rid of this
 
 #include "Application.h"
 
-#include "Window/OpenGL/OpenGLWindow.h"
+#include "Window/OpenGL/OpenGLWindow.h"   //@CleanUp: Clean this up too
 #include "Rendering/RenderCommand.h"
 
 #include "glm/glm.hpp"
+
+extern "C" {
+  #include "Scripting/TElua.h"
+}
 
 Application* app;
 Window* window;
@@ -28,6 +32,7 @@ static std::string getName() {
 #endif
   return name;
 }
+
 int main() {
   window = new OpenGLWindow({ 680, 480 }, getName().c_str(), false);
    
@@ -39,10 +44,12 @@ int main() {
   camera = new Camera(window);
   RenderCommand::init(camera);
 
+  init_lua();
+
   app = createApplication();
   app->window = window;
   app->camera = camera;
-  
+
   app->begin();
 
   float previous = (float)glfwGetTime();    //YUCK! @CleanUp: Make custom deltaTime function, don't want glfw in the main file
@@ -60,6 +67,7 @@ int main() {
     previous = time;
   }
 
+  close_lua();
   RenderCommand::end();
 
   delete app;
