@@ -23,15 +23,11 @@ public:
   virtual void clear(glm::vec4 color) = 0;
 
   virtual void run() = 0;
-    
+
   virtual ~Renderer() {
-    for(int i = 0; i < sprites.size(); i++) delete sprites[i];
-    sprites.clear();
-    for(int i = 0; i < texts.size(); i++) delete texts[i];
-    texts.clear();
-    for(int i = 0; i < quads.size(); i++) delete quads[i];
-    quads.clear();
-    
+    deleteVector<Sprite>(&sprites);
+    deleteVector<Text>(&texts);
+    deleteVector<Quad>(&quads);    
     delete defaultTextShader;
     delete defaultSpriteShader;
     delete defaultQuadShader;
@@ -46,4 +42,14 @@ protected:
   Shader* defaultSpriteShader;
   Shader* defaultQuadShader;
   Camera* camera;
+
+private:
+  template<typename T>
+  inline void deleteVector(std::vector<T*>* v) {
+    for (int i = 0; i < v->size(); i++) {
+      delete v->at(i);
+      i--;
+    }
+    v->clear();
+  }
 };

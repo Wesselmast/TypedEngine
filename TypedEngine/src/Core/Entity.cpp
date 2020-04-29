@@ -1,5 +1,7 @@
 #include "entity.h"
 
+#include <stdio.h>
+
 Entity::Entity() {
   entityCount++;
 }
