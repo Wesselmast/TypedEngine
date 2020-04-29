@@ -1,5 +1,3 @@
-#include "glfw/glfw3.h"   //@CleanUp: Get rid of this
-
 #include "Application.h"
 
 #include "Rendering/RenderAPI.h"
@@ -52,16 +50,17 @@ int main() {
 
   app->begin();
 
-  float previous = (float)glfwGetTime();    //YUCK! @CleanUp: Make custom deltaTime function, don't want glfw in the main file
+  float previous = window->getTime();    //YUCK! @CleanUp: Make custom deltaTime function, don't want glfw in the main file
   
   while (window->isRunning()) {
-    float time = (float)glfwGetTime();
+    float time = window->getTime();
     float deltaTime = time - previous;
     
     app->tick(deltaTime, time);
 
     RenderCommand::clear({ 0.9f, 0.9f, 0.9f, 1.0f });
     RenderCommand::run();
+
     window->swapBuffers();
     
     previous = time;

@@ -54,18 +54,20 @@ void OpenGLWindow::refreshViewport() {
 }
 
 bool OpenGLWindow::isRunning() const {
+  glfwPollEvents();
   return !glfwWindowShouldClose(window);
 }
 
 void OpenGLWindow::swapBuffers() {
   glfwSwapBuffers(window);
-  
-  //TODO @CleanUp @Important Separate poll events from swapbuffers
-  glfwPollEvents();
 }
 
 void OpenGLWindow::close() {
   glfwSetWindowShouldClose(window, 1);
+}
+
+float OpenGLWindow::getTime() {
+  return (float)glfwGetTime();
 }
 
 void OpenGLWindow::callback_mouseScrolled(GLFWwindow * window, double offsetx, double offsety) {

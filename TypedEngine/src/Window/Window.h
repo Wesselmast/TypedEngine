@@ -18,6 +18,7 @@ public:
   virtual void swapBuffers() = 0;
   virtual glm::vec2 getSize() const = 0;
   virtual void close() = 0;
+  virtual float getTime() = 0;
   
   void callback_mouseScrolled(fptr_MouseScrolled function) { mouseScrolledFunction = function; }
   void callback_keyPressed(fptr_KeyAction function) { keyPressedFunction = function; }

@@ -15,6 +15,7 @@ public:
   virtual bool isRunning() const override;
   virtual void swapBuffers() override;
   virtual void close() override;
+  virtual float getTime() override;
   
   static void callback_mouseScrolled(GLFWwindow* window, double offsetx, double offsety);
   static void callback_keyAction(GLFWwindow* window, int key, int scancode, int action, int mods);
