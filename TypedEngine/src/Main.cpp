@@ -2,7 +2,7 @@
 
 #include "Application.h"
 
-#include "Window/OpenGL/OpenGLWindow.h"   //@CleanUp: Clean this up too
+#include "Rendering/RenderAPI.h"
 #include "Rendering/RenderCommand.h"
 
 #include "glm/glm.hpp"
@@ -34,8 +34,8 @@ static std::string getName() {
 }
 
 int main() {
-  window = new OpenGLWindow({ 680, 480 }, getName().c_str(), false);
-   
+  window = RenderAPI::createWindow({ 680, 480 }, getName().c_str());
+
   window->callback_keyPressed(callback_keyPressed);
   window->callback_keyReleased(callback_keyReleased);
   window->callback_mouseScrolled(callback_mouseScrolled);
