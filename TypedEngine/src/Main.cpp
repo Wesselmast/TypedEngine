@@ -52,7 +52,8 @@ int main() {
   while (window->isRunning()) {
     float time = window->getTime();
     float deltaTime = time - previous;
-    
+
+    run_lua(deltaTime, time);
     app->tick(deltaTime, time);
 
     RenderCommand::clear({ 0.9f, 0.9f, 0.9f, 1.0f });

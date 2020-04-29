@@ -19,6 +19,7 @@ extern int luaopen_TEcore(lua_State* L);
 #endif
 
 static bool closedLua = false;
+static bool compiled = false;
 
 static const luaL_Reg lualibs[] = {
   {"TEcore", luaopen_TEcore},
@@ -84,12 +85,29 @@ void init_lua() {
 }
 
 void compile_lua() {
-  if(closedLua) return;
+  if(closedLua || compiled) return;
 
-  lua_getglobal(L, "main");
+  lua_getglobal(L, "begin");
   
   if (lua_isfunction(L, -1)) {
     if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
+      printf("%s\n", lua_tostring(L, -1));
+      return;
+    }
+  }
+
+  compiled = true;
+}
+
+void run_lua(float deltaTime, float time) {
+  if(closedLua || !compiled) return;
+
+  lua_getglobal(L, "tick");
+  
+  if (lua_isfunction(L, -1)) {
+    lua_pushnumber(L, deltaTime);
+    lua_pushnumber(L, time);
+    if (lua_pcall(L, 2, 0, 0) != LUA_OK) {
       printf("%s\n", lua_tostring(L, -1));
       return;
     }
