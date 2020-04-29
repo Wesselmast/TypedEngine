@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class Text;
 class Quad;
 class Window;
@@ -10,6 +12,8 @@ class Console {
  public:
   void refresh();
   void recieveKey(Key key, Modifier mod);
+
+  void executeCommand(const std::string& command);
   
   Console(Window* window);
   ~Console();

@@ -114,6 +114,10 @@ void run_lua(float deltaTime, float time) {
   }
 }
 
+void quit_lua() {
+  compiled = false;
+}
+
 void close_lua() {
   if(closedLua) return;
   closedLua = true;

@@ -7,6 +7,12 @@
 #include "window/window.h"
 #include <string>
 
+#include <stdio.h>
+
+extern "C" {
+  #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
@@ -46,6 +52,7 @@ void Console::refresh() {
 
 void Console::recieveKey(Key key, Modifier mod) {
   if(key == Key::ENTER) {
+    executeCommand(text->text);
     text->text.clear();
     return;
   }
@@ -56,6 +63,18 @@ void Console::recieveKey(Key key, Modifier mod) {
     return;
   }
   text->text.push_back((char)Input::convertKey(key, mod));
+}
+
+void Console::executeCommand(const std::string& command) {
+  if(command == "run") {
+    compile_lua();
+    return;
+  }
+  if(command == "quit") {
+    quit_lua();
+    return;
+  }
+  printf("ERROR: Unknown command\n");
 }
 
 Console::~Console() {
