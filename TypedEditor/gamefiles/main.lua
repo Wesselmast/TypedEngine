@@ -1,7 +1,7 @@
 require "TEcore"
 
 TE = TEcore;
-
+   
 quads = {}
 
 function begin()
@@ -12,7 +12,11 @@ function begin()
    blubby:init(transform, "res/textures/T_Tree.png")
    
    textos = TE.TEText()
-   textos:init("HELLO THEREEEE!!!!")
+   local textT = TE.TETransform()
+   textT.scale.x = 2.0
+   textT.scale.y = 2.0
+   textos:init(textT, "Are you ready for a disco party?!")
+   textos:setColor(TE.color(1.0, 0.0, 1.0, 1.0))
 end
 
 function tick(deltaTime, time)
@@ -28,9 +32,10 @@ function tick(deltaTime, time)
       local s = quads[q][1]
       t.position.x = t.position.x + (q * deltaTime * 300)
       s:setTransform(t)
+      local c = TE.color(math.sin(time * q), math.cos(time * q), math.tan(time * q), 1.0)
+      s:setColor(c)
    end
    
-   --blubby:setTransform(transform))
    transform.position.x = transform.position.x + (600 * deltaTime)
    blubby:setTransform(transform)
 end

@@ -99,6 +99,13 @@ TEText* TEText::init(TETransform* transform, const char* text) {
   return (TEText*)ref;
 }
 
+void TEText::setText(const char* text) {
+  ((Text*)ref)->text = text;
+}
+
+void TEText::setColor(const color& color) {
+  ((Text*)ref)->color = {color.r, color.g, color.b, color.a};  
+}
 
 // QUADS
 
@@ -124,4 +131,8 @@ TEQuad* TEQuad::init(TETransform* transform, const color& color) {
   ref = new Quad(*toTransform(transform), {color.r, color.g, color.b, color.a});
   ref->tag = Tag::PLAY_MODE;
   return (TEQuad*)ref;
+}
+
+void TEQuad::setColor(const color& color) {
+  ((Quad*)ref)->color = {color.r, color.g, color.b, color.a};  
 }

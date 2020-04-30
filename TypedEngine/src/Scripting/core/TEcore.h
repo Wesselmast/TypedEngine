@@ -4,15 +4,27 @@ class Entity;
 class Transform;
 
 struct vec2 {
+  vec2() {
+  }
+  
+  vec2(float x, float y) : x(x), y(y) {
+  }
+
   float x = 0.0f;
   float y = 0.0f;
 };
 
 struct color {
+  color() {
+  }
+  
+  color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {
+  }
+
   float r = 0.0f;
   float g = 0.0f;
   float b = 0.0f;
-  float a = 0.0f;
+  float a = 1.0f;
 };
 
 struct TETransform {
@@ -53,6 +65,8 @@ public:
   TEText* init(TETransform* transform);
   TEText* init(const char* text);
   TEText* init(TETransform* transform, const char* text);
+  void setText(const char* text);
+  void setColor(const color& color);
 };
 
 class TEQuad : public TEEntity {
@@ -61,4 +75,5 @@ public:
   TEQuad* init(TETransform* transform);
   TEQuad* init(const color& color);
   TEQuad* init(TETransform* transform, const color& color);
+  void setColor(const color& color);
 };
