@@ -5,6 +5,8 @@
 #include "Rendering/Quad.h"
 #include <stdio.h>
 
+#include <string>
+
 // TRANSFORM
 
 Transform* toTransform(TETransform* t) {
@@ -83,14 +85,16 @@ TEText* TEText::init(TETransform* transform) {
   return (TEText*)ref;
 }
 
-TEText* TEText::init(const std::string& text) {
-  ref = new Text(text);
+TEText* TEText::init(const char* text) {
+  std::string s_text = text;
+  ref = new Text(s_text);
   ref->tag = Tag::PLAY_MODE;
   return (TEText*)ref;
 }
 
-TEText* TEText::init(TETransform* transform, const std::string& text) {
-  ref = new Text(*toTransform(transform), text);
+TEText* TEText::init(TETransform* transform, const char* text) {
+  std::string s_text = text;
+  ref = new Text(*toTransform(transform), s_text);
   ref->tag = Tag::PLAY_MODE;
   return (TEText*)ref;
 }

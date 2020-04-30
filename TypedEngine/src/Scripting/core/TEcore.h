@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 class Entity;
 class Transform;
 
@@ -35,7 +33,7 @@ private:
 class TEEntity {
 public:
   void setTransform(TETransform* transform);
-  TETransform* getTransform();  
+  TETransform* getTransform();
 protected:
   Entity* ref;
 };
@@ -53,8 +51,8 @@ class TEText : public TEEntity {
 public:
   TEText* init();
   TEText* init(TETransform* transform);
-  TEText* init(const std::string& text);
-  TEText* init(TETransform* transform, const std::string& text);
+  TEText* init(const char* text);
+  TEText* init(TETransform* transform, const char* text);
 };
 
 class TEQuad : public TEEntity {

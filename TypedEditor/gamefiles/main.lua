@@ -2,25 +2,35 @@ require "TEcore"
 
 TE = TEcore;
 
-transform = TE.TETransform()
-sprite = TE.TESprite()
-quad = TE.TEQuad()
-text = TE.TEText()
+quads = {}
 
 function begin()
+   transform = TE.TETransform()
    transform.position.x = 150
    transform.rotation = 0
-   blubby = sprite:init(transform, "res/textures/T_Tree.png")
+   blubby = TE.TESprite()
+   blubby:init(transform, "res/textures/T_Tree.png")
+   
+   textos = TE.TEText()
+   textos:init("HELLO THEREEEE!!!!")
 end
 
 function tick(deltaTime, time)
    if time % 2 < deltaTime then
-      local soxoo = sprite
-      soxoo:init(transform)
+      local s = TE.TEQuad()
+      local t = TE.TETransform()
+      s:init()
+      table.insert(quads, {s, t})
+   end
+
+   for q in pairs(quads) do
+      local t = quads[q][2]
+      local s = quads[q][1]
+      t.position.x = t.position.x + (q * deltaTime * 300)
+      s:setTransform(t)
    end
    
-   print(blubby)
-   
+   --blubby:setTransform(transform))
    transform.position.x = transform.position.x + (600 * deltaTime)
-   sprite:setTransform(transform)
+   blubby:setTransform(transform)
 end
