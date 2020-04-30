@@ -99,6 +99,12 @@ void App::onWindowRefreshed() {
   camera->updateProjection();
 }
 
+void App::onMousePressed(MouseButton button) {
+  float x = window->getMousePosition().x;
+  float y = window->getMousePosition().y;
+  printf("Mouse Position: %d, %d\n", x, y);
+}
+
 Application* createApplication() {
   return new App();
 }

@@ -20,6 +20,7 @@ extern int luaopen_TEcore(lua_State* L);
 
 static bool closedLua = false;
 static bool compiled = false;
+char mainFile[256];
 
 static const luaL_Reg lualibs[] = {
   {"TEcore", luaopen_TEcore},
@@ -74,18 +75,17 @@ void init_lua() {
   lua_setfield(L, -2, "cpath");
   lua_pop(L, 1);
   
-  char mainFile[256];
   strcat(mainFile, buf);
   strcat(mainFile, "\\gamefiles\\main.lua");
+}
+
+void compile_lua() {
+  if(closedLua || compiled) return;
 
   if (luaL_dofile(L, mainFile) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));
     return;
   }
-}
-
-void compile_lua() {
-  if(closedLua || compiled) return;
 
   lua_getglobal(L, "begin");
   

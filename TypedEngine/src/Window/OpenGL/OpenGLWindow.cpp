@@ -1,14 +1,18 @@
 #include "OpenGLWindow.h"
 
 #include <GLFW/glfw3.h>
+#include <stdio.h>
 
-fptr_MouseScrolled Window::mouseScrolledFunction;
+fptr_TwoFloat Window::mouseScrolledFunction;
+fptr_TwoFloat Window::mouseMovedFunction;
+fptr_MouseAction Window::mousePressedFunction;
 fptr_KeyAction Window::keyPressedFunction;
 fptr_KeyAction Window::keyReleasedFunction;
 fptr_NoParams Window::windowRefreshFunction;
 
+glm::vec2 OpenGLWindow::mousePosition = {0.0f, 0.0f};
+
 OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
-  
   if (!glfwInit()) {
     // ERROR MESSAGE
     return;
@@ -28,6 +32,8 @@ OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
   glfwSetScrollCallback(window, callback_mouseScrolled);
   glfwSetKeyCallback(window, callback_keyAction);
   glfwSetWindowRefreshCallback(window, callback_windowRefreshed);
+  glfwSetCursorPosCallback(window, callback_mouseMoved);
+  glfwSetMouseButtonCallback(window, callback_mousePressed);
   
   setVSync(true);
 }
@@ -66,8 +72,12 @@ void OpenGLWindow::close() {
   glfwSetWindowShouldClose(window, 1);
 }
 
-float OpenGLWindow::getTime() {
+float OpenGLWindow::getTime() const {
   return (float)glfwGetTime();
+}
+
+glm::vec2 OpenGLWindow::getMousePosition() const {
+  return mousePosition;
 }
 
 void OpenGLWindow::callback_mouseScrolled(GLFWwindow * window, double offsetx, double offsety) {
@@ -88,3 +98,16 @@ void OpenGLWindow::callback_windowRefreshed(GLFWwindow * window) {
   glViewport(0, 0, width, height);
   windowRefreshFunction();
 }
+
+void OpenGLWindow::callback_mouseMoved(GLFWwindow* window, double xpos, double ypos) {
+  printf("Mouse Position: %d, %d\n", xpos, ypos);
+  mousePosition = {(float)xpos, (float)ypos};
+  mouseMovedFunction((float)xpos, (float)ypos);
+}
+
+void OpenGLWindow::callback_mousePressed(GLFWwindow* window, int button, int action, int mods) {
+  switch(action) {
+  case GLFW_PRESS: mousePressedFunction(Input::convertMouseButton(button)); break;
+  case GLFW_RELEASE: /*   MOUSE RELEASED EVENT   */ break;
+  }
+} 

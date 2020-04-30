@@ -15,12 +15,15 @@ public:
   virtual bool isRunning() const override;
   virtual void swapBuffers() override;
   virtual void close() override;
-  virtual float getTime() override;
+  virtual float getTime() const override;
+  virtual glm::vec2 getMousePosition() const override;
   
   static void callback_mouseScrolled(GLFWwindow* window, double offsetx, double offsety);
+  static void callback_mousePressed(GLFWwindow* window, int button, int action, int mods);
   static void callback_keyAction(GLFWwindow* window, int key, int scancode, int action, int mods);
   static void callback_windowRefreshed(GLFWwindow* window);
-  
+  static void callback_mouseMoved(GLFWwindow* window, double xpos, double ypos);
 private:
   GLFWwindow* window;
+  static glm::vec2 mousePosition;
 };

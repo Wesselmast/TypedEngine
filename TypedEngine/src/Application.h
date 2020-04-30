@@ -18,7 +18,7 @@ public:
   
   virtual void onMousePressed(MouseButton button) {}
   virtual void onMouseReleased(MouseButton button) {}
-  virtual void onMouseMoved(int posX, int posY) {}
+  virtual void onMouseMoved(float posX, float posY) {}
   virtual void onMouseScrolled(float offsetX, float offsetY) {}
   
   virtual void onKeyPressed(Key key, Modifier mod) {}
