@@ -80,8 +80,12 @@ void init_lua() {
 }
 
 void compile_lua() {
-  if(closedLua || compiled) return;
-
+  if(closedLua) return;
+  if(compiled) {
+    printf("ERROR: Already running!\n");
+    return;
+  }
+  
   if (luaL_dofile(L, mainFile) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));
     return;

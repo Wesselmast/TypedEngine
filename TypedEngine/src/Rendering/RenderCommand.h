@@ -60,6 +60,14 @@ public:
     }
   }
   
+  inline static void removeTagged(Tag tag) {
+    for(Sprite* s : renderer->sprites) {
+      if(s->tag == tag) {
+	delete s;
+      }
+    }
+  }
+  
   inline static void run() {
     renderer->run();
   }  

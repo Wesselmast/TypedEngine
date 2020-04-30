@@ -7,6 +7,8 @@
 #include "window/window.h"
 #include <string>
 
+#include "Rendering/Rendercommand.h"
+
 #include <stdio.h>
 
 extern "C" {
@@ -71,6 +73,7 @@ void Console::executeCommand(const std::string& command) {
     return;
   }
   if(command == "quit") {
+    RenderCommand::removeTagged(Tag::PLAY_MODE);
     quit_lua();
     return;
   }

@@ -32,18 +32,22 @@ TETransform::~TETransform() {
 
 void TESprite::init() {
   ref = new Sprite();
+  ref->tag = Tag::PLAY_MODE;
 }
 
 void TESprite::init(TETransform* transform) {
   ref = new Sprite(*toTransform(transform));
+  ref->tag = Tag::PLAY_MODE;
 }
 
 void TESprite::init(const char* texture) {
   ref = new Sprite(texture);
+  ref->tag = Tag::PLAY_MODE;
 }
 
 void TESprite::init(TETransform* transform, const char* texture) {
   ref = new Sprite(*toTransform(transform), texture);
+  ref->tag = Tag::PLAY_MODE;
 }
 
 void TESprite::setTransform(TETransform* transform) {
