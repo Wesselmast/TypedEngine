@@ -17,9 +17,8 @@ function tick(deltaTime, time)
    if time % 2 < deltaTime then
       local soxoo = sprite
       soxoo:init(transform)
-
    end
-
+   
    print(blubby)
    
    transform.position.x = transform.position.x + (600 * deltaTime)
