@@ -25,13 +25,22 @@ public:
   virtual void run() = 0;
 
   virtual ~Renderer() {
-    deleteVector<Sprite>(&sprites);
-    deleteVector<Text>(&texts);
-    deleteVector<Quad>(&quads);    
+    deleteVectorAll<Sprite>(&sprites);
+    deleteVectorAll<Text>(&texts);
+    deleteVectorAll<Quad>(&quads);    
     delete defaultTextShader;
     delete defaultSpriteShader;
     delete defaultQuadShader;
     delete camera;
+  }
+
+  template<typename T>
+  inline void deleteVectorByTag(std::vector<T*>* v, Tag tag) {
+    for (int i = 0; i < v->size(); i++) {
+      if(v->at(i)->tag != tag) continue;
+      delete v->at(i);
+      i--;
+    }
   }
 
   std::vector<Sprite*> sprites;
@@ -41,11 +50,10 @@ protected:
   Shader* defaultTextShader;
   Shader* defaultSpriteShader;
   Shader* defaultQuadShader;
-  Camera* camera;
-
+  Camera* camera;  
 private:
   template<typename T>
-  inline void deleteVector(std::vector<T*>* v) {
+  inline void deleteVectorAll(std::vector<T*>* v) {
     for (int i = 0; i < v->size(); i++) {
       delete v->at(i);
       i--;

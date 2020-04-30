@@ -61,11 +61,9 @@ public:
   }
   
   inline static void removeTagged(Tag tag) {
-    for(Sprite* s : renderer->sprites) {
-      if(s->tag == tag) {
-	delete s;
-      }
-    }
+    renderer->deleteVectorByTag<Sprite>(&(renderer->sprites), tag);
+    renderer->deleteVectorByTag<Text>(&(renderer->texts), tag);
+    renderer->deleteVectorByTag<Quad>(&(renderer->quads), tag);
   }
   
   inline static void run() {

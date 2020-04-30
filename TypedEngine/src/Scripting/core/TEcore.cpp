@@ -1,8 +1,12 @@
 #include "TEcore.h"
 
 #include "Rendering/Sprite.h"
+#include "Rendering/Text.h"
+#include "Rendering/Quad.h"
 #include "Core/Transform.h"
 #include <stdio.h>
+
+// TRANSFORM
 
 Transform* toTransform(TETransform* t) {
   return new Transform({{t->position.x, t->position.y}, t->rotation, {t->scale.x, t->scale.y}});
@@ -30,30 +34,91 @@ TETransform::~TETransform() {
   delete ref;
 }
 
-void TESprite::init() {
-  ref = new Sprite();
-  ref->tag = Tag::PLAY_MODE;
-}
+// ENTITY
 
-void TESprite::init(TETransform* transform) {
-  ref = new Sprite(*toTransform(transform));
-  ref->tag = Tag::PLAY_MODE;
-}
-
-void TESprite::init(const char* texture) {
-  ref = new Sprite(texture);
-  ref->tag = Tag::PLAY_MODE;
-}
-
-void TESprite::init(TETransform* transform, const char* texture) {
-  ref = new Sprite(*toTransform(transform), texture);
-  ref->tag = Tag::PLAY_MODE;
-}
-
-void TESprite::setTransform(TETransform* transform) {
+void TEEntity::setTransform(TETransform* transform) {
   ref->transform = *toTransform(transform);
 }
 
-TETransform* TESprite::getTransform() {
+TETransform* TEEntity::getTransform() {
   return toTETransform(&ref->transform);
+}
+
+// SPRITES
+
+TESprite* TESprite::init() {
+  ref = new Sprite();
+  ref->tag = Tag::PLAY_MODE;
+  return (TESprite*)ref;
+}
+
+TESprite* TESprite::init(TETransform* transform) {
+  ref = new Sprite(*toTransform(transform));
+  ref->tag = Tag::PLAY_MODE;
+  return (TESprite*)ref;
+}
+
+TESprite* TESprite::init(const char* texture) {
+  ref = new Sprite(texture);
+  ref->tag = Tag::PLAY_MODE;
+  return (TESprite*)ref;
+}
+
+TESprite* TESprite::init(TETransform* transform, const char* texture) {
+  ref = new Sprite(*toTransform(transform), texture);
+  ref->tag = Tag::PLAY_MODE;
+  return (TESprite*)ref;
+}
+
+//  TEXT
+
+TEText* TEText::init() {
+  ref = new Text();
+  ref->tag = Tag::PLAY_MODE;
+  return (TEText*)ref;
+}
+
+TEText* TEText::init(TETransform* transform) {
+  ref = new Text(*toTransform(transform));
+  ref->tag = Tag::PLAY_MODE;
+  return (TEText*)ref;
+}
+
+TEText* TEText::init(const std::string& text) {
+  ref = new Text(text);
+  ref->tag = Tag::PLAY_MODE;
+  return (TEText*)ref;
+}
+
+TEText* TEText::init(TETransform* transform, const std::string& text) {
+  ref = new Text(*toTransform(transform), text);
+  ref->tag = Tag::PLAY_MODE;
+  return (TEText*)ref;
+}
+
+
+// QUADS
+
+TEQuad* TEQuad::init() {
+  ref = new Quad();
+  ref->tag = Tag::PLAY_MODE;
+  return (TEQuad*)ref;
+}
+
+TEQuad* TEQuad::init(TETransform* transform) {
+  ref = new Quad(*toTransform(transform));  
+  ref->tag = Tag::PLAY_MODE;
+  return (TEQuad*)ref;
+}
+
+TEQuad* TEQuad::init(const color& color) {
+  ref = new Quad({color.r, color.g, color.b, color.a});
+  ref->tag = Tag::PLAY_MODE;
+  return (TEQuad*)ref;
+}
+
+TEQuad* TEQuad::init(TETransform* transform, const color& color) {
+  ref = new Quad(*toTransform(transform), {color.r, color.g, color.b, color.a});
+  ref->tag = Tag::PLAY_MODE;
+  return (TEQuad*)ref;
 }

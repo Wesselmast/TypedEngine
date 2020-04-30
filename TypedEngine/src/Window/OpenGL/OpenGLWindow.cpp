@@ -100,7 +100,6 @@ void OpenGLWindow::callback_windowRefreshed(GLFWwindow * window) {
 }
 
 void OpenGLWindow::callback_mouseMoved(GLFWwindow* window, double xpos, double ypos) {
-  printf("Mouse Position: %d, %d\n", xpos, ypos);
   mousePosition = {(float)xpos, (float)ypos};
   mouseMovedFunction((float)xpos, (float)ypos);
 }

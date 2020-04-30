@@ -1,11 +1,20 @@
 #pragma once
 
-class Sprite;
+#include <string>
+
+class Entity;
 class Transform;
 
 struct vec2 {
   float x = 0.0f;
   float y = 0.0f;
+};
+
+struct color {
+  float r = 0.0f;
+  float g = 0.0f;
+  float b = 0.0f;
+  float a = 0.0f;
 };
 
 struct TETransform {
@@ -18,32 +27,40 @@ struct TETransform {
   float rotation;
   vec2 scale;
 private:
-  Transform* ref;
+  Transform* ref = nullptr;
 };
 
-class TESprite {
+// CONSTRUCTORS ARE BROKEN! WE NEED THEM
+
+class TEEntity {
 public:
-  void init();
-  void init(TETransform* transform);
-  void init(const char* texture);
-  void init(TETransform* transform, const char* texture);
-
   void setTransform(TETransform* transform);
-  TETransform* getTransform();
-
-  // CleanUp: These sprites should self-destruct once left play-state
-  
-private:
-  Sprite* ref;
+  TETransform* getTransform();  
+protected:
+  Entity* ref;
 };
 
 
-// class TEText {
-// public:
-//   TEText();
-// };
+class TESprite : public TEEntity {
+public:
+  TESprite* init();
+  TESprite* init(TETransform* transform);
+  TESprite* init(const char* texture);
+  TESprite* init(TETransform* transform, const char* texture);
+};
 
-// class TEQuad {
-// public:
-//   TEQuad();
-// };
+class TEText : public TEEntity {
+public:
+  TEText* init();
+  TEText* init(TETransform* transform);
+  TEText* init(const std::string& text);
+  TEText* init(TETransform* transform, const std::string& text);
+};
+
+class TEQuad : public TEEntity {
+public:
+  TEQuad* init();
+  TEQuad* init(TETransform* transform);
+  TEQuad* init(const color& color);
+  TEQuad* init(TETransform* transform, const color& color);
+};
