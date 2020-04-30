@@ -82,7 +82,7 @@ void init_lua() {
 void compile_lua() {
   if(closedLua) return;
   if(compiled) {
-    printf("ERROR: Already running!\n");
+    printf("ERRORo: Already running!\n");
     return;
   }
   
