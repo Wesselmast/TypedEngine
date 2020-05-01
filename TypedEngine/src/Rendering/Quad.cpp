@@ -1,7 +1,7 @@
-#include "quad.h"
+#include "Quad.h"
 
 #include "RenderCommand.h"
-#include "renderAPI.h"
+#include "RenderAPI.h"
 
 const glm::vec4 defaultColor = { 1.0f, 1.0f, 1.0f, 1.0f};
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 

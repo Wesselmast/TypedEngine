@@ -1,5 +1,5 @@
 
-#include "shader.h"
+#include "Shader.h"
 
 #include <iostream>
 #include <cstring>

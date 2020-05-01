@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/entity.h"
+#include "Core/Entity.h"
 #include "glm/glm.hpp"
 
 class Quad : public Entity {
