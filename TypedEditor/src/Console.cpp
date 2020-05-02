@@ -11,13 +11,29 @@
 
 #include <stdio.h>
 
+#include "ConsoleCommands.h"
+
 extern "C" {
   #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
+}
+
+void command_run(const std::string& command) {
+  run_lua();
+}
+
+void command_quit(const std::string& command) {
+  RenderCommand::removeTagged(Tag::PLAY_MODE);
+  quit_lua();
 }
 
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
+  CONSOLE_COMMANDS(
+		   ConsoleCommand{command_run,   "run"},
+		   ConsoleCommand{command_quit,  "quit"}
+  );
+
   text = new Text("");
   text->useScreenPosition(true);
   text->transform.scale = { 0.75f, 0.75f };
@@ -54,7 +70,7 @@ void Console::refresh() {
 
 void Console::recieveKey(Key key, Modifier mod) {
   if(key == Key::ENTER) {
-    executeCommand(text->text);
+    parseCommand(text->text);
     text->text.clear();
     return;
   }
@@ -65,19 +81,6 @@ void Console::recieveKey(Key key, Modifier mod) {
     return;
   }
   text->text.push_back((char)Input::convertKey(key, mod));
-}
-
-void Console::executeCommand(const std::string& command) {
-  if(command == "run") {
-    compile_lua();
-    return;
-  }
-  if(command == "quit") {
-    RenderCommand::removeTagged(Tag::PLAY_MODE);
-    quit_lua();
-    return;
-  }
-  printf("ERROR: Unknown command\n");
 }
 
 Console::~Console() {

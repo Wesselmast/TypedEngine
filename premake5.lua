@@ -121,7 +121,8 @@ project "TypedEditor"
 	postbuildcommands {
 		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
 		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
-		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"'
+		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
+		'@echo off && echo. && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
 	}
 
 	filter "system:windows"

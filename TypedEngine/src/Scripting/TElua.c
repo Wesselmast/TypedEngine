@@ -79,10 +79,10 @@ void init_lua() {
   strcat(mainFile, "\\gamefiles\\main.lua");
 }
 
-void compile_lua() {
+void run_lua() {
   if(closedLua) return;
   if(compiled) {
-    printf("ERRORo: Already running!\n");
+    printf("ERROR: Already running!\n");
     return;
   }
   
@@ -103,7 +103,7 @@ void compile_lua() {
   compiled = true;
 }
 
-void run_lua(float deltaTime, float time) {
+void tick_lua(float deltaTime, float time) {
   if(closedLua || !compiled) return;
 
   lua_getglobal(L, "tick");
