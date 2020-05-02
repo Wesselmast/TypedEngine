@@ -8,10 +8,6 @@
 typedef void(*fptr_Command)(const std::string&);
 
 struct ConsoleCommand {
-  ConsoleCommand(fptr_Command command, const std::string& commandName) {
-    this->command = command;
-    this->commandName = commandName;
-  }
   fptr_Command command;
   std::string commandName;
 };
