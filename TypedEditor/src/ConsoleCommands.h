@@ -3,10 +3,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <vector>
-#include <string>
-#include <sstream>
-#include <iterator>
-
 #include <string.h>
 
 typedef void(*fptr_Command)(char**);
