@@ -17,28 +17,40 @@ extern "C" {
   #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
 }
 
-void command_run(const std::string& command) {
+void command_play(const std::string& command) {
+  printf("\nENTERING PLAY MODE...\n\n"); 
   run_lua();
 }
 
-void command_quit(const std::string& command) {
+void command_stop(const std::string& command) {
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   quit_lua();
+  printf("\nENTERING EDITOR MODE...\n\n"); 
 }
 
 void command_help(const std::string& command) {
   listCommands();
 }
 
+void command_ping(const std::string& command) {
+  printf("\npong!\n");
+}
+
+void command_cls(const std::string& command) {
+  system("cls");     // @CleanUp: NOT PRETTY! We should log to our own console instead
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
   CONSOLE_COMMANDS(
-		   ConsoleCommand{command_run,   "run"},
-		   ConsoleCommand{command_quit,  "quit"},
-		   ConsoleCommand{command_help,  "help"}
-		   );
-
+    ConsoleCommand{command_play,  "play"},
+    ConsoleCommand{command_stop,  "stop"},
+    ConsoleCommand{command_help,  "help"},
+    ConsoleCommand{command_ping,  "ping"},
+    ConsoleCommand{command_cls,  "cls"}
+  );
+  
   text = new Text("");
   text->useScreenPosition(true);
   text->transform.scale = { 0.75f, 0.75f };
