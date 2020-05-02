@@ -21,31 +21,25 @@ static std::vector<ConsoleCommand> commands;
 const unsigned int MAX_ARGUMENTS = 10;
 
 static void parseCommand(const char* command) {
-
-  // std::string s = "HELLO CAKE YES";
-  // std::vector<std::string> args;
-  // std::istringstream iss(s);
-  // for(std::string a; iss >> s; ) {
-  //   args.push_back(a);
-  // }
-  
-  char cmd[256];
+  char cmd[256] = {};
   strcpy(cmd, command);
-  char* args[MAX_ARGUMENTS];
+  char* args[MAX_ARGUMENTS + 1] = {};
 
   unsigned int amt = 0;
   args[amt] = strtok(cmd, " ");
-  if(!args[0]) return;
+  if(!args[amt]) return;
+  
   while(args[amt]) {
     if(amt >= MAX_ARGUMENTS) {
       	printf("ERROR: Cannot insert more than %d arguments!\n", MAX_ARGUMENTS);
 	return;
     }
     args[++amt] = strtok(NULL, " ");
+    args[amt-1] = args[amt];
   }
   amt--;
   
-  char* firstCommand = args[0];
+  char* firstCommand = strtok(cmd, " "); 
   
   for(auto& c : commands) {
     if(!strcmp(c.commandName, firstCommand)) {

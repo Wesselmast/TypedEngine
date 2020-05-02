@@ -14,11 +14,14 @@
 #include "ConsoleCommands.h"
 
 extern "C" {
-  #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
+  #include "Scripting/TElua.h"
 }
 
+std::future<void> luaFuture;
+
 void command_play(char** arguments) {
-  printf("\nENTERING PLAY MODE...\n\n"); 
+  printf("\nENTERING PLAY MODE...\n\n");
+  // luaFuture = std::async(std::launch::async, run_lua);  //@Volatile: Async works, but textures dont render, also race conditions?!
   run_lua();
 }
 
@@ -40,6 +43,10 @@ void command_cls(char** arguments) {
   system("cls");     // @CleanUp: NOT PRETTY! We should log to our own console instead
 }
 
+void command_echo(char** arguments) {
+  printf("\n%s\n", arguments[0]);
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
@@ -48,7 +55,8 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{command_stop,  "stop"},
     ConsoleCommand{command_help,  "help"},
     ConsoleCommand{command_ping,  "ping"},
-    ConsoleCommand{command_cls,   "cls" }
+    ConsoleCommand{command_cls,   "cls" },
+    ConsoleCommand{command_echo,  "echo", 1}
   );
   
   text = new Text("");

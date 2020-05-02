@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <future>
 
 class Text;
 class Quad;
