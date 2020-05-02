@@ -4,24 +4,62 @@
 #include <stdarg.h>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <iterator>
 
-typedef void(*fptr_Command)(const std::string&);
+#include <string.h>
+
+typedef void(*fptr_Command)(char**);
 
 struct ConsoleCommand {
   fptr_Command command;
-  std::string commandName;
+  const char* commandName;
+  unsigned int argCount = 0;
 };
 
 static std::vector<ConsoleCommand> commands;
+const unsigned int MAX_ARGUMENTS = 10;
 
-static void parseCommand(const std::string& command) {
+static void parseCommand(const char* command) {
+
+  // std::string s = "HELLO CAKE YES";
+  // std::vector<std::string> args;
+  // std::istringstream iss(s);
+  // for(std::string a; iss >> s; ) {
+  //   args.push_back(a);
+  // }
+  
+  char cmd[256];
+  strcpy(cmd, command);
+  char* args[MAX_ARGUMENTS];
+
+  unsigned int amt = 0;
+  args[amt] = strtok(cmd, " ");
+  if(!args[0]) return;
+  while(args[amt]) {
+    if(amt >= MAX_ARGUMENTS) {
+      	printf("ERROR: Cannot insert more than %d arguments!\n", MAX_ARGUMENTS);
+	return;
+    }
+    args[++amt] = strtok(NULL, " ");
+  }
+  amt--;
+  
+  char* firstCommand = args[0];
+  
   for(auto& c : commands) {
-    if(c.commandName == command) {
-      c.command(command);
-      return;
+    if(!strcmp(c.commandName, firstCommand)) {
+      if(c.argCount == amt) {
+	c.command(args);
+	return;
+      }
+      else {
+	printf("ERROR: Command '%s' wants %d arguments, %d were given\n", firstCommand, c.argCount, amt);
+	return;
+      }
     }
   }
-  printf("ERROR: Command '%s' is unknown\n", command.c_str());
+  printf("ERROR: Command '%s' is unknown\n", firstCommand);
 }
 
 static void enterCommands(int numargs, ...) {
@@ -37,7 +75,7 @@ static void enterCommands(int numargs, ...) {
 static void listCommands() {
   printf("\nCommands: \n");
   for(auto& c : commands) {
-    printf("  %s\n", c.commandName.c_str());
+    printf("  %s\n", c.commandName);
   }
 }
 

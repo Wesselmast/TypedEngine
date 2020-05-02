@@ -17,26 +17,26 @@ extern "C" {
   #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
 }
 
-void command_play(const std::string& command) {
+void command_play(char** arguments) {
   printf("\nENTERING PLAY MODE...\n\n"); 
   run_lua();
 }
 
-void command_stop(const std::string& command) {
+void command_stop(char** arguments) {
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   quit_lua();
   printf("\nENTERING EDITOR MODE...\n\n"); 
 }
 
-void command_help(const std::string& command) {
+void command_help(char** arguments) {
   listCommands();
 }
 
-void command_ping(const std::string& command) {
+void command_ping(char** arguments) {
   printf("\npong!\n");
 }
 
-void command_cls(const std::string& command) {
+void command_cls(char** arguments) {
   system("cls");     // @CleanUp: NOT PRETTY! We should log to our own console instead
 }
 
@@ -48,7 +48,7 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{command_stop,  "stop"},
     ConsoleCommand{command_help,  "help"},
     ConsoleCommand{command_ping,  "ping"},
-    ConsoleCommand{command_cls,  "cls"}
+    ConsoleCommand{command_cls,   "cls" }
   );
   
   text = new Text("");
@@ -87,7 +87,7 @@ void Console::refresh() {
 
 void Console::recieveKey(Key key, Modifier mod) {
   if(key == Key::ENTER) {
-    parseCommand(text->text);
+    parseCommand(text->text.c_str());
     text->text.clear();
     return;
   }
