@@ -38,5 +38,12 @@ static void enterCommands(int numargs, ...) {
   va_end(list);
 }
 
+static void listCommands() {
+  printf("\nCommands: \n");
+  for(auto& c : commands) {
+    printf("  %s\n", c.commandName.c_str());
+  }
+}
+
 #define NUM_ARGS(...) (sizeof((ConsoleCommand[]){__VA_ARGS__})/sizeof(ConsoleCommand))
 #define CONSOLE_COMMANDS(...) (enterCommands(NUM_ARGS(__VA_ARGS__), __VA_ARGS__))

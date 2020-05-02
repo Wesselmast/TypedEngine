@@ -26,13 +26,18 @@ void command_quit(const std::string& command) {
   quit_lua();
 }
 
+void command_help(const std::string& command) {
+  listCommands();
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
   CONSOLE_COMMANDS(
 		   ConsoleCommand{command_run,   "run"},
-		   ConsoleCommand{command_quit,  "quit"}
-  );
+		   ConsoleCommand{command_quit,  "quit"},
+		   ConsoleCommand{command_help,  "help"}
+		   );
 
   text = new Text("");
   text->useScreenPosition(true);
