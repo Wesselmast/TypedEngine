@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "App.h"
 
 #include "Core/Transform.h"
@@ -5,9 +7,6 @@
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
 #include "Console.h"
-
-#include <iostream>
-#include <string>
 
 glm::vec2 input = glm::vec2(0, 0);
 float zoom = 1;

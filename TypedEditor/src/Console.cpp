@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Console.h"
 
 #include "Rendering/text.h"
@@ -5,29 +7,25 @@
 #include "input/input.h"
 
 #include "window/window.h"
-#include <string>
 
 #include "Rendering/Rendercommand.h"
+#include "Scripting/LuaCommand.h"
 
-#include <stdio.h>
+#include <future>
 
 #include "ConsoleCommands.h"
-
-extern "C" {
-  #include "Scripting/TElua.h"
-}
 
 std::future<void> luaFuture;
 
 void command_play(char** arguments) {
   printf("\nENTERING PLAY MODE...\n\n");
-  // luaFuture = std::async(std::launch::async, run_lua);  //@Volatile: Async works, but textures dont render, also race conditions?!
-  run_lua();
+  //luaFuture = std::async(std::launch::async, &LuaCommand::run);             //@Volatile: Async works, but textures dont render, also race conditions?!          
+  //LuaCommand::run();
 }
 
 void command_stop(char** arguments) {
   RenderCommand::removeTagged(Tag::PLAY_MODE);
-  quit_lua();
+  LuaCommand::quit();
   printf("\nENTERING EDITOR MODE...\n\n"); 
 }
 

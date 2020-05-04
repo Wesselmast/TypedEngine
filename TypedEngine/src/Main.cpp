@@ -1,13 +1,10 @@
+#include "PCH.h"
+
 #include "Application.h"
 
 #include "Rendering/RenderAPI.h"
 #include "Rendering/RenderCommand.h"
-
-#include "glm/glm.hpp"
-
-extern "C" {
-  #include "Scripting/TElua.h"
-}
+#include "Scripting/LuaCommand.h"
 
 Application* app;
 Window* window;
@@ -43,7 +40,7 @@ int main() {
   camera = new Camera(window);
   RenderCommand::init(camera);
 
-  init_lua();
+  LuaCommand::init();
 
   app = createApplication();
   app->window = window;
@@ -57,7 +54,7 @@ int main() {
     float time = window->getTime();
     float deltaTime = time - previous;
 
-    tick_lua(deltaTime, time);
+    LuaCommand::tick(deltaTime, time);
     app->tick(deltaTime, time);
 
     RenderCommand::clear({ 0.9f, 0.9f, 0.9f, 1.0f });
@@ -68,7 +65,7 @@ int main() {
     previous = time;
   }
 
-  close_lua();
+  LuaCommand::close();
   RenderCommand::end();
 
   delete app;

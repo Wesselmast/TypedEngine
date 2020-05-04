@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "text.h"
 
 #include "RenderCommand.h"
