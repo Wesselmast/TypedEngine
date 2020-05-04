@@ -17,6 +17,8 @@
 
 std::future<void> luaFuture;
 
+Window* command_window;
+
 void command_play(char** arguments) {
   printf("\nENTERING PLAY MODE...\n\n");
   //luaFuture = std::async(std::launch::async, &LuaCommand::run);             //@Volatile: Async works, but textures dont render, also race conditions?!          
@@ -31,6 +33,10 @@ void command_stop(char** arguments) {
 
 void command_help(char** arguments) {
   listCommands();
+}
+
+void command_exit(char** arguments) {
+  command_window->close();
 }
 
 void command_ping(char** arguments) {
@@ -54,8 +60,11 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{command_help,  "help"},
     ConsoleCommand{command_ping,  "ping"},
     ConsoleCommand{command_cls,   "cls" },
+    ConsoleCommand{command_exit,  "exit" },
     ConsoleCommand{command_echo,  "echo", 1}
   );
+  
+  command_window = window;
   
   text = new Text("");
   text->useScreenPosition(true);
@@ -108,6 +117,7 @@ void Console::recieveKey(Key key, Modifier mod) {
 
 Console::~Console() {
   delete text;
+  delete topText;
   delete topBar;
   delete panel;
 }
