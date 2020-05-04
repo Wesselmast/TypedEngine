@@ -7,7 +7,6 @@ extern "C" {
 }
 
 void LuaManager::initLua() {
-  printf("HI!");
   init_lua();
 }
 
