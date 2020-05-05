@@ -44,6 +44,7 @@ void App::tick(float deltaTime, float time) {
 }
 
 bool consoleEnabled = false;
+
 void App::onKeyPressed(Key key, Modifier mod) {
   if(key == Key::ESCAPE) {
     window->close(); 

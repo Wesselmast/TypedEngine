@@ -10,7 +10,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <stdbool.h> 
 
 extern int luaopen_TEcore(lua_State* L);
 
@@ -18,8 +17,8 @@ extern int luaopen_TEcore(lua_State* L);
 #define LUA_EXTRALIBS
 #endif
 
-static bool closedLua = false;
-static bool compiled = false;
+static unsigned char closedLua = 0;
+static unsigned char compiled = 0;
 char mainFile[256];
 
 static const luaL_Reg lualibs[] = {
@@ -100,7 +99,7 @@ void run_lua() {
     }
   }
 
-  compiled = true;
+  compiled = 1;
 }
 
 void tick_lua(float deltaTime, float time) {
@@ -119,11 +118,11 @@ void tick_lua(float deltaTime, float time) {
 }
 
 void quit_lua() {
-  compiled = false;
+  compiled = 0;
 }
 
 void close_lua() {
   if(closedLua) return;
-  closedLua = true;
+  closedLua = 1;
   lua_close(L);
 }

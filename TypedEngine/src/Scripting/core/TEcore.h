@@ -40,7 +40,7 @@ private:
   Transform* ref = nullptr;
 };
 
-// CONSTRUCTORS ARE BROKEN! WE NEED THEM
+// @CleanUp: CONSTRUCTORS ARE BROKEN! WE NEED THEM
 
 class TEEntity {
 public:
@@ -49,7 +49,6 @@ public:
 protected:
   Entity* ref;
 };
-
 
 class TESprite : public TEEntity {
 public:

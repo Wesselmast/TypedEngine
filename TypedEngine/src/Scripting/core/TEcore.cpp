@@ -7,8 +7,6 @@
 #include "Rendering/Quad.h"
 #include <stdio.h>
 
-#include <string>
-
 // TRANSFORM
 
 Transform* toTransform(TETransform* t) {
