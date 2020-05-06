@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "Quad.h"
 
 #include "RenderCommand.h"

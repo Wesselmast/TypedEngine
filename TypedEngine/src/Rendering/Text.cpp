@@ -1,4 +1,8 @@
+#include "PCH.h"
+
 #include "Text.h"
+
+
 
 #include "RenderCommand.h"
 #include "RenderAPI.h"

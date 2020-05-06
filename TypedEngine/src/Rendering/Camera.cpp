@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "Camera.h"
 
 #include <glm/gtx/rotate_vector.hpp>

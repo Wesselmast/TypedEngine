@@ -40,15 +40,20 @@ project "TypedEngine"
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
 
+	buildoptions {
+		"-Winvalid-pch"
+	}
+
+	pchheader "PCH.h"
+	pchsource "TypedEngine/src/PCH.cpp"
+
 	files {
 		"%{prj.location}/src/**.h",
 		"%{prj.location}/src/**.cpp",
 		"%{prj.location}/external/stb_image/**.h",
 		"%{prj.location}/external/stb_image/**.cpp",
 		"%{prj.location}/external/glm/glm/**.hpp",
-		"%{prj.location}/external/glm/glm/**.inl",
-		"%{prj.location}/src/**.cxx",
-		"%{prj.location}/src/**.c",
+		"%{prj.location}/external/glm/glm/**.inl"
 	}
 
 	includedirs {
@@ -61,8 +66,8 @@ project "TypedEngine"
 		"%{IncludeDir.stb_image}"
 	}
 
-	links {	
-		"swig",
+	links {
+		"TELua",
 		"glad",
 		"freetype",
 		"lua",
@@ -85,43 +90,36 @@ project "TypedEngine"
 		runtime "Release"
 		optimize "on"
 
-project "TypedEditor"
-	location "TypedEditor"
-	kind "ConsoleApp"
+
+
+----------------------------------------------------------------LUA STATIC LIBRARY--------------------------------------------------------------
+
+project "TELua"
+	location "TypedEngine/src/Scripting"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir("bin/" .. outputdir .. "/%{prj.name}")
-	objdir("int/" .. outputdir .. "/%{prj.name}")
+	targetdir("%{prj.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir("%{prj.location}/int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.cpp"
+		"%{prj.location}/**.h",
+		"%{prj.location}/**.c"
 	}
-		
 
 	includedirs {
-		"TypedEngine/src",
-		"%{prj.location}/lib/src",
-		"%{IncludeDir.lua}",   -- eventually remove this one! Abstract into engine
+		"%{IncludeDir.lua}",
 		"%{IncludeDir.glm}"
 	}
 
 	links {
-		"TypedEngine",
-		"glad",
-		"freetype",
-		"lua",
-		"glfw",
-		"opengl32",
-		"gdi32"
+		"lua"
 	}
 
-	postbuildcommands {
-		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
-		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"'
+	prebuildcommands {
+		"swig -c++ -lua core/TEcore.i"
 	}
 
 	filter "system:windows"
@@ -136,7 +134,12 @@ project "TypedEditor"
 		optimize "on"
 
 
-project "TEcore"  -- lua core library. at some point clean this up for multiple libs
+
+--------------------------------------------------------------DLL EXPORT PROJECTS----------------------------------------------------------------------
+
+
+
+project "TEcore"  -- TypedEngine Core Library for Lua
 	location "TypedEngine/src/Scripting"
 	kind "SharedLib"
 	language "C++"
@@ -149,8 +152,7 @@ project "TEcore"  -- lua core library. at some point clean this up for multiple 
 	files {
 		"%{prj.location}/**.h",
 		"%{prj.location}/**.c",
-		"%{prj.location}/**.cxx",
-		"%{prj.location}/**.i"
+		"%{prj.location}/**.cxx",	
 	}
 
 	includedirs {
@@ -180,13 +182,61 @@ project "TEcore"  -- lua core library. at some point clean this up for multiple 
 		runtime "Release"
 		optimize "on"
 
-project "swig"
-	location "TypedEngine/src/Scripting"
-	kind "Utility"
 
-	prebuildcommands {
-		"swig -c++ -lua core/TEcore.i"
+-------------------------------------------------------------TYPEDEDITOR----------------------------------------------------------------------------
+
+
+
+project "TypedEditor"
+	location "TypedEditor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir("bin/" .. outputdir .. "/%{prj.name}")
+	objdir("int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "PCH.h"
+	pchsource "TypedEngine/src/PCH.cpp"
+
+	files {
+		"%{prj.location}/src/**.h",
+		"%{prj.location}/src/**.cpp",
+		"TypedEngine/src/Scripting/core/TEcore_wrap.cxx"        -- Ugliest thing I've ever seen. Should be fixed!!!!!
+	}
+
+	includedirs {
+		"TypedEngine/src",
+		"%{IncludeDir.lua}",	
+		"%{IncludeDir.glm}"
+	}
+
+	links {
+		"TypedEngine",
+		"TELua",
+		"glad",
+		"freetype",
+		"lua",
+		"glfw",
+		"opengl32",
+		"gdi32"
+	}
+
+	postbuildcommands {
+		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
+		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
+		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
+		'@echo off && echo. && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
 	}
 
 	filter "system:windows"
 		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"

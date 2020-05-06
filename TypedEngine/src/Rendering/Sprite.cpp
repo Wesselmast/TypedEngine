@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "Sprite.h"
 
 #include "RenderCommand.h"

@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "Console.h"
 
 #include "Rendering/Text.h"
@@ -8,16 +10,67 @@
 #include <string>
 
 #include "Rendering/RenderCommand.h"
+=======
+#include "Window/Window.h"
 
-#include <stdio.h>
+#include "Rendering/Rendercommand.h"
+#include "Scripting/LuaCommand.h"
 
-extern "C" {
-  #include "Scripting/TElua.h"   //@CleanUp: I don't really want to include this in the editor (wrapper?!)
+#include <future>
+
+#include "ConsoleCommands.h"
+
+std::future<void> luaFuture;
+
+Window* command_window;
+
+void command_play(char** arguments) {
+  printf("\nENTERING PLAY MODE...\n\n");
+  //luaFuture = std::async(std::launch::async, &LuaCommand::run);             //@Volatile: Async works, but textures dont render, also race conditions?!          
+  LuaCommand::run();
+}
+
+void command_stop(char** arguments) {
+  RenderCommand::removeTagged(Tag::PLAY_MODE);
+  LuaCommand::quit();
+  printf("\nENTERING EDITOR MODE...\n\n"); 
+}
+
+void command_help(char** arguments) {
+  listCommands();
+}
+
+void command_exit(char** arguments) {
+  command_window->close();
+}
+
+void command_ping(char** arguments) {
+  printf("\npong!\n");
+}
+
+void command_cls(char** arguments) {
+  system("cls");     // @CleanUp: NOT PRETTY! We should log to our own console instead
+}
+
+void command_echo(char** arguments) {
+  printf("\n%s\n", arguments[0]);
 }
 
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
+  CONSOLE_COMMANDS(
+    ConsoleCommand{command_play,  "play"    },
+    ConsoleCommand{command_stop,  "stop"    },
+    ConsoleCommand{command_help,  "help"    },
+    ConsoleCommand{command_ping,  "ping"    },
+    ConsoleCommand{command_cls,   "cls"     },
+    ConsoleCommand{command_exit,  "exit"    },
+    ConsoleCommand{command_echo,  "echo", 1 }
+  );
+  
+  command_window = window;
+  
   text = new Text("");
   text->useScreenPosition(true);
   text->transform.scale = { 0.75f, 0.75f };
@@ -54,7 +107,7 @@ void Console::refresh() {
 
 void Console::recieveKey(Key key, Modifier mod) {
   if(key == Key::ENTER) {
-    executeCommand(text->text);
+    parseCommand(text->text.c_str());
     text->text.clear();
     return;
   }
@@ -67,21 +120,9 @@ void Console::recieveKey(Key key, Modifier mod) {
   text->text.push_back((char)Input::convertKey(key, mod));
 }
 
-void Console::executeCommand(const std::string& command) {
-  if(command == "run") {
-    compile_lua();
-    return;
-  }
-  if(command == "quit") {
-    RenderCommand::removeTagged(Tag::PLAY_MODE);
-    quit_lua();
-    return;
-  }
-  printf("ERROR: Unknown command\n");
-}
-
 Console::~Console() {
   delete text;
+  delete topText;
   delete topBar;
   delete panel;
 }

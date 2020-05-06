@@ -1,7 +1,7 @@
 #pragma once
 
 void init_lua();
-void compile_lua();
+void run_lua();
 void close_lua();
-void run_lua(float deltaTime, float time);
+void tick_lua(float deltaTime, float time);
 void quit_lua();
