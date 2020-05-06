@@ -1,6 +1,6 @@
 #pragma once
 
-#include "transform.h"
+#include "Transform.h"
 #include <string>
 
 enum class Tag {
@@ -18,7 +18,7 @@ class Entity {
   inline void useScreenPosition(bool enabled) {
     screenPosition = enabled;
   }
-  
+
   Transform transform = { { 0.0f, 0.0f}, 0.0f, { 1.0f, 1.0f} };
   std::string name;
   Tag tag = Tag::PERMANENT;

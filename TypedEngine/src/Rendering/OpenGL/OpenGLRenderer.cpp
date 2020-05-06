@@ -1,7 +1,9 @@
+#include "PCH.h"
+
 #include "OpenGLRenderer.h"
 
 #include "glad/glad.h"
-#include "glfw/glfw3.h"
+#include "GLFW/glfw3.h"
 #include "glm/gtx/quaternion.hpp"
 
 //@CleanUp: Make own error logging function and include that instead;
@@ -16,17 +18,16 @@
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLVertexArray.h"
 
-#include "core/transform.h"
-#include "rendering/camera.h"
+#include "Core/Transform.h"
+#include "Rendering/Camera.h"
 
-#include "rendering/quad.h"
-#include "rendering/text.h"
-#include "rendering/sprite.h"
+#include "Rendering/Quad.h"
+#include "Rendering/Text.h"
+#include "Rendering/Sprite.h"
 
 #include <map>
 #include <utility>
 #include <string>
-#include <iostream>
 
 //@CleanUp: This text stuff all has to be abstracted, for now this is where it'll live!
 
@@ -41,19 +42,19 @@ std::map<GLchar, Character> characters;
 
 void OpenGLRenderer::init(Camera* camera) {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    fprintf(stderr, "Failed to initialize GLAD");
+    printf("Failed to initialize GLAD");
     return;
   }
 
   FT_Library ft;
   if(FT_Init_FreeType(&ft)) {
-    fprintf(stderr, "Failed to initialize FreeType");
+    printf("Failed to initialize FreeType");
     return;
   }
 
   FT_Face face;
   if(FT_New_Face(ft, "res/fonts/Menlo-Regular.ttf", 0, &face)) {
-    fprintf(stderr, "Failed to load font Menlo-Regular.ttf");
+    printf("Failed to load font Menlo-Regular.ttf");
     return;
   }
 
@@ -63,7 +64,7 @@ void OpenGLRenderer::init(Camera* camera) {
 
   for(GLubyte c = 0; c < 128; c++) {
     if(FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-      fprintf(stderr, "Failed to load character");
+      printf("Failed to load character");
       continue;
     }
     

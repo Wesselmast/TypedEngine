@@ -5,11 +5,11 @@
 #include <vector>
 #include <string>
 
-#include "sprite.h"
-#include "shader.h"
-#include "text.h"
-#include "quad.h"
-#include "camera.h"
+#include "Sprite.h"
+#include "Shader.h"
+#include "Text.h"
+#include "Quad.h"
+#include "Camera.h"
 
 class Renderer {
 public:

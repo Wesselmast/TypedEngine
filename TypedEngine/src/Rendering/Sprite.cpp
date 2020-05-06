@@ -1,7 +1,9 @@
-#include "sprite.h"
+#include "PCH.h"
+
+#include "Sprite.h"
 
 #include "RenderCommand.h"
-#include "renderAPI.h"
+#include "RenderAPI.h"
 #include "Texture.h"
 
 const char* defaultPath = "res/textures/T_Default.jpg";

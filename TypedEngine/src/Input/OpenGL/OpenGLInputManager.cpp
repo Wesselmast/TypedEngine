@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "OpenGLInputManager.h"
 
 #include "GLFW/glfw3.h"

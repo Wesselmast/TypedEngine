@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/entity.h"
+#include "Core/Entity.h"
 
 class Texture;
 

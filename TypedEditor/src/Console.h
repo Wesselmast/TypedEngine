@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 class Text;
 class Quad;
 class Window;

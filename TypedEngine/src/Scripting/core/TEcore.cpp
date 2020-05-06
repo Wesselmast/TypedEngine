@@ -1,11 +1,11 @@
+#include "PCH.h"
+
 #include "TEcore.h"
 
 #include "Rendering/Sprite.h"
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
 #include <stdio.h>
-
-#include <string>
 
 // TRANSFORM
 

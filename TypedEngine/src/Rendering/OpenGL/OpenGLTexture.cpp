@@ -1,3 +1,5 @@
+#include "PCH.h"
+
 #include "OpenGLTexture.h"
 
 #include "glad/glad.h"
