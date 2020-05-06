@@ -1,6 +1,6 @@
 #include "PCH.h"
 
-#include "entity.h"
+#include "Entity.h"
 
 #include <stdio.h>
 

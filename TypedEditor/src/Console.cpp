@@ -1,12 +1,17 @@
-#include "pch.h"
+#include "PCH.h"
 
 #include "Console.h"
 
-#include "Rendering/text.h"
-#include "Rendering/quad.h"
-#include "input/input.h"
+#include "Rendering/Text.h"
+#include "Rendering/Quad.h"
+#include "Input/Input.h"
 
-#include "window/window.h"
+#include "Window/Window.h"
+#include <string>
+
+#include "Rendering/RenderCommand.h"
+=======
+#include "Window/Window.h"
 
 #include "Rendering/Rendercommand.h"
 #include "Scripting/LuaCommand.h"

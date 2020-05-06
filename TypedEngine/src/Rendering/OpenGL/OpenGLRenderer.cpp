@@ -3,7 +3,7 @@
 #include "OpenGLRenderer.h"
 
 #include "glad/glad.h"
-#include "glfw/glfw3.h"
+#include "GLFW/glfw3.h"
 #include "glm/gtx/quaternion.hpp"
 
 //@CleanUp: Make own error logging function and include that instead;
@@ -18,12 +18,12 @@
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLVertexArray.h"
 
-#include "core/transform.h"
-#include "rendering/camera.h"
+#include "Core/Transform.h"
+#include "Rendering/Camera.h"
 
-#include "rendering/quad.h"
-#include "rendering/text.h"
-#include "rendering/sprite.h"
+#include "Rendering/Quad.h"
+#include "Rendering/Text.h"
+#include "Rendering/Sprite.h"
 
 #include <map>
 #include <utility>
