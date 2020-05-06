@@ -18,17 +18,11 @@ extern int luaopen_TEcore(lua_State* L);
 #define LUA_EXTRALIBS
 #endif
 
-<<<<<<< Updated upstream
-static bool closedLua = false;
-static bool compiled = false;
-char mainFile[256];
-=======
-char** files;
-
 static unsigned char closedLua = 0;
 static unsigned char compiled = 0;
 char filePath[256];
->>>>>>> Stashed changes
+
+char** files;
 
 static const luaL_Reg lualibs[] = {
   {"TEcore", luaopen_TEcore},
@@ -133,11 +127,8 @@ void quit_lua() {
 
 void close_lua() {
   if(closedLua) return;
-<<<<<<< Updated upstream
   closedLua = true;
-=======
   closedLua = 1;
   free(files);
->>>>>>> Stashed changes
   lua_close(L);
 }

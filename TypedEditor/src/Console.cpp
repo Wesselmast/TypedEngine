@@ -9,10 +9,6 @@
 #include "Window/Window.h"
 #include <string>
 
-#include "Rendering/RenderCommand.h"
-=======
-#include "Window/Window.h"
-
 #include "Rendering/Rendercommand.h"
 #include "Scripting/LuaCommand.h"
 
