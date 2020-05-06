@@ -18,9 +18,17 @@ extern int luaopen_TEcore(lua_State* L);
 #define LUA_EXTRALIBS
 #endif
 
+<<<<<<< Updated upstream
 static bool closedLua = false;
 static bool compiled = false;
 char mainFile[256];
+=======
+char** files;
+
+static unsigned char closedLua = 0;
+static unsigned char compiled = 0;
+char filePath[256];
+>>>>>>> Stashed changes
 
 static const luaL_Reg lualibs[] = {
   {"TEcore", luaopen_TEcore},
@@ -43,6 +51,8 @@ void init_lua() {
   luaL_openlibs(L);
   openLibs(L);
 
+  files = malloc(256 * sizeof(char*));
+  
   char buf[256];
   GetCurrentDirectoryA(256, buf);
   
@@ -60,7 +70,6 @@ void init_lua() {
   lua_setfield(L, -2, "path");
   lua_pop(L, 1);
   
-
   lua_getglobal(L, "package");
   lua_getfield(L, -1, "cpath");
   
@@ -75,8 +84,8 @@ void init_lua() {
   lua_setfield(L, -2, "cpath");
   lua_pop(L, 1);
   
-  strcat(mainFile, buf);
-  strcat(mainFile, "\\gamefiles\\main.lua");
+  strcat(filePath, buf);
+  strcat(filePath, "\\gamefiles\\main.lua");
 }
 
 void run_lua() {
@@ -86,7 +95,7 @@ void run_lua() {
     return;
   }
   
-  if (luaL_dofile(L, mainFile) != LUA_OK) {
+  if (luaL_dofile(L, filePath) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));
     return;
   }
@@ -124,6 +133,11 @@ void quit_lua() {
 
 void close_lua() {
   if(closedLua) return;
+<<<<<<< Updated upstream
   closedLua = true;
+=======
+  closedLua = 1;
+  free(files);
+>>>>>>> Stashed changes
   lua_close(L);
 }
