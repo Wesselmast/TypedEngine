@@ -52,6 +52,14 @@ void command_echo(char** arguments) {
   printf("\n%s\n", arguments[0]);
 }
 
+void command_push(char** arguments) {
+  LuaCommand::push(arguments[0]);
+}
+
+void command_printfiles(char** arguments) {
+  LuaCommand::printfiles();
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
@@ -62,7 +70,9 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{command_ping,  "ping"    },
     ConsoleCommand{command_cls,   "cls"     },
     ConsoleCommand{command_exit,  "exit"    },
-    ConsoleCommand{command_echo,  "echo", 1 }
+    ConsoleCommand{command_echo,  "echo", 1 },
+    ConsoleCommand{command_push,  "push", 1 },
+    ConsoleCommand{command_printfiles,  "printfiles" }
   );
   
   command_window = window;

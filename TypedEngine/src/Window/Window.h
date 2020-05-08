@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Input/Input.h"
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 typedef void(*fptr_NoParams)();
 typedef void(*fptr_TwoFloat)(float, float);

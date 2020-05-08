@@ -1,47 +1,23 @@
-require "test2"
-require "moreTests/test4"
-require "TypedLuaCollection"
+require "TEcore"
 
-function main()
+TE = TEcore
    
-   -- t = manipulatePosition()
-   -- t = t + manipulatePosition()
+quads = {}
 
-   t = TypedLuaCollection.Test()
-   t:say_hello(20)
-   -- print(add(t.x, 80))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- print(add(t.y, 20))
-   -- thatTookLong ()
-   -- computesomethinghard()
-
-   --[[         ASYNC TEST!
-   index = 0
-   while true do
-      print(index)
-      index = index + 1
-   end
-   --]]
+function begin()
+   transform = TE.TETransform()
+   blubby = TE.TESprite()
+   blubby:init(transform, "res/textures/T_Brick.jpg")
+   
+   textos = TE.TEText()
+   local textT = TE.TETransform()
+   textT.scale.x = 2.0
+   textT.scale.y = 2.0
+   textos:init(textT, "NACHOS ON THE HOUSE TONIGHT!!!!")
+   textos:setColor(TE.color(1.0, 0.0, 1.0, 1.0))
 end
 
-function add(a, b) 
-   return a + b 
+function tick(deltaTime, time)
+   transform.position.x = transform.position.x + (600 * deltaTime)
+   blubby:setTransform(transform)
 end
-
--- function manipulatePosition()
---  --  t1 = createVector()
---  --  t2 = createVector()
---    t1.x = 60
---    t1.y = 2.5
---    t2.y = 25
---    t2.x = 195
---    return t1 + t2
--- end

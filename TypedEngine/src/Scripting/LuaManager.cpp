@@ -14,6 +14,14 @@ void LuaManager::runLua() {
   run_lua();
 }
 
+void LuaManager::pushLua(char* file) {
+  push_lua(file);
+}
+
+void LuaManager::printLuaFiles() {
+  print_lua_files();
+}
+
 void LuaManager::closeLua() {
   close_lua();
 }

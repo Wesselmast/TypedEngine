@@ -12,6 +12,14 @@ class LuaCommand {
     lua->runLua();
   }
 
+  inline static void push(char* file) {
+    lua->pushLua(file);
+  }
+    
+  inline static void printfiles() {
+    lua->printLuaFiles();
+  }
+
   inline static void close() {
     lua->closeLua();
   }
