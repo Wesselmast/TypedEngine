@@ -10,7 +10,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <stdbool.h> 
+#include <stdbool.h>
 
 extern int luaopen_TEcore(lua_State* L);
 
@@ -18,7 +18,12 @@ extern int luaopen_TEcore(lua_State* L);
 #define LUA_EXTRALIBS
 #endif
 
-static char luafiles[256 * sizeof(char*)][128];
+struct LuaFile {
+  char fileName[128];
+  int address;
+};
+
+static struct LuaFile* luafiles[256 * sizeof(struct LuaFile*)];
 
 static unsigned char closedLua = 0;
 static unsigned char compiled = 0;
@@ -83,19 +88,34 @@ void init_lua() {
 
 void push_lua(char* file) {
   if(compiled || closedLua) return;
+
   static int index = 0;
   file[strlen(file)+1] = '\0';
-  strcpy(luafiles[index], filePath);
-  strcat(luafiles[index], file);
-  printf("Added '%s' to the lua filepath!", file);
+
+  luafiles[index] = malloc(sizeof(struct LuaFile));  
+
+  strcpy(luafiles[index]->fileName, filePath);
+  strcat(luafiles[index]->fileName, file);
+
+  /* printf("%s\n", luafiles[index]->fileName); */
+  
+  if (luaL_dofile(L, luafiles[index]->fileName/*luafiles[index]->fileName*/) != LUA_OK) {
+    printf("%s\n", lua_tostring(L, -1));
+    return;
+  }
+
+  lua_getglobal(L, "object");
+  luafiles[index]->address = luaL_ref(L, LUA_REGISTRYINDEX);
+  printf("%d\n", luafiles[index]->address);
+
   index++;
 }
 
 void print_lua_files() {
   printf("Lua Files:\n");
-  for(int i = 0; i < sizeof(luafiles) / sizeof(char*); i++) {
-    if(!strlen(luafiles[i])) break;
-    printf("   %d = %s\n", i, luafiles[i]);
+  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
+    if(!luafiles[i]) break;
+    printf("   %d = %s\n", i, luafiles[i]->fileName);
   }
   printf("\n");
 }
@@ -107,17 +127,10 @@ void run_lua() {
     return;
   }
 
-  for(int i = 0; i < sizeof(luafiles) / sizeof(char*); i++) {
-    if(!strlen(luafiles[i])) break;
+  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
+    if(!luafiles[i]) break;
     
-    if (luaL_dofile(L, luafiles[i]) != LUA_OK) {
-      printf("%s\n", lua_tostring(L, -1));
-      return;
-    }
-    
-    lua_getglobal(L, "object");
-    void* adress = lua_touserdata(L, -1);
-    lua_getglobal(L, "object");                      // LUA ERROR CONTINUE: FETCH INSTANCE FROM LUA AND CALL BEGIN & TICK FROM THERE
+    lua_rawgeti(L, LUA_REGISTRYINDEX, luafiles[i]->address);
     lua_getfield(L, -1, "begin");
     
     if (lua_isfunction(L, -1)) {
@@ -134,25 +147,21 @@ void run_lua() {
 void tick_lua(float deltaTime, float time) {
   if(closedLua || !compiled) return;
   
-  /* for(int i = 0; i < sizeof(luafiles) / sizeof(char*); i++) { */
-  /*   if(!strlen(luafiles[i])) break; */
+  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
+    if(!luafiles[i]) break;
+
+    lua_rawgeti(L, LUA_REGISTRYINDEX, luafiles[i]->address);
+    lua_getfield(L, -1, "tick");
     
-  /*   if (luaL_dofile(L, luafiles[i]) != LUA_OK) { */
-  /*     printf("%s\n", lua_tostring(L, -1)); */
-  /*     return; */
-  /*   } */
-    
-  /*   lua_getglobal(L, "tick"); */
-    
-  /*   if (lua_isfunction(L, -1)) { */
-  /*     lua_pushnumber(L, deltaTime); */
-  /*     lua_pushnumber(L, time); */
-  /*     if (lua_pcall(L, 2, 0, 0) != LUA_OK) { */
-  /* 	printf("%s\n", lua_tostring(L, -1)); */
-  /* 	return; */
-  /*     } */
-  /*   } */
-  /* } */
+    if (lua_isfunction(L, -1)) {
+      lua_pushnumber(L, deltaTime);
+      lua_pushnumber(L, time);
+      if (lua_pcall(L, 2, 0, 0) != LUA_OK) {
+  	printf("%s\n", lua_tostring(L, -1));
+  	return;
+      }
+    }
+  }
   
   
 /*   if (luaL_dofile(L, luafiles[0]) != LUA_OK) {  */
