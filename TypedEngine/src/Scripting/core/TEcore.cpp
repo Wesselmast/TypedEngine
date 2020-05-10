@@ -1,5 +1,3 @@
-#include "PCH.h"
-
 #include "TEcore.h"
 
 #include "Rendering/Sprite.h"

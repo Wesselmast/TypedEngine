@@ -1,5 +1,3 @@
-#include "PCH.h"
-
 #include "OpenGLWindow.h"
 
 #include <GLFW/glfw3.h>

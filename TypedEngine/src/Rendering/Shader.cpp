@@ -1,5 +1,3 @@
-#include "PCH.h"
-
 #include "Shader.h"
 
 #include <iostream>

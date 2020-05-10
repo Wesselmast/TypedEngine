@@ -1,5 +1,3 @@
-#include "PCH.h"
-
 #include "OpenGLVertexArray.h"
 
 #include "glad/glad.h"

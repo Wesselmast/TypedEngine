@@ -6,7 +6,7 @@ workspace "TypedEngine"
 		"Debug",
 		"Release"	
 	}
-
+	
 	flags {
 		"MultiProcessorCompile"
 	}
@@ -31,6 +31,7 @@ group "Dependencies"
 group ""
 
 project "TypedEngine"
+	toolset "gcc"
 	location "TypedEngine"
 	kind "StaticLib"
 	language "C++"
@@ -40,20 +41,15 @@ project "TypedEngine"
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
 
-	buildoptions {
-		"-Winvalid-pch"
-	}
-
-	pchheader "PCH.h"
-	pchsource "TypedEngine/src/PCH.cpp"
-
 	files {
 		"%{prj.location}/src/**.h",
 		"%{prj.location}/src/**.cpp",
 		"%{prj.location}/external/stb_image/**.h",
 		"%{prj.location}/external/stb_image/**.cpp",
 		"%{prj.location}/external/glm/glm/**.hpp",
-		"%{prj.location}/external/glm/glm/**.inl"
+		"%{prj.location}/external/glm/glm/**.inl",
+		"%{prj.location}/src/**.c",
+		"%{prj.location}/src/**.cxx"
 	}
 
 	includedirs {
@@ -92,34 +88,14 @@ project "TypedEngine"
 
 
 
-----------------------------------------------------------------LUA STATIC LIBRARY--------------------------------------------------------------
+--------------------------------------------------------------- LUA UTILITY --------------------------------------------------------------
 
 project "TELua"
 	location "TypedEngine/src/Scripting"
-	kind "StaticLib"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir("%{prj.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir("%{prj.location}/int/" .. outputdir .. "/%{prj.name}")
-
-	files {
-		"%{prj.location}/**.h",
-		"%{prj.location}/**.c"
-	}
-
-	includedirs {
-		"%{IncludeDir.lua}",
-		"%{IncludeDir.glm}"
-	}
-
-	links {
-		"lua"
-	}
+	kind "Utility"
 
 	prebuildcommands {
-		"swig -c++ -lua core/TEcore.i"         --  SWIG SHOULD RECOMPILE ONLY WHEN FILE DIRTY AND ONLY ONCE:  --
+		"swig -c++ -lua core/TEcore.i"
 	}
 
 	filter "system:windows"
@@ -140,6 +116,7 @@ project "TELua"
 
 
 project "TEcore"  -- TypedEngine Core Library for Lua
+	toolset "gcc"
 	location "TypedEngine/src/Scripting"
 	kind "SharedLib"
 	language "C++"
@@ -188,6 +165,7 @@ project "TEcore"  -- TypedEngine Core Library for Lua
 
 
 project "TypedEditor"
+	toolset "gcc"
 	location "TypedEditor"
 	kind "ConsoleApp"
 	language "C++"
@@ -199,19 +177,16 @@ project "TypedEditor"
 
 	files {
 		"%{prj.location}/src/**.h",
-		"%{prj.location}/src/**.cpp",
-		"TypedEngine/src/Scripting/core/TEcore_wrap.cxx"        -- Ugliest thing I've ever seen. Should be fixed!!!!!
+		"%{prj.location}/src/**.cpp"
 	}
 
 	includedirs {
-		"TypedEngine/src",
-		"%{IncludeDir.lua}",	
+		"TypedEngine/src",	
 		"%{IncludeDir.glm}"
 	}
 
 	links {
 		"TypedEngine",
-		"TELua",
 		"glad",
 		"freetype",
 		"lua",

@@ -181,24 +181,6 @@ void tick_lua(float deltaTime, float time) {
       }
     }
   }
-  
-  
-/*   if (luaL_dofile(L, luafiles[0]) != LUA_OK) {  */
-/*     printf("%s\n", lua_tostring(L, -1));  */
-/*     return;  */
-/*   } */
-  
-/*   lua_getglobal(L, "tick");  */
-  
-/*   if (lua_isfunction(L, -1)) {  */
-/*     lua_pushnumber(L, deltaTime);  */
-/*     lua_pushnumber(L, time);  */
-/*     if (lua_pcall(L, 2, 0, 0) != LUA_OK) {  */
-/*       printf("%s\n", lua_tostring(L, -1));  */
-/*       return;  */
-/*     }  */
-/*   }  */
-/* } */
 }
 void quit_lua() {
   compiled = 0;
