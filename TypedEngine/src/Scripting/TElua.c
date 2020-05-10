@@ -184,6 +184,10 @@ void tick_lua(float deltaTime, float time) {
 }
 void quit_lua() {
   compiled = 0;
+  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {                        // @CleanUp: This shouldn't really be here, I think something is wrong with memory management
+    if(!luafiles[i]) break;
+    free(luafiles[i]);
+  }
   printf("\nENTERING EDITOR MODE...\n\n"); 
 }
 

@@ -1,12 +1,13 @@
 workspace "TypedEngine"
 	architecture "x86_64"
 	startproject "TypedEditor"
-
+	gccprefix "ccache "
+	
 	configurations {
 		"Debug",
 		"Release"	
 	}
-	
+
 	flags {
 		"MultiProcessorCompile"
 	}
