@@ -8,8 +8,8 @@ class LuaCommand {
     lua->initLua();
   }
 
-  inline static void run() {
-    lua->runLua();
+  inline static int run() {
+    return lua->runLua();
   }
 
   inline static void push(char* file) {

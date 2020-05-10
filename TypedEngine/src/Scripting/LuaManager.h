@@ -5,7 +5,7 @@ class LuaManager {
   LuaManager() {}
 
   void initLua();
-  void runLua();
+  int runLua();
   void pushLua(char* file);
   void printLuaFiles();
   void closeLua();

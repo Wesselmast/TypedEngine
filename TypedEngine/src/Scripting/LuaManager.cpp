@@ -10,8 +10,8 @@ void LuaManager::initLua() {
   init_lua();
 }
 
-void LuaManager::runLua() {
-  run_lua();
+int LuaManager::runLua() {
+  return run_lua();
 }
 
 void LuaManager::pushLua(char* file) {

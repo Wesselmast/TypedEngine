@@ -119,7 +119,7 @@ project "TELua"
 	}
 
 	prebuildcommands {
-		"swig -c++ -lua core/TEcore.i"
+		"swig -c++ -lua core/TEcore.i"         --  SWIG SHOULD RECOMPILE ONLY WHEN FILE DIRTY AND ONLY ONCE:  --
 	}
 
 	filter "system:windows"

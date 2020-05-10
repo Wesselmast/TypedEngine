@@ -1,7 +1,7 @@
 #pragma once
 
 void init_lua();
-void run_lua();
+int run_lua();
 void push_lua(char* file);
 void print_lua_files();
 void close_lua();

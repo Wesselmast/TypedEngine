@@ -21,15 +21,16 @@ std::future<void> luaFuture;
 Window* command_window;
 
 void command_play(char** arguments) {
-  printf("\nENTERING PLAY MODE...\n\n");
   //luaFuture = std::async(std::launch::async, &LuaCommand::run);             //@Volatile: Async works, but textures dont render, also race conditions?!          
-  LuaCommand::run();
+  if(!LuaCommand::run()) {
+    RenderCommand::removeTagged(Tag::PLAY_MODE);
+    LuaCommand::quit();
+  }
 }
 
 void command_stop(char** arguments) {
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   LuaCommand::quit();
-  printf("\nENTERING EDITOR MODE...\n\n"); 
 }
 
 void command_help(char** arguments) {
