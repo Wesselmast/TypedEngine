@@ -1,5 +1,3 @@
-#include "PCH.h"
-
 #include "Console.h"
 
 #include "Rendering/Text.h"
@@ -65,14 +63,14 @@ glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
   CONSOLE_COMMANDS(
-    ConsoleCommand{command_play,  "play"    },
-    ConsoleCommand{command_stop,  "stop"    },
-    ConsoleCommand{command_help,  "help"    },
-    ConsoleCommand{command_ping,  "ping"    },
-    ConsoleCommand{command_cls,   "cls"     },
-    ConsoleCommand{command_exit,  "exit"    },
-    ConsoleCommand{command_echo,  "echo", 1 },
-    ConsoleCommand{command_push,  "push", 1 },
+    ConsoleCommand{command_play,        "play"       },
+    ConsoleCommand{command_stop,        "stop"       },
+    ConsoleCommand{command_help,        "help"       },
+    ConsoleCommand{command_ping,        "ping"       },
+    ConsoleCommand{command_cls,         "cls"        },
+    ConsoleCommand{command_exit,        "exit"       },
+    ConsoleCommand{command_echo,        "echo", 1    },
+    ConsoleCommand{command_push,        "push", 1    },
     ConsoleCommand{command_printfiles,  "printfiles" }
   );
   

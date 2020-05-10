@@ -197,9 +197,6 @@ project "TypedEditor"
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "PCH.h"
-	pchsource "TypedEngine/src/PCH.cpp"
-
 	files {
 		"%{prj.location}/src/**.h",
 		"%{prj.location}/src/**.cpp",

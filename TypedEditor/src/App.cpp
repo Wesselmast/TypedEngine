@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "App.h"
 
 #include "Core/Transform.h"
