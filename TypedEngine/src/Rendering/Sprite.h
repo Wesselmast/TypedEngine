@@ -11,6 +11,7 @@ class Sprite : public Entity {
   Sprite(Transform transform);
   Sprite(const char* texture);
   Sprite(Transform transform, const char* texture);
+  void setTexture(const char* texture);
 public:
   Texture* texture;
 private:

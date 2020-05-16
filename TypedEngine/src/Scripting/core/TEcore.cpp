@@ -69,6 +69,10 @@ TESprite* TESprite::init(TETransform* transform, const char* texture) {
   return (TESprite*)ref;
 }
 
+void TESprite::setTexture(const char* texture) {
+  ((Sprite*)ref)->setTexture(texture);
+}
+
 //  TEXT
 
 TEText* TEText::init() {

@@ -56,6 +56,7 @@ public:
   TESprite* init(TETransform* transform);
   TESprite* init(const char* texture);
   TESprite* init(TETransform* transform, const char* texture);
+  void setTexture(const char* texture);
 };
 
 class TEText : public TEEntity {

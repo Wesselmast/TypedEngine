@@ -11,8 +11,6 @@ function new()
    return setmetatable(self, main)
 end
 
--- @CleanUp: 'self' should be replaced with the parent object that hosts the script
-
 function main.begin(self)
    textos = TE.TEText()
    local textT = TE.TETransform()

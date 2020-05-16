@@ -25,10 +25,14 @@ Sprite::Sprite(Transform transform, const char* texture) {
 
 void Sprite::init(Transform transform, const char* texture) {
   this->transform = transform;
-  this->texture = RenderAPI::createTexture(texture);
-
+  setTexture(texture);
+  
   setName("Sprite");
   RenderCommand::addSprite(this);  
+}
+
+void Sprite::setTexture(const char* texture) {
+  this->texture = RenderAPI::createTexture(texture);
 }
 
 Sprite::~Sprite() {
