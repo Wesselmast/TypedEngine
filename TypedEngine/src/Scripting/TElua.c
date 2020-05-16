@@ -120,6 +120,11 @@ void push_lua(char* file) {
   index++;
 }
 
+/* void pop_lua(char* file) { */
+/*   if(closedLua) return; */
+  
+/* } */
+
 void print_lua_files() {
   printf("Lua Files:\n");
   for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
@@ -150,8 +155,7 @@ int run_lua() {
 
     if (lua_isfunction(L, -1)) {
       lua_rawgeti(L, LUA_REGISTRYINDEX, luafiles[i]->address);
-      lua_pushnumber(L, luafiles[i]->address);
-      if (lua_pcall(L, 2, 0, 0) != LUA_OK) {
+      if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
 	printf("%s\n", lua_tostring(L, -1));
 	return 0;
       }

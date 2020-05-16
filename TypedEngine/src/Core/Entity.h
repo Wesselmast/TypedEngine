@@ -20,6 +20,7 @@ class Entity {
   }
 
   void addScript(const char* fileName);   
+  void removeScript(const char* fileName);   
   
   Transform transform = { { 0.0f, 0.0f}, 0.0f, { 1.0f, 1.0f} };
   std::string name;

@@ -1,10 +1,7 @@
 TE = require "TEcore";
 
 local object = {
-   transform = TE.TETransform(),
-   tree = TE.TESprite(),
-   quads = {},
-   address = 0
+   quads = {}
 }
 
 object.__index = object
@@ -16,12 +13,7 @@ end
 
 -- @CleanUp: 'self' should be replaced with the parent object that hosts the script
 
-function object.begin(self, address)
-   self.address = address
-   self.transform.position.x = 150
-   self.transform.rotation = 0
-   self.tree:init(self.transform, "res/textures/T_Tree.png")
-   
+function object.begin(self)
    textos = TE.TEText()
    local textT = TE.TETransform()
    textT.scale.x = 2.0
@@ -47,7 +39,4 @@ function object.tick(self, deltaTime, time)
       local c = TE.color(math.sin(time * q), math.cos(time * q), math.tan(time * q), 1.0)
       s:setColor(c)
    end
-   
-   self.transform.position.x = self.transform.position.x + (200 * deltaTime * self.address)
-   self.tree:setTransform(self.transform)
 end

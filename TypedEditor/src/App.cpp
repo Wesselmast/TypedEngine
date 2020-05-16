@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 
+bool consoleEnabled = false;
 glm::vec2 input = glm::vec2(0, 0);
 float zoom = 1;
 
@@ -24,6 +25,7 @@ void App::begin() {
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
 
+  treeSprite->addScript("tree.lua");
   treeSprite->addScript("main.lua");
   
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
@@ -44,8 +46,6 @@ void App::tick(float deltaTime, float time) {
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
 }
-
-bool consoleEnabled = false;
 
 void App::onKeyPressed(Key key, Modifier mod) {
   if(key == Key::ESCAPE) {
