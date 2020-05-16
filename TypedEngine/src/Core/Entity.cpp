@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include <stdio.h>
+#include "Scripting/LuaCommand.h"
 
 Entity::Entity() {
   entityCount++;
@@ -8,6 +9,10 @@ Entity::Entity() {
 
 Entity::~Entity() {
   entityCount--;
+}
+
+void Entity::addScript(const char* fileName) {
+  LuaCommand::push((char*)fileName);
 }
 
 void Entity::setName(const std::string& name) {

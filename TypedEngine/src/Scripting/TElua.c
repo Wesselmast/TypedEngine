@@ -99,8 +99,6 @@ void push_lua(char* file) {
 
   strcpy(luafiles[index]->fileName, filePath);
   strcat(luafiles[index]->fileName, file);
-
-  /* printf("%s\n", luafiles[index]->fileName); */
   
   if (luaL_dofile(L, luafiles[index]->fileName) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));

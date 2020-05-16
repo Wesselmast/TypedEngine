@@ -19,6 +19,8 @@ class Entity {
     screenPosition = enabled;
   }
 
+  void addScript(const char* fileName);   
+  
   Transform transform = { { 0.0f, 0.0f}, 0.0f, { 1.0f, 1.0f} };
   std::string name;
   Tag tag = Tag::PERMANENT;

@@ -1,6 +1,6 @@
 TE = require "TEcore";
 
-object = {
+local object = {
    transform = TE.TETransform(),
    tree = TE.TESprite(),
    quads = {},
@@ -10,11 +10,11 @@ object = {
 object.__index = object
 
 function new()
-   local self = {
-      
-   }
+   local self = {}
    return setmetatable(self, object)
 end
+
+-- @CleanUp: 'self' should be replaced with the parent object that hosts the script
 
 function object.begin(self, address)
    self.address = address

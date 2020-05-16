@@ -22,6 +22,8 @@ void App::begin() {
   console = new Console(window);
   treeSprite = new Sprite("res/textures/T_Tree.png"); 
   treeSprite->transform.position = { 1000, 1250 };
+
+  treeSprite->addScript("main.lua");
   
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
   sprite->transform.scale *= -5.0f;

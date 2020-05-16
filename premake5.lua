@@ -8,6 +8,8 @@ workspace "TypedEngine"
 		"Release"	
 	}
 
+
+
 	flags {
 		"MultiProcessorCompile"
 	}
