@@ -1,19 +1,19 @@
 TE = require "TEcore";
 
-local object = {
+local main = {
    quads = {}
 }
 
-object.__index = object
+main.__index = main
 
 function new()
    local self = {}
-   return setmetatable(self, object)
+   return setmetatable(self, main)
 end
 
 -- @CleanUp: 'self' should be replaced with the parent object that hosts the script
 
-function object.begin(self)
+function main.begin(self)
    textos = TE.TEText()
    local textT = TE.TETransform()
    textT.scale.x = 2.0
@@ -23,7 +23,7 @@ function object.begin(self)
    textos:setColor(TE.color(1.0, 0.0, 1.0, 1.0))
 end
 
-function object.tick(self, deltaTime, time)
+function main.tick(self, deltaTime, time)
    if time % 2 < deltaTime then
       local s = TE.TEQuad()
       local t = TE.TETransform()
@@ -39,4 +39,8 @@ function object.tick(self, deltaTime, time)
       local c = TE.color(math.sin(time * q), math.cos(time * q), math.tan(time * q), 1.0)
       s:setColor(c)
    end
+end
+
+function print_that_it_works()
+   print("it works!")
 end

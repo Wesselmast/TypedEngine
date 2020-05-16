@@ -1,25 +1,27 @@
+require "main"
 TE = require "TEcore";
 
-local object = {
+local tree = {
    transform = TE.TETransform(),
-   tree = TE.TESprite()
+   sprite = TE.TESprite()
 }
 
-object.__index = object
+tree.__index = tree
 
 function new()
    local self = {}
-   return setmetatable(self, object)
+   return setmetatable(self, tree)
 end
 
 -- @CleanUp: 'self' should be replaced with the parent object that hosts the script
 
-function object.begin(self)
-   self.tree:init(self.transform, "res/textures/T_Tree.png")
+function tree.begin(self)
+   self.sprite:init(self.transform, "res/textures/T_Tree.png")
 end
 
-function object.tick(self, deltaTime, time)
+function tree.tick(self, deltaTime, time)
+   print_that_it_works() -- Function from the main.lua file
    self.transform.position.x = self.transform.position.x + (200 * deltaTime)
    self.transform.rotation = self.transform.rotation + deltaTime
-   self.tree:setTransform(self.transform)
+   self.sprite:setTransform(self.transform)
 end
