@@ -26,7 +26,11 @@ static std::string getName() {
 }
 
 int main() {
+  printf("Starting Up...");
+
   window = RenderAPI::createWindow({ 680, 480 }, getName().c_str(), false);
+
+  printf("Created Window...");
 
   window->callback_keyPressed(callback_keyPressed);
   window->callback_keyReleased(callback_keyReleased);
@@ -38,7 +42,11 @@ int main() {
   camera = new Camera(window);
   RenderCommand::init(camera);
 
+  printf("Initted Renderer...");
+
   LuaCommand::init();
+
+  printf("Initted Lua...");
 
   app = createApplication();
   app->window = window;

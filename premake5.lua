@@ -32,7 +32,6 @@ group "Dependencies"
 group ""
 
 project "TypedEngine"
-	toolset "gcc"
 	location "TypedEngine"
 	kind "StaticLib"
 	language "C++"
@@ -117,7 +116,6 @@ project "TELua"
 
 
 project "TEcore"  -- TypedEngine Core Library for Lua
-	toolset "gcc"
 	location "TypedEngine/src/Scripting"
 	kind "SharedLib"
 	language "C++"
@@ -166,7 +164,6 @@ project "TEcore"  -- TypedEngine Core Library for Lua
 
 
 project "TypedEditor"
-	toolset "gcc"
 	location "TypedEditor"
 	kind "ConsoleApp"
 	language "C++"

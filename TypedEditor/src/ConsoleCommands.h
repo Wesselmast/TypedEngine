@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <vector>
 #include <string.h>
+#include <tuple>
 
 typedef void(*fptr_Command)(char**);
 
@@ -69,5 +70,5 @@ static void listCommands() {
   }
 }
 
-#define NUM_ARGS(...) (sizeof((ConsoleCommand[]){__VA_ARGS__})/sizeof(ConsoleCommand))
+#define NUM_ARGS(...) std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value
 #define CONSOLE_COMMANDS(...) (enterCommands(NUM_ARGS(__VA_ARGS__), __VA_ARGS__))

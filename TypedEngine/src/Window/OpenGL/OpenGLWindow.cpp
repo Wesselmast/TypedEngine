@@ -56,7 +56,7 @@ void OpenGLWindow::setVSync(bool enabled) {
 
 void OpenGLWindow::refreshViewport() {
   glm::vec2 size = getSize();
-  glViewport(0, 0, (GLsizei)size.x, (GLsizei)size.y);
+  //glViewport(0, 0, (GLsizei)size.x, (GLsizei)size.y);
 }
 
 bool OpenGLWindow::isRunning() const {
@@ -95,7 +95,7 @@ void OpenGLWindow::callback_windowRefreshed(GLFWwindow * window) {
   int width;
   int height;
   glfwGetFramebufferSize(window, &width, &height);
-  glViewport(0, 0, width, height);
+ // glViewport(0, 0, width, height);
   windowRefreshFunction();
 }
 
