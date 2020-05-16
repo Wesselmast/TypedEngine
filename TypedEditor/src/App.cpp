@@ -4,8 +4,9 @@
 #include "Rendering/Sprite.h"
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
-#include <stdio.h>
 #include "Console.h"
+
+#include <stdio.h>
 
 glm::vec2 input = glm::vec2(0, 0);
 float zoom = 1;
