@@ -93,12 +93,14 @@ void push_lua(char* file) {
   }
 
   static int index = 0;
-  file[strlen(file)+1] = '\0';
+  char fileBuffer[256];
+  strcpy(fileBuffer, file);
+  fileBuffer[strlen(file)+1] = '\0';
 
   luafiles[index] = malloc(sizeof(struct LuaFile));  
 
   strcpy(luafiles[index]->fileName, filePath);
-  strcat(luafiles[index]->fileName, file);
+  strcat(luafiles[index]->fileName, fileBuffer);
   
   if (luaL_dofile(L, luafiles[index]->fileName) != LUA_OK) {
     printf("%s\n", lua_tostring(L, -1));
@@ -182,21 +184,15 @@ void tick_lua(float deltaTime, float time) {
 }
 void quit_lua() {
   compiled = 0;
-  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {                        // @CleanUp: This shouldn't really be here, I think something is wrong with memory management
+  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
     if(!luafiles[i]) break;
     free(luafiles[i]);
   }
   printf("\nENTERING EDITOR MODE...\n\n"); 
 }
 
-static struct LuaFile* luafiles[256 * sizeof(struct LuaFile*)];
-
 void close_lua() {
   if(closedLua) return;
-  for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
-    if(!luafiles[i]) break;
-    free(luafiles[i]);
-  }
   closedLua = 1;
   lua_close(L);
 }
