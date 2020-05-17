@@ -43,6 +43,16 @@ public:
     }
   }
 
+  template<typename T>
+  inline std::vector<T*> getVectorByTag(std::vector<T*>* v, Tag tag) {
+    std::vector<T*> local_v;
+    for (int i = 0; i < v->size(); i++) {
+      if(v->at(i)->tag != tag) continue;
+      local_v.push_back(v->at(i));
+    }
+    return local_v;
+  }
+  
   std::vector<Sprite*> sprites;
   std::vector<Text*> texts;
   std::vector<Quad*> quads;

@@ -11,6 +11,11 @@ class Text : public Entity {
   Text(Transform transform);
   Text(const std::string& text);
   Text(Transform transform, const std::string& text);
+
+  virtual int size() const override {
+    return sizeof(Text);
+  }  
+
 public:
   glm::vec4 color;
   std::string text;

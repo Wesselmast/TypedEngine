@@ -1,12 +1,17 @@
 #pragma once
 
-#include "Level.h"
+#include "LevelManager.h"
 
 class LevelCommand {
  public:
-  static void saveLevel();
-  static void loadLevel();
-
- private:
+  inline static void saveLevel(char* path) {
+    levelManager->saveLevel(path);
+  }
   
+  inline static void loadLevel(char* path) {
+    levelManager->loadLevel(path);
+  }
+  
+ private:
+  static LevelManager* levelManager;
 };

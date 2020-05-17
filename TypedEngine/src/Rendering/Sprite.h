@@ -12,6 +12,10 @@ class Sprite : public Entity {
   Sprite(const char* texture);
   Sprite(Transform transform, const char* texture);
   void setTexture(const char* texture);
+  
+  virtual int size() const override {
+    return sizeof(Sprite);
+  }
 public:
   Texture* texture;
 private:

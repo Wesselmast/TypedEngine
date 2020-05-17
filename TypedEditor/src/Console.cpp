@@ -13,6 +13,7 @@
 #include <future>
 
 #include "ConsoleCommands.h"
+#include "Core/LevelCommand.h"
 
 std::future<void> luaFuture;
 
@@ -51,6 +52,10 @@ void command_echo(char** arguments) {
   printf("\n%s\n", arguments[0]);
 }
 
+void command_level(char** arguments) {
+  LevelCommand::saveLevel(arguments[0]);
+}
+
 void command_push(char** arguments) {
   LuaCommand::push(arguments[0]);
 }
@@ -69,8 +74,9 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_ping,        "ping"       },
     ConsoleCommand{ command_cls,         "cls"        },
     ConsoleCommand{ command_exit,        "exit"       },
-    ConsoleCommand{ command_echo,        "echo", 1    },
-    ConsoleCommand{ command_push,        "push", 1    },
+    ConsoleCommand{ command_echo,        "echo",  1   },
+    ConsoleCommand{ command_push,        "push",  1   },
+    ConsoleCommand{ command_level,       "level", 1   },
     ConsoleCommand{ command_printfiles,  "printfiles" }
   );
   

@@ -66,6 +66,16 @@ public:
     renderer->deleteVectorByTag<Quad>(&(renderer->quads), tag);
   }
   
+  inline static void getTagged(Tag tag, std::vector<Entity*>* v) {
+    std::vector<Sprite*> a = renderer->getVectorByTag<Sprite>(&(renderer->sprites), tag);
+    std::vector<Text*> b = renderer->getVectorByTag<Text>(&(renderer->texts), tag);
+    std::vector<Quad*> c = renderer->getVectorByTag<Quad>(&(renderer->quads), tag);
+    v->insert(v->end(), a.begin(), a.end());
+    v->insert(v->end(), b.begin(), b.end());
+    v->insert(v->end(), c.begin(), c.end());    
+  }
+
+
   inline static void run() {
     renderer->run();
   }  

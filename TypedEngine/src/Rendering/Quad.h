@@ -10,6 +10,10 @@ class Quad : public Entity {
   Quad(Transform transform);
   Quad(const glm::vec4& color);
   Quad(Transform transform, const glm::vec4& color);
+
+  virtual int size() const override {
+    return sizeof(Quad);
+  }  
 public:
   glm::vec4 color;
 private:

@@ -28,6 +28,10 @@ class Entity {
   
   bool screenPosition = false;
 
+  virtual int size() const {
+    return sizeof(Entity);
+  }
+  
 private:
   static int entityCount;
 };
