@@ -1,7 +1,12 @@
 #pragma once
 
-class Level {
+#include "Level.h"
+
+class LevelCommand {
  public:
   static void saveLevel();
   static void loadLevel();
+
+ private:
+  
 };
