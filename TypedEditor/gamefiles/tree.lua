@@ -10,11 +10,11 @@ tree.__index = tree
 
 function new()
    local self = {}
+   tree.sprite:init("res/textures/T_Tree.png")
    return setmetatable(self, tree)
 end
-
+ 
 function tree.begin(self)
-   self.sprite:init(self.transform, "res/textures/T_Tree.png")
 end
 
 function tree.tick(self, deltaTime, time)

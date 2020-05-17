@@ -24,7 +24,7 @@ class Entity {
   
   Transform transform = { { 0.0f, 0.0f}, 0.0f, { 1.0f, 1.0f} };
   std::string name;
-  Tag tag = Tag::PERMANENT;
+  Tag tag = Tag::LEVEL;
   
   bool screenPosition = false;
 
