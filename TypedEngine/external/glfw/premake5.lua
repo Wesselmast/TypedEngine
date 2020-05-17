@@ -43,7 +43,6 @@ project "glfw"
 		}
 
 	filter "system:windows"
-		systemversion "latest"
 		staticruntime "On"
 
 		files

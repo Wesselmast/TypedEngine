@@ -67,9 +67,6 @@ project "freetype"
 		"_CRT_SECURE_NO_WARNINGS"--]]
 	}
 
-    filter "system:windows"
-        systemversion "latest"
-
     filter "configurations:Debug"
         runtime "Debug"
         symbols "on"

@@ -8,11 +8,12 @@ workspace "TypedEngine"
 		"Release"	
 	}
 
-
-
 	flags {
 		"MultiProcessorCompile"
 	}
+
+	filter "system:windows"
+		systemversion "latest"
 
 			-- Debug / Release Operating system   x64
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -69,13 +70,19 @@ project "TypedEngine"
 		"glad",
 		"freetype",
 		"lua",
-		"glfw",
-	 	"opengl32",
-		"gdi32"
+		"glfw"
 	}
 
-	filter "system:windows"
-		systemversion "latest"
+	filter "toolset:gcc"
+		links {
+		 	"opengl32",
+			"gdi32"
+		}
+	filter "toolset:msc*"
+		links {
+		 	"opengl32.lib",
+			"gdi32.lib"
+		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
@@ -99,9 +106,6 @@ project "TELua"
 	prebuildcommands {
 		"swig -c++ -lua core/TEcore.i"
 	}
-
-	filter "system:windows"
-		systemversion "latest"
 
 	filter "configurations:Debug"
 		runtime "Debug"
@@ -144,13 +148,19 @@ project "TEcore"  -- TypedEngine Core Library for Lua
 		"glad",
 		"freetype",
 		"lua",
-		"glfw",
-		"opengl32",
-		"gdi32"
+		"glfw"
 	}
 
-	filter "system:windows"
-		systemversion "latest"
+	filter "toolset:gcc"
+		links {
+		 	"opengl32",
+			"gdi32"
+		}
+	filter "toolset:msc"
+		links {
+		 	"opengl32.lib",
+			"gdi32.lib"
+		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
@@ -172,6 +182,13 @@ project "TypedEditor"
 	cppdialect "C++17"
 	staticruntime "on"
 
+	postbuildcommands {
+		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
+		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
+		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
+		'@echo off && echo. && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
+	}
+
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
 	objdir("int/" .. outputdir .. "/%{prj.name}")
 
@@ -190,20 +207,19 @@ project "TypedEditor"
 		"glad",
 		"freetype",
 		"lua",
-		"glfw",
-		"opengl32",
-		"gdi32"
+		"glfw"
 	}
 
-	postbuildcommands {
-		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
-		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
-		'@echo off && echo. && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
-	}
-
-	filter "system:windows"
-		systemversion "latest"
+	filter "toolset:gcc"
+		links {
+		 	"opengl32",
+			"gdi32"
+		}
+	filter "toolset:msc"
+		links {
+		 	"opengl32.lib",
+			"gdi32.lib"
+		}
 
 	filter "configurations:Debug"
 		runtime "Debug"

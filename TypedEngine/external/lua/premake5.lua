@@ -68,9 +68,6 @@ project "lua"
         "lzio.c",
         "lzio.h"
     }
-    
-    filter "system:windows"
-        systemversion "latest"
 
     filter "configurations:Debug"
         runtime "Debug"

@@ -15,9 +15,6 @@ project "glad"
     includedirs {
     	"include"
     }
-    
-    filter "system:windows"
-        systemversion "latest"
 
     filter "configurations:Debug"
         runtime "Debug"
