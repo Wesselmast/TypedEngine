@@ -15,6 +15,7 @@ class Text : public Entity {
   virtual int size() const override {
     return sizeof(Text);
   }  
+  virtual int typeID() const override { return 0; }; 
 
 public:
   glm::vec4 color;

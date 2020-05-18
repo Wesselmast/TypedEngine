@@ -31,6 +31,9 @@ class Entity {
   virtual int size() const {
     return sizeof(Entity);
   }
+  virtual int typeID() const {
+    return -1;
+  };
   
 private:
   static int entityCount;

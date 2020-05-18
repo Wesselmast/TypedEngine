@@ -19,24 +19,46 @@ void LevelManager::saveLevel(char* path) {
   strcat(buf, "\\levels\\");
   strcat(buf, path);
   strcat(buf, ".TELevel");
-  
-  std::ofstream file(buf, std::ios::out | std::ios::binary);
+
+  std::ios_base::sync_with_stdio(false);
+  std::ofstream file(buf, std::ios::out | std::ios::binary );
   if(!file) {
-    printf("Cannot open file %s!", buf);
+    printf("Cannot open file %s!\n", buf);
     return;
   }
 
   std::vector<Entity*> entities;  
   RenderCommand::getTagged(Tag::LEVEL, &entities);
-
+  
+  
   for(int i = 0; i < entities.size(); i++) {
-    file.write((char*)entities[i], entities[i]->size());
+    int entitySize = entities[i]->size();
+    int typeID = entities[i]->typeID();
+    file.write((char*)&typeID, sizeof(int));
+    file.write((char*)&entitySize, sizeof(int));
+    file.write((char*)entities[i], entitySize);
+    
+    printf("%d\n", typeID);
+    printf("%d\n", entitySize);
   }
   file.close();
+
   if(!file.good()) {
-    printf("Couldn't write to file %s!", buf);
+    printf("Couldn't write to file %s!\n", buf);
     return;
   }
+}
+
+template<typename T>
+Entity* loadEntity(std::ifstream& file) {
+  Entity* entity = new T;
+    
+  int offset;
+  file.read((char*)&offset, sizeof(int));
+  file.read((char*)entity, offset); 
+  
+  printf("%d\n", offset);
+  return entity;
 }
 
 
@@ -47,25 +69,31 @@ void LevelManager::loadLevel(char* path) {
   strcat(buf, path);
   strcat(buf, ".TELevel");
   
-  std::ifstream file(buf, std::ios::out | std::ios::binary);
+  std::ifstream file(buf, std::ios::binary);
   if(!file) {
-    printf("Cannot open file %s!", buf);
+    printf("Cannot open file %s!\n", buf);
     return;
   }
 
   // @ToDo: FIGURE THIS OUT!
 
+  std::vector<Entity*> entities;
 
-  // std::vector<Entity*> entities;
-  // entities.resize(3);
-  // for(int i = 0; i < 3; i++) {
-  //   file.read((char*)entities[i], entities[i]->size());
-  // }
+  int typeID;
+  while(file.read((char*)&typeID, sizeof(int))) {
+    printf("%d\n", typeID);
 
-
+    switch(typeID) {
+    case 0: entities.push_back(loadEntity<Text>(file));   break;
+    case 1: entities.push_back(loadEntity<Sprite>(file)); break;
+    case 2: entities.push_back(loadEntity<Quad>(file));   break;
+    }
+  }
+  
   file.close();
+
   if(!file.good()) {
-    printf("Couldn't write to file %s!", buf);
+    printf("Couldn't read file %s!\n", buf);
     return;
   }
 }

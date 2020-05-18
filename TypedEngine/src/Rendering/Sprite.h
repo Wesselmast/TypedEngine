@@ -16,6 +16,8 @@ class Sprite : public Entity {
   virtual int size() const override {
     return sizeof(Sprite);
   }
+  virtual int typeID() const override { return 1; }; 
+
 public:
   Texture* texture;
 private:

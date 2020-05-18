@@ -14,6 +14,8 @@ class Quad : public Entity {
   virtual int size() const override {
     return sizeof(Quad);
   }  
+  virtual int typeID() const override { return 2; }; 
+
 public:
   glm::vec4 color;
 private:
