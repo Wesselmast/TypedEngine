@@ -77,18 +77,18 @@ glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
   CONSOLE_COMMANDS(
-    ConsoleCommand{ command_play,        "play"            },
-    ConsoleCommand{ command_stop,        "stop"            },
-    ConsoleCommand{ command_help,        "help"            },
-    ConsoleCommand{ command_ping,        "ping"            },
-    ConsoleCommand{ command_cls,         "cls"             },
-    ConsoleCommand{ command_exit,        "exit"            },
-    ConsoleCommand{ command_echo,        "echo",       1   },
-    ConsoleCommand{ command_push,        "push",       1   },
-    ConsoleCommand{ command_save_level,  "savelevel", 1    },
-    ConsoleCommand{ command_load_level,  "loadlevel", 1    },
-    ConsoleCommand{ command_printfiles,  "printf"          },
-    ConsoleCommand{ command_renderinfo,  "printr"          } 
+    ConsoleCommand{ command_play,        "play"           },
+    ConsoleCommand{ command_stop,        "stop"           },
+    ConsoleCommand{ command_help,        "help"           },
+    ConsoleCommand{ command_ping,        "ping"           },
+    ConsoleCommand{ command_cls,         "cls"            },
+    ConsoleCommand{ command_exit,        "exit"           },
+    ConsoleCommand{ command_echo,        "echo",       1  },
+    ConsoleCommand{ command_push,        "push",       1  },
+    ConsoleCommand{ command_save_level,  "save",       1  },
+    ConsoleCommand{ command_load_level,  "open",       1  },
+    ConsoleCommand{ command_printfiles,  "printf"         },
+    ConsoleCommand{ command_renderinfo,  "printr"         } 
  );
   
   command_window = window;
