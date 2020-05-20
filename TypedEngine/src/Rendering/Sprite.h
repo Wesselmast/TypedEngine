@@ -20,6 +20,7 @@ class Sprite : public Entity {
 
 public:
   Texture* texture;
+  const char* textureName;
 private:
-  void init(Transform transform, const char* texture);
+  void init();
 };

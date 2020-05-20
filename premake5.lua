@@ -184,7 +184,7 @@ project "TypedEditor"
 
 	postbuildcommands {
 		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedEditor/gamefiles" "%{cfg.targetdir}/gamefiles"',
+		'{COPY} "../TypedEditor/scripts" "%{cfg.targetdir}/scripts"',
 		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
 		'@echo off && echo. && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
 	}

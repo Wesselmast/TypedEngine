@@ -2,6 +2,7 @@
 
 #include "Renderer.h"
 #include <algorithm>
+#include <stdio.h>
 
 class RenderCommand {
 public:
@@ -75,7 +76,22 @@ public:
     v->insert(v->end(), c.begin(), c.end());    
   }
 
-
+  inline static void print() {
+    printf("Renderer: \n");
+    printf("   Sprites: %d\n", renderer->sprites.size());
+    for(auto e : renderer->sprites) {
+      printf("      %s: size: %d, tag: %d\n", e->name.c_str(), e->size(), e->tag);
+    }
+    printf("   Quads: %d\n", renderer->quads.size());
+    for(auto e : renderer->quads) {
+      printf("      %s: size: %d, tag: %d\n", e->name.c_str(), e->size(), e->tag);
+    }
+    printf("   Texts: %d\n", renderer->texts.size());
+    for(auto e : renderer->texts) {
+      printf("      %s: size: %d, tag: %d\n", e->name.c_str(), e->size(), e->tag);
+    }
+  }
+  
   inline static void run() {
     renderer->run();
   }  

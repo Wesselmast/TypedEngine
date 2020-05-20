@@ -4,12 +4,12 @@
 
 class LevelCommand {
  public:
-  inline static void saveLevel(char* path) {
-    levelManager->saveLevel(path);
+  inline static int saveLevel(char* path) {
+    return levelManager->saveLevel(path);
   }
   
-  inline static void loadLevel(char* path) {
-    levelManager->loadLevel(path);
+  inline static int loadLevel(char* path) {
+    return levelManager->loadLevel(path);
   }
   
  private:

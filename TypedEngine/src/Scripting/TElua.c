@@ -59,7 +59,7 @@ void init_lua() {
   strcpy(path, (const char*)lua_tostring(L, -1));
   strcat(path, ";");
   strcat(path, buf);
-  strcat(path, "\\gamefiles\\?.lua");
+  strcat(path, "\\scripts\\?.lua");
   lua_pop(L, 1);
   
   lua_pushstring(L, path);
@@ -81,7 +81,7 @@ void init_lua() {
   lua_pop(L, 1);
   
   strcat(filePath, buf);
-  strcat(filePath, "\\gamefiles\\");
+  strcat(filePath, "\\scripts\\");
 }
 
 
@@ -170,7 +170,7 @@ void tick_lua(float deltaTime, float time) {
   if(closedLua || !compiled) return;
   
   for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
-    if(!luafiles[i]) break;
+    if(!luafiles[i]) return;
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, luafiles[i]->address);
     lua_getfield(L, -1, "tick");
@@ -186,7 +186,12 @@ void tick_lua(float deltaTime, float time) {
     }
   }
 }
+
 void quit_lua() {
+  if(!compiled) {
+    printf("ERROR: Can't stop when you're not running!\n");
+    return;
+  }
   compiled = 0;
   for(int i = 0; i < sizeof(luafiles) / sizeof(struct LuaFile*); i++) {
     if(!luafiles[i]) break;

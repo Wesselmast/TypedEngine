@@ -8,24 +8,31 @@ const char* defaultPath = "res/textures/T_Default.jpg";
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 
 
 Sprite::Sprite() {
-  init(defaultTransform, defaultPath);
+  this->transform = defaultTransform;
+  this->textureName = defaultPath;
+  init();
 }
 
 Sprite::Sprite(Transform transform) {
-  init(transform, defaultPath);
+  this->transform = transform;
+  this->textureName = defaultPath;
+  init();
 }
 
 Sprite::Sprite(const char* texture) {
-  init(defaultTransform, texture);
+  this->transform = defaultTransform;
+  this->textureName = texture;
+  init();
 }
 
 Sprite::Sprite(Transform transform, const char* texture) {
-  init(transform, texture);
+  this->transform = transform;
+  this->textureName = texture;
+  init();
 }
 
-void Sprite::init(Transform transform, const char* texture) {
-  this->transform = transform;
-  setTexture(texture);
+void Sprite::init() {
+  setTexture(textureName);
   
   setName("Sprite");
   RenderCommand::addSprite(this);  

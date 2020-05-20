@@ -28,7 +28,6 @@ void LuaManager::tickLua(float deltaTime, float time) {
   tick_lua(deltaTime, time);
 }
 
-
 void LuaManager::quitLua() {
   quit_lua();
 }

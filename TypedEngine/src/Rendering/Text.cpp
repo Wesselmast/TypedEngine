@@ -8,26 +8,34 @@ const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} };
 const glm::vec4 defaultColor = { 1.0f, 1.0f, 1.0f, 1.0f }; 
 
 Text::Text() {
-  init(defaultTransform, defaultText);
+  this->transform = defaultTransform;
+  this->color = defaultColor; 
+  this->text = defaultText;
+  init();
 }
 
 Text::Text(Transform transform) {
-  init(transform, defaultText);
+  this->transform = transform;
+  this->color = defaultColor; 
+  this->text = defaultText;
+  init();
 }
 
 Text::Text(const std::string& text) {
-  init(defaultTransform, text);
+  this->transform = defaultTransform;
+  this->color = defaultColor; 
+  this->text = text;
+  init();
 }
 
 Text::Text(Transform transform, const std::string& text) {
-  init(transform, text);
+  this->transform = transform;
+  this->color = defaultColor; 
+  this->text = text;
+  init();
 }
 
-void Text::init(Transform transform, const std::string& text) {
-  this->transform = transform;
-  this->text = text;
-  this->color = defaultColor; 
-  
+void Text::init() {  
   setName("Text");
   RenderCommand::addText(this);  
 }

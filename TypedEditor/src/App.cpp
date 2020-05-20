@@ -22,26 +22,22 @@ Console* console;
 void App::begin() {
   Sprite test;
   console = new Console(window);
-  treeSprite = new Sprite("res/textures/T_Tree.png"); 
-  treeSprite->transform.position = { 1000, 1250 };
-
-  treeSprite->addScript("tree.lua");
-  treeSprite->addScript("main.lua");
   
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
   sprite->transform.scale *= -5.0f;
 
   fpsCounter->useScreenPosition(true);
+  fpsCounter->tag = Tag::PERMANENT;
+
+  Sprite* AC = new Sprite({{-4800.0f, 500.0f}, 0.0f, {1.0f, 1.0f}}, "res/textures/4kAC.jpg");
+  AC->addScript("tree.lua");
+  AC->addScript("main.lua");
 }
 
 void App::tick(float deltaTime, float time) {
   position += input * deltaTime * zoom * panSpeed;
   camera->setPosition(position);
   camera->setScale(glm::vec2(zoom));
-
-  const float rotationSpeed = 5.0f;
-  treeSprite->transform.scale.x = (glm::sin(time * rotationSpeed));
-  treeSprite->transform.position.x = -(glm::sin(time * rotationSpeed)) * 1080.0f / 2;
 
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));

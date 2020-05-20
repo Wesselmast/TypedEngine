@@ -28,6 +28,7 @@ void command_play(char** arguments) {
 }
 
 void command_stop(char** arguments) {
+  // @CleanUp: Add condition to quit command. Nothing should happend if quitting fails
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   LuaCommand::quit();
 }
@@ -57,12 +58,15 @@ void command_save_level(char** arguments) {
 }
 
 void command_load_level(char** arguments) {
-  RenderCommand::removeTagged(Tag::LEVEL);
   LevelCommand::loadLevel(arguments[0]);
 }
 
 void command_push(char** arguments) {
   LuaCommand::push(arguments[0]);
+}
+
+void command_renderinfo(char** arguments) {
+  RenderCommand::print();
 }
 
 void command_printfiles(char** arguments) {
@@ -81,10 +85,11 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_exit,        "exit"            },
     ConsoleCommand{ command_echo,        "echo",       1   },
     ConsoleCommand{ command_push,        "push",       1   },
-    ConsoleCommand{ command_save_level,  "savelevel", 1   },
-    ConsoleCommand{ command_load_level,  "loadlevel", 1   },
-    ConsoleCommand{ command_printfiles,  "printfiles"      }
-  );
+    ConsoleCommand{ command_save_level,  "savelevel", 1    },
+    ConsoleCommand{ command_load_level,  "loadlevel", 1    },
+    ConsoleCommand{ command_printfiles,  "printf"          },
+    ConsoleCommand{ command_renderinfo,  "printr"          } 
+ );
   
   command_window = window;
   

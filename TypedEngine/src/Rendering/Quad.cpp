@@ -7,25 +7,30 @@ const glm::vec4 defaultColor = { 1.0f, 1.0f, 1.0f, 1.0f};
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 
 
 Quad::Quad() {
-  init(defaultTransform, defaultColor);
+  this->transform = defaultTransform;
+  this->color = defaultColor;
+  init();
 }
 
 Quad::Quad(Transform transform) {
-  init(transform, defaultColor);
+  this->transform = transform;
+  this->color = defaultColor;
+  init();
 }
 
 Quad::Quad(const glm::vec4& color) {
-  init(defaultTransform, color);
+  this->transform = defaultTransform;
+  this->color = color;
+  init();
 }
 
 Quad::Quad(Transform transform, const glm::vec4& color) {
-  init(transform, color);
-}
-
-void Quad::init(Transform transform, const glm::vec4& color) {
   this->transform = transform;
   this->color = color;
+  init();
+}
 
+void Quad::init() {
   setName("Quad");
   RenderCommand::addQuad(this);  
 }

@@ -84,7 +84,8 @@ void OpenGLRenderer::init(Camera* camera) {
   
   
   setBlending(true);
-
+  //setCulling(true);      @CleanUp: Will need this at some point for optimization 
+   
   this->camera = camera;
   defaultSpriteShader = new OpenGLShader("res/shaders/default.shader");
   defaultTextShader = new OpenGLShader("res/shaders/defaultText.shader");

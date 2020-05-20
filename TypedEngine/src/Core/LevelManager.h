@@ -2,6 +2,6 @@
 
 class LevelManager {
  public:
-  void saveLevel(char* path);
-  void loadLevel(char* path);
+  int saveLevel(char* path);
+  int loadLevel(char* path);
 };

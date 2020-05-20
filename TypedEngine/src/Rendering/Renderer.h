@@ -11,6 +11,8 @@
 #include "Quad.h"
 #include "Camera.h"
 
+#include <stdio.h>
+
 class Renderer {
 public:
   virtual void init(Camera* camera) = 0;
@@ -37,6 +39,7 @@ public:
   template<typename T>
   inline void deleteVectorByTag(std::vector<T*>* v, Tag tag) {
     for (int i = 0; i < v->size(); i++) {
+      if(!v->at(i)) break;
       if(v->at(i)->tag != tag) continue;
       delete v->at(i);
       i--;

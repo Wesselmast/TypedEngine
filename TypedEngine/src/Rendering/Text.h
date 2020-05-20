@@ -21,5 +21,5 @@ public:
   glm::vec4 color;
   std::string text;
 private:
-  void init(Transform transform, const std::string& text);
+  void init();
 };

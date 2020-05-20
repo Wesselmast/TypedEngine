@@ -19,5 +19,5 @@ class Quad : public Entity {
 public:
   glm::vec4 color;
 private:
-  void init(Transform transform, const glm::vec4& color);
+  void init();
 };
