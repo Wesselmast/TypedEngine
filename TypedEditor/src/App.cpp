@@ -7,6 +7,7 @@
 #include "Console.h"
 
 #include <stdio.h>
+#include <math.h>
 
 bool consoleEnabled = false;
 glm::vec2 input = glm::vec2(0, 0);
@@ -19,13 +20,16 @@ const float panSpeed = 750.0f;
 Text* fpsCounter = new Text();
 Console* console;
 
+Sprite* mouseTest;
+
 void App::begin() {
-  Sprite test;
   console = new Console(window);
   
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
   sprite->transform.scale *= -5.0f;
 
+  mouseTest = new Sprite();
+  
   fpsCounter->useScreenPosition(true);
   fpsCounter->tag = Tag::PERMANENT;
 
@@ -95,10 +99,36 @@ void App::onWindowRefreshed() {
   camera->updateProjection();
 }
 
+glm::vec2 worldToScreen(Camera* camera, Window* window, glm::vec2 point) {
+  glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(point, 0.0f));
+  glm::mat4 mvp = camera->getViewProjection() * position;
+  glm::vec3 screenPos(mvp[3]);
+
+  screenPos.x += 1.0f;
+  screenPos.x *= 0.5f * window->getSize().x;
+  screenPos.y += 1.0f;
+  screenPos.y *= 0.5f * window->getSize().y;
+
+  return glm::vec2(screenPos.x, screenPos.y);
+}
+
 void App::onMousePressed(MouseButton button) {
   float x = window->getMousePosition().x;
   float y = window->getMousePosition().y;
+
+  glm::vec2 screenPos0 = worldToScreen(camera, window, mouseTest->transform.position);
+  glm::vec2 screenPos1 = worldToScreen(camera, window, mouseTest->transform.position + glm::vec2(mouseTest->texture->getWidth(), mouseTest->texture->getHeight()));
+  
+  if(x > screenPos0.x && x < screenPos1.x) {
+    if(y > screenPos0.y && y < screenPos1.y) {
+      printf("COLLIDE!!!!\n");
+      return;
+    }
+  }
   printf("Mouse Position: %f, %f\n", x, y);
+  printf("Object Screen Position 0: %f, %f\n", screenPos0.x, screenPos0.y);
+  printf("Object Screen Position 1: %f, %f\n", screenPos1.x, screenPos1.y);
+  printf("Camera Position: %f, %f\n", camera->getPosition().x, camera->getPosition().y);
 }
 
 Application* createApplication() {

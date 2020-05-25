@@ -23,7 +23,7 @@ OpenGLTexture::OpenGLTexture(const char * path) {
   }
   else {
     fprintf(stderr, "Error: Texture at location %s is not valid!\n", path);
-	}
+  }
   stbi_image_free(data);
 }
 
