@@ -6,7 +6,7 @@
 typedef void(*fptr_NoParams)();
 typedef void(*fptr_TwoFloat)(float, float);
 typedef void(*fptr_KeyAction)(Key, Modifier);
-typedef void(*fptr_MouseAction)(MouseButton);
+typedef void(*fptr_MouseAction)(MouseButton, Modifier);
 
 class Window {
 public:
@@ -24,6 +24,7 @@ public:
   void callback_mouseScrolled(fptr_TwoFloat function) { mouseScrolledFunction = function; }
   void callback_mouseMoved(fptr_TwoFloat function) { mouseMovedFunction = function; }
   void callback_mousePressed(fptr_MouseAction function) { mousePressedFunction = function; }
+  void callback_mouseReleased(fptr_MouseAction function) { mouseReleasedFunction = function; }
   void callback_keyPressed(fptr_KeyAction function) { keyPressedFunction = function; }
   void callback_keyReleased(fptr_KeyAction function) { keyReleasedFunction = function; }
   void callback_windowRefreshed(fptr_NoParams function) { windowRefreshFunction = function; }
@@ -32,6 +33,7 @@ protected:
   static fptr_TwoFloat mouseScrolledFunction; 
   static fptr_TwoFloat mouseMovedFunction;
   static fptr_MouseAction mousePressedFunction;
+  static fptr_MouseAction mouseReleasedFunction;
   static fptr_KeyAction keyPressedFunction;
   static fptr_KeyAction keyReleasedFunction;
   static fptr_NoParams windowRefreshFunction;

@@ -16,8 +16,8 @@ public:
   virtual void onWindowMoved(int posX, int posY) {}
   virtual void onWindowRefreshed() {}
   
-  virtual void onMousePressed(MouseButton button) {}
-  virtual void onMouseReleased(MouseButton button) {}
+  virtual void onMousePressed(MouseButton button, Modifier mod) {}
+  virtual void onMouseReleased(MouseButton button, Modifier mod) {}
   virtual void onMouseMoved(float posX, float posY) {}
   virtual void onMouseScrolled(float offsetX, float offsetY) {}
   

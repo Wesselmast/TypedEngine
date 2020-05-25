@@ -6,6 +6,7 @@
 fptr_TwoFloat Window::mouseScrolledFunction;
 fptr_TwoFloat Window::mouseMovedFunction;
 fptr_MouseAction Window::mousePressedFunction;
+fptr_MouseAction Window::mouseReleasedFunction;
 fptr_KeyAction Window::keyPressedFunction;
 fptr_KeyAction Window::keyReleasedFunction;
 fptr_NoParams Window::windowRefreshFunction;
@@ -106,7 +107,7 @@ void OpenGLWindow::callback_mouseMoved(GLFWwindow* window, double xpos, double y
 
 void OpenGLWindow::callback_mousePressed(GLFWwindow* window, int button, int action, int mods) {
   switch(action) {
-  case GLFW_PRESS: mousePressedFunction(Input::convertMouseButton(button)); break;
-  case GLFW_RELEASE: /*   MOUSE RELEASED EVENT   */ break;
+  case GLFW_PRESS: mousePressedFunction(Input::convertMouseButton(button), Input::convertMod(mods)); break;
+  case GLFW_RELEASE: mouseReleasedFunction(Input::convertMouseButton(button), Input::convertMod(mods)); break;
   }
 } 

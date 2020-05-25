@@ -16,5 +16,6 @@ public:
   void onKeyReleased(Key key, Modifier mod) override;
   void onMouseScrolled(float offsetX, float offsetY) override;
   void onWindowRefreshed() override;
-  void onMousePressed(MouseButton button) override;
+  void onMousePressed(MouseButton button, Modifier mod) override;
+  void onMouseReleased(MouseButton button, Modifier mod) override;
 };

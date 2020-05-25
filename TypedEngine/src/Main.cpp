@@ -12,7 +12,8 @@ static void callback_keyPressed(Key key, Modifier mod) { app->onKeyPressed(key, 
 static void callback_keyReleased(Key key, Modifier mod) { app->onKeyReleased (key, mod); }
 static void callback_mouseScrolled(float offsetx, float offsety) { app->onMouseScrolled(offsetx, offsety); }
 static void callback_windowRefreshed() {  app->onWindowRefreshed(); }
-static void callback_mousePressed(MouseButton button) {  app->onMousePressed(button); }
+static void callback_mousePressed(MouseButton button, Modifier mod) {  app->onMousePressed(button, mod); }
+static void callback_mouseReleased(MouseButton button, Modifier mod) {  app->onMouseReleased(button, mod); }
 static void callback_mouseMoved(float xPos, float yPos) {  app->onMouseMoved(xPos, yPos); }
 
 static std::string getName() {
@@ -38,6 +39,7 @@ int main() {
   window->callback_windowRefreshed(callback_windowRefreshed);
   window->callback_mouseMoved(callback_mouseMoved);
   window->callback_mousePressed(callback_mousePressed);
+  window->callback_mouseReleased(callback_mouseReleased);
 
   camera = new Camera(window);
   RenderCommand::init(camera);
