@@ -21,6 +21,32 @@ Text* fpsCounter = new Text();
 Console* console;
 
 Sprite* mouseTest;
+bool transformTheMouseTest = false;
+
+
+
+glm::vec2 worldToScreen(Camera* camera, Window* window, glm::vec2 point) {
+  glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(point, 0.0f));
+  glm::mat4 mvp = camera->getViewProjection() * position;
+  glm::vec3 screenPos(mvp[3]);
+
+  screenPos.x += 1.0f;
+  screenPos.x *= 0.5f * window->getSize().x;
+  screenPos.y += 1.0f;
+  screenPos.y *= 0.5f * window->getSize().y;
+
+  return glm::vec2(screenPos.x, screenPos.y);
+}
+
+
+glm::vec2 screenToWorld(Camera* camera, Window* window, glm::vec2 point) {
+  double x = 2.0 * (point.x / window->getSize().x) - 1.0;
+  double y = 2.0 * (point.y / window->getSize().y) - 1.0;
+
+  glm::vec4 screenPos = glm::vec4(x, -y, -1.0f, 1.0f);
+
+  return glm::vec3(glm::inverse(camera->getViewProjection()) * screenPos);
+}
 
 void App::begin() {
   console = new Console(window);
@@ -45,6 +71,10 @@ void App::tick(float deltaTime, float time) {
 
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
+
+  if(transformTheMouseTest) {
+    mouseTest->transform.position = screenToWorld(camera, window, window->getMousePosition());
+  }
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {
@@ -99,32 +129,21 @@ void App::onWindowRefreshed() {
   camera->updateProjection();
 }
 
-glm::vec2 worldToScreen(Camera* camera, Window* window, glm::vec2 point) {
-  glm::mat4 position = glm::translate(glm::mat4(1.0f), glm::vec3(point, 0.0f));
-  glm::mat4 mvp = camera->getViewProjection() * position;
-  glm::vec3 screenPos(mvp[3]);
-
-  screenPos.x += 1.0f;
-  screenPos.x *= 0.5f * window->getSize().x;
-  screenPos.y += 1.0f;
-  screenPos.y *= 0.5f * window->getSize().y;
-
-  return glm::vec2(screenPos.x, screenPos.y);
-}
-
 void App::onMousePressed(MouseButton button) {
   float x = window->getMousePosition().x;
   float y = window->getMousePosition().y;
 
-  glm::vec2 screenPos0 = worldToScreen(camera, window, mouseTest->transform.position);
-  glm::vec2 screenPos1 = worldToScreen(camera, window, mouseTest->transform.position + glm::vec2(mouseTest->texture->getWidth(), mouseTest->texture->getHeight()));
+  glm::vec2 screenPos0 = worldToScreen(camera, window, mouseTest->transform.position - glm::vec2(0, mouseTest->texture->getHeight()));    // @CleanUp: Really terrible world to screen position stuff
+  glm::vec2 screenPos1 = worldToScreen(camera, window, mouseTest->transform.position + glm::vec2(mouseTest->texture->getWidth(), 0));
   
   if(x > screenPos0.x && x < screenPos1.x) {
     if(y > screenPos0.y && y < screenPos1.y) {
+      transformTheMouseTest = true;
       printf("COLLIDE!!!!\n");
       return;
     }
   }
+  transformTheMouseTest = false;
   printf("Mouse Position: %f, %f\n", x, y);
   printf("Object Screen Position 0: %f, %f\n", screenPos0.x, screenPos0.y);
   printf("Object Screen Position 1: %f, %f\n", screenPos1.x, screenPos1.y);
