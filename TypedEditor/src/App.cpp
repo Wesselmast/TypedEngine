@@ -98,7 +98,7 @@ void App::onWindowRefreshed() {
 void App::onMousePressed(MouseButton button) {
   float x = window->getMousePosition().x;
   float y = window->getMousePosition().y;
-  printf("Mouse Position: %d, %d\n", x, y);
+  printf("Mouse Position: %f, %f\n", x, y);
 }
 
 Application* createApplication() {

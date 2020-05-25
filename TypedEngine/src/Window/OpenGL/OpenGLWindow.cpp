@@ -14,7 +14,7 @@ glm::vec2 OpenGLWindow::mousePosition = {0.0f, 0.0f};
 
 OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
   if (!glfwInit()) {
-    // ERROR MESSAGE
+    printf("Failed to initialize GLFW3!");
     return;
   }
   
@@ -23,7 +23,7 @@ OpenGLWindow::OpenGLWindow(glm::vec2 size, const char * name, bool fullscreen) {
   window = glfwCreateWindow((int)size.x, (int)size.y, name, monitor, NULL);
   if (!window) {
     glfwTerminate();
-    // ERROR MESSAGE
+    printf("Failed to create a window!");
     return;
   }
 
