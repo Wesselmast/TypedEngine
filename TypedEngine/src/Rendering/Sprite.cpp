@@ -40,6 +40,22 @@ void Sprite::init() {
 void Sprite::setTexture(const char* texture) {
   this->texture = RenderAPI::createTexture(texture);
 }
+  
+bool Sprite::checkForClick(glm::vec2 mousePos) {
+  if(clickable) {
+    glm::vec2 p0 = transform.position;
+    glm::vec2 p1 = transform.position + glm::vec2(texture->getWidth(), texture->getHeight());
+    
+    if(mousePos.x > p0.x && mousePos.x < p1.x) {
+      if(mousePos.y > p0.y && mousePos.y < p1.y) {
+	clicked = true;
+	offset = glm::vec2(p0.x - mousePos.x, p0.y - mousePos.y);
+	return true;
+      }
+    }
+  }
+  return false;
+}
 
 Sprite::~Sprite() {
   printf("Deleted sprite: %s\n", name.c_str());

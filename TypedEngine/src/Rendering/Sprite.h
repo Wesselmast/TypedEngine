@@ -17,6 +17,7 @@ class Sprite : public Entity {
   }
   virtual int typeID() const override { return 1; }; 
 
+  virtual bool checkForClick(glm::vec2 mousePos) override;
 public:
   Texture* texture;
   const char* textureName;

@@ -26,8 +26,14 @@ class Entity {
   std::string name;
   Tag tag = Tag::LEVEL;
   
-  bool screenPosition = false;
+  glm::vec2 offset;
 
+  bool screenPosition = false;
+  bool clickable = true;
+  bool clicked = false;
+  
+  virtual bool checkForClick(glm::vec2 mousePos) { return false; }
+  
   virtual int size() const {
     return sizeof(Entity);
   }

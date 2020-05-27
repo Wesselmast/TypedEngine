@@ -1,9 +1,13 @@
 #include "App.h"
 
 #include "Core/Transform.h"
+#include "Core/Math.h"
+
 #include "Rendering/Sprite.h"
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
+#include "Rendering/RenderCommand.h"
+
 #include "Console.h"
 
 #include <stdio.h>
@@ -21,32 +25,7 @@ Text* fpsCounter = new Text();
 Console* console;
 
 Sprite* mouseTest;
-bool transformTheMouseTest = false;
-glm::vec2 offset;
-
-glm::vec2 worldToScreen(Camera* camera, Window* window, glm::vec2 point) {
-  double x = 2.0 * (point.x / window->getSize().x) - 1.0;
-  double y = 2.0 * (point.y / window->getSize().y) - 1.0;
-
-  glm::vec4 sp(x, -y, -1.0f, 1.0f);
-  glm::vec3 screenPos(camera->getViewProjection() * sp);
-
-  screenPos.x += 1.0f;
-  screenPos.x *= 0.5f * window->getSize().x;
-  screenPos.y += 1.0f;
-  screenPos.y *= 0.5f * window->getSize().y;
-
-  return glm::vec2(screenPos.x, screenPos.y);
-}
-
-glm::vec2 screenToWorld(Camera* camera, Window* window, glm::vec2 point) {
-  double x = 2.0 * (point.x / window->getSize().x) - 1.0;
-  double y = 2.0 * (point.y / window->getSize().y) - 1.0;
-
-  glm::vec4 screenPos = glm::vec4(x, -y, -1.0f, 1.0f);
-
-  return glm::vec3(glm::inverse(camera->getViewProjection()) * screenPos);
-}
+Entity* clickedObject = nullptr;
 
 void App::begin() {
   console = new Console(window);
@@ -72,8 +51,8 @@ void App::tick(float deltaTime, float time) {
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
 
-  if(transformTheMouseTest) {
-    mouseTest->transform.position = screenToWorld(camera, window, window->getMousePosition()) + offset;
+  if(clickedObject) {
+    clickedObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + clickedObject->offset;
   }
 }
 
@@ -131,25 +110,24 @@ void App::onWindowRefreshed() {
 
 void App::onMousePressed(MouseButton button, Modifier mod) {
   glm::vec2 mousePos = screenToWorld(camera, window, window->getMousePosition());
-  glm::vec2 p0 = mouseTest->transform.position;
-  glm::vec2 p1 = mouseTest->transform.position + glm::vec2(mouseTest->texture->getWidth(), mouseTest->texture->getHeight());
 
-  if(mousePos.x > p0.x && mousePos.x < p1.x) {
-    if(mousePos.y > p0.y && mousePos.y < p1.y) {
-      transformTheMouseTest = true;
-      offset = glm::vec2(p0.x - mousePos.x, p0.y - mousePos.y);
-      printf("COLLIDE!!!!\n");
-      return;
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->checkForClick(mousePos)) {
+      clickedObject = e;
+      break;
     }
   }
-  printf("\nMouse Position: %f, %f\n", mousePos.x, mousePos.y);
-  printf("Object Screen Position 0: %f, %f\n", p0.x, p0.y);
-  printf("Object Screen Position 1: %f, %f\n", p1.x, p1.y);
-  printf("Camera Position: %f, %f\n", camera->getPosition().x, camera->getPosition().y);
 }
 
 void App::onMouseReleased(MouseButton button, Modifier mod) {
-  if(transformTheMouseTest) transformTheMouseTest = false;
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    e->clicked = false;
+  }
+  clickedObject = nullptr;
 }
 
 Application* createApplication() {
