@@ -33,7 +33,7 @@ void App::begin() {
   Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
   sprite->transform.scale *= -5.0f;
 
-  mouseTest = new Sprite();
+  mouseTest = new Sprite("res/textures/T_Tree.png");
   
   fpsCounter->useScreenPosition(true);
   fpsCounter->tag = Tag::PERMANENT;

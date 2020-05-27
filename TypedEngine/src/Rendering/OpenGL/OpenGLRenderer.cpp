@@ -214,7 +214,10 @@ void OpenGLRenderer::drawSprite(Sprite* sprite) {
 
   defaultSpriteShader->bind();
   defaultSpriteShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(sprite->transform, sprite->screenPosition));
-  
+  defaultSpriteShader->setUniformInt1("uClicked", (int)sprite->clicked);
+
+  printf("%s: %d\n", sprite->name.c_str(), (int)sprite->clicked);
+
   glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
   sprite->texture->unbind();
 }
