@@ -2,6 +2,7 @@
 
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
+#include "Rendering/Sprite.h"
 #include "Input/Input.h"
 
 #include "Window/Window.h"
@@ -31,6 +32,18 @@ void command_stop(char** arguments) {
   // @CleanUp: Add condition to quit command. Nothing should happend if quitting fails
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   LuaCommand::quit();
+}
+
+void command_create(char** arguments) {
+  if(!strcmp("sprite", arguments[0])) {
+    new Sprite(arguments[1]);
+  }
+  if(!strcmp("quad", arguments[0])) {
+    new Quad(arguments[1]);
+  }
+  if(!strcmp("quad", arguments[0])) {
+    new Text(arguments[1]);
+  }
 }
 
 void command_help(char** arguments) {
