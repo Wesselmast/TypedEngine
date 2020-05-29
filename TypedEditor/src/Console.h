@@ -10,6 +10,7 @@ class Console {
  public:
   void refresh();
   void recieveKey(Key key, Modifier mod);
+  void setHidden(bool hidden);
   
   Console(Window* window);
   ~Console();

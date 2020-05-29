@@ -20,7 +20,6 @@ int LevelManager::saveLevel(char* path) {
   strcat(buf, path);
   strcat(buf, ".TELevel");
 
-  std::ios_base::sync_with_stdio(false);
   std::ofstream file(buf, std::ios::out | std::ios::binary );
   if(!file) {
     printf("Cannot open file %s!\n", buf);
@@ -36,9 +35,6 @@ int LevelManager::saveLevel(char* path) {
     file.write((char*)&typeID, sizeof(int));
     file.write((char*)&entitySize, sizeof(int));
     file.write((char*)entities[i], entitySize);
-    
-    printf("%d\n", typeID);
-    printf("%d\n", entitySize);
   }
   
   file.close();
@@ -47,6 +43,8 @@ int LevelManager::saveLevel(char* path) {
     printf("Couldn't write to file %s!\n", buf);
     return 0;
   }
+
+  printf("\nDONE SAVING LEVEL!\n\n");
   return 1;
 }
 
@@ -124,7 +122,7 @@ int LevelManager::loadLevel(char* path) {
   }
   // maybe this below should happen after closing the file
   
-  printf("\n\nDONE! LEVEL CONTENTS: \n\n");
+  printf("\nDONE! LEVEL CONTENTS: \n\n");
   RenderCommand::print();
   
   return 1;

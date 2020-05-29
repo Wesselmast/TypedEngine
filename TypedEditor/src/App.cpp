@@ -24,23 +24,16 @@ const float panSpeed = 750.0f;
 Text* fpsCounter = new Text();
 Console* console;
 
-Sprite* mouseTest;
 Entity* clickedObject = nullptr;
 
 void App::begin() {
-  console = new Console(window);
-  
-  Sprite* sprite  = new Sprite("res/textures/T_Wood.jpg");
-  sprite->transform.scale *= -5.0f;
+  new Sprite("res/textures/T_Tree.png");
 
-  mouseTest = new Sprite("res/textures/T_Tree.png");
+  console = new Console(window);
+  console->setHidden(true);
   
   fpsCounter->useScreenPosition(true);
   fpsCounter->tag = Tag::PERMANENT;
-
-  Sprite* AC = new Sprite({{-4800.0f, 500.0f}, 0.0f, {1.0f, 1.0f}}, "res/textures/4kAC.jpg");
-  AC->addScript("tree.lua");
-  AC->addScript("main.lua");
 }
 
 void App::tick(float deltaTime, float time) {
@@ -64,6 +57,7 @@ void App::onKeyPressed(Key key, Modifier mod) {
   
   if(key == Key::GRAVE) {
     consoleEnabled = !consoleEnabled;
+    console->setHidden(!consoleEnabled);
     return;
   }
 
@@ -116,6 +110,10 @@ void App::onMousePressed(MouseButton button, Modifier mod) {
   for(auto e : entities) {
     if(e->checkForClick(mousePos)) {
       clickedObject = e;
+      if(mod == Modifier::ALT) {
+	Sprite* spawned = new Sprite(e->transform, ((Sprite*)e)->textureName);
+	break;
+      }
       break;
     }
   }

@@ -19,7 +19,7 @@ class Entity {
     screenPosition = enabled;
   }
 
-  void addScript(const char* fileName);   
+  void addScript(const char* fileName);
   void removeScript(const char* fileName);   
   
   Transform transform = { { 0.0f, 0.0f}, 0.0f, { 1.0f, 1.0f} };
@@ -31,6 +31,7 @@ class Entity {
   bool screenPosition = false;
   bool clickable = true;
   bool clicked = false;
+  bool hidden = false;
   
   virtual bool checkForClick(glm::vec2 mousePos) { return false; }
   

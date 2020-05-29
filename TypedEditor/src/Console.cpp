@@ -131,6 +131,13 @@ void Console::refresh() {
   topText->transform.position = { -w/2 - (45.0f * wS), -h/4 - (40.0f * hS)} ;
 }
 
+void Console::setHidden(bool hidden) {
+  text->hidden = hidden;
+  topBar->hidden = hidden;
+  topText->hidden = hidden;
+  panel->hidden = hidden;
+}
+
 void Console::recieveKey(Key key, Modifier mod) {
   if(key == Key::ENTER) {
     parseCommand(text->text.c_str());
@@ -143,6 +150,7 @@ void Console::recieveKey(Key key, Modifier mod) {
     }
     return;
   }
+  if(key == Key::SHIFT) return;
   text->text.push_back((char)Input::convertKey(key, mod));
 }
 

@@ -183,10 +183,11 @@ project "TypedEditor"
 	staticruntime "on"
 
 	postbuildcommands {
-		'{COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
-		'{COPY} "../TypedEditor/scripts" "%{cfg.targetdir}/scripts"',
-		'{COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
-		'@echo off && echo. && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
+		'@echo off && {COPY} "../TypedEditor/res" "%{cfg.targetdir}/res"',
+		'@echo off && {COPY} "../TypedEditor/scripts" "%{cfg.targetdir}/scripts"',
+		'@echo off && {COPY} "../TypedEditor/levels" "%{cfg.targetdir}/levels"',
+		'@echo off && {COPY} "../TypedEngine/src/Scripting/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}" "%{cfg.targetdir}/lib"',
+		'@echo off && echo. && echo ">>>>>>>>>>>>>>>  SUCCESS!  <<<<<<<<<<<<<<<" && echo.'
 	}
 
 	targetdir("bin/" .. outputdir .. "/%{prj.name}")
