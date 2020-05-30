@@ -1,8 +1,8 @@
 #include "Utility.h"
 
-#include <strstream>
+#include <sstream>
 
-glm::vec4 hexToColor(char* hex) {
+glm::vec4 hexToColor(const char* hex) {
   glm::vec4 vec;
   std::stringstream stream;
   stream << std::hex << hex[0];
@@ -20,7 +20,7 @@ glm::vec4 hexToColor(char* hex) {
   return vec;
 }
 
-char* colorToHex(const glm::vec4& color) {
+const char* colorToHex(const glm::vec4& color) {
   std::stringstream stream;
   stream << std::hex << color.x;  
   stream << std::hex << color.y;  

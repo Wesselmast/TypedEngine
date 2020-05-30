@@ -10,6 +10,7 @@
 
 #include "Rendering/Rendercommand.h"
 #include "Scripting/LuaCommand.h"
+#include "Core/Utility.h"
 
 #include <future>
 
@@ -39,7 +40,7 @@ void command_create(char** arguments) {
     new Sprite(arguments[1]);
   }
   if(!strcmp("quad", arguments[0])) {
-    new Quad(arguments[1]);
+    new Quad(hexToColor(arguments[1]));
   }
   if(!strcmp("quad", arguments[0])) {
     new Text(arguments[1]);
@@ -100,6 +101,7 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_push,        "push",       1  },
     ConsoleCommand{ command_save_level,  "save",       1  },
     ConsoleCommand{ command_load_level,  "open",       1  },
+    ConsoleCommand{ command_create,      "create",     2  },
     ConsoleCommand{ command_printfiles,  "printf"         },
     ConsoleCommand{ command_renderinfo,  "printr"         } 
  );
