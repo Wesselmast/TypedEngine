@@ -8,13 +8,17 @@ const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} };
 
 Sprite::Sprite() {
   this->transform = defaultTransform;
-  this->textureName = (char*)defaultPath;
+  unsigned int size = strlen(defaultPath) + 1;
+  textureName = new char[size];
+  memcpy(textureName, defaultPath, size);
   init();
 }
 
 Sprite::Sprite(Transform transform) {
   this->transform = transform;
-  this->textureName = (char*)defaultPath;
+  unsigned int size = strlen(defaultPath) + 1;
+  textureName = new char[size];
+  memcpy(textureName, defaultPath, size);
   init();
 }
 
@@ -36,6 +40,7 @@ Sprite::Sprite(Transform transform, const char* texture) {
 
 void Sprite::init() {
   setName("Sprite");
+
   if(setTexture(textureName)) {
     RenderCommand::addSprite(this);  
     return;

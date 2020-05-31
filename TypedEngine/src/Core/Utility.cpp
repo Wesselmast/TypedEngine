@@ -1,5 +1,6 @@
 #include "Utility.h"
 
+#include <stdio.h>
 #include <sstream>
 
 glm::vec4 hexToColor(const char* hex) {
@@ -17,6 +18,7 @@ glm::vec4 hexToColor(const char* hex) {
   stream << std::hex << hex[6];
   stream << std::hex << hex[7];
   stream >> vec.w;
+  printf("COLOR: %f, %f, %f, %f", vec.x, vec.y, vec.z, vec.w);
   return vec;
 }
 

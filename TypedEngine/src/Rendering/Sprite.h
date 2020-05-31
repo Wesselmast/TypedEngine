@@ -13,9 +13,6 @@ class Sprite : public Entity {
   Sprite(Transform transform, const char* texture);
   bool setTexture(const char* texture);
   
-  virtual int size() const override {
-    return sizeof(Sprite);
-  }
   virtual int typeID() const override { return 1; }; 
 
   virtual bool checkForClick(glm::vec2 mousePos) override;

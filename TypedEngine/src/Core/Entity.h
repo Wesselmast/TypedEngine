@@ -36,9 +36,6 @@ class Entity {
   
   virtual bool checkForClick(glm::vec2 mousePos) { return false; }
   
-  virtual int size() const {
-    return sizeof(Entity);
-  }
   virtual int typeID() const {
     return -1;
   };

@@ -12,11 +12,7 @@ class Text : public Entity {
   Text(const std::string& text);
   Text(Transform transform, const std::string& text);
 
-  virtual int size() const override {
-    return sizeof(Text);
-  }  
   virtual int typeID() const override { return 0; }; 
-
 public:
   glm::vec4 color;
   std::string text;
