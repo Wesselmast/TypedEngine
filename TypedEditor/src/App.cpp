@@ -9,6 +9,7 @@
 #include "Rendering/RenderCommand.h"
 
 #include "Console.h"
+#include "Core/Utility.h" 
 
 #include <stdio.h>
 #include <math.h>
@@ -30,6 +31,8 @@ Entity* clickedObject = nullptr;
 void App::begin() {
   new Sprite("res/textures/T_Tree.png");
 
+  glm::vec4 t(1.0f, 0.0f, 1.0f, 1.0f);
+  
   console = new Console(window);
   console->setHidden(true);
   

@@ -2,31 +2,30 @@
 
 #include <stdio.h>
 #include <sstream>
+#include <cstring>
 
 glm::vec4 hexToColor(const char* hex) {
   glm::vec4 vec;
   std::stringstream stream;
-  stream << std::hex << hex[0];
-  stream << std::hex << hex[1];
-  stream >> vec.x;
-  stream << std::hex << hex[2];
-  stream << std::hex << hex[3];
-  stream >> vec.y;
-  stream << std::hex << hex[4];
-  stream << std::hex << hex[5];
-  stream >> vec.z;
-  stream << std::hex << hex[6];
-  stream << std::hex << hex[7];
-  stream >> vec.w;
-  printf("COLOR: %f, %f, %f, %f", vec.x, vec.y, vec.z, vec.w);
+  unsigned int hexValue;
+  stream << std::hex << hex;
+  stream >> hexValue;
+  vec.x = ((hexValue >> 24) & 0xFF) / 255.0f;
+  vec.y = ((hexValue >> 16) & 0xFF) / 255.0f;
+  vec.z = ((hexValue >>  8) & 0xFF) / 255.0f;
+  vec.w = ((hexValue >>  0) & 0xFF) / 255.0f;
   return vec;
 }
 
 const char* colorToHex(const glm::vec4& color) {
   std::stringstream stream;
-  stream << std::hex << color.x;  
-  stream << std::hex << color.y;  
-  stream << std::hex << color.z;  
-  stream << std::hex << color.w;
-  return stream.str().c_str();
+  stream << "#";  
+  stream << std::hex << ((int)(color.x * 255.0f) << 24 |
+			 (int)(color.y * 255.0f) << 16 |
+			 (int)(color.z * 255.0f) <<  8 |
+			 (int)(color.w * 255.0f) <<  0);  
+  const std::string tmp = stream.str();
+  char* tmp2 = new char[strlen(tmp.c_str()) + 1];
+  memcpy(tmp2, tmp.c_str(), strlen(tmp.c_str()) + 1);
+  return tmp2;
 }
