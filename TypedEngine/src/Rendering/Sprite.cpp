@@ -8,37 +8,45 @@ const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} };
 
 Sprite::Sprite() {
   this->transform = defaultTransform;
-  this->textureName = defaultPath;
+  this->textureName = (char*)defaultPath;
   init();
 }
 
 Sprite::Sprite(Transform transform) {
   this->transform = transform;
-  this->textureName = defaultPath;
+  this->textureName = (char*)defaultPath;
   init();
 }
 
 Sprite::Sprite(const char* texture) {
   this->transform = defaultTransform;
-  this->textureName = texture;
+  unsigned int size = strlen(texture) + 1;
+  textureName = new char[size];
+  memcpy(textureName, texture, size);
   init();
 }
 
 Sprite::Sprite(Transform transform, const char* texture) {
   this->transform = transform;
-  this->textureName = texture;
+  unsigned int size = strlen(texture) + 1;
+  textureName = new char[size];
+  memcpy(textureName, texture, size);
   init();
 }
 
 void Sprite::init() {
-  setTexture(textureName);
-  
   setName("Sprite");
-  RenderCommand::addSprite(this);  
+  if(setTexture(textureName)) {
+    RenderCommand::addSprite(this);  
+    return;
+  }
+  delete this;
 }
 
-void Sprite::setTexture(const char* texture) {
+bool Sprite::setTexture(const char* texture) {
+  this->textureName = (char*)texture;
   this->texture = RenderAPI::createTexture(texture);
+  return this->texture->valid;
 }
   
 bool Sprite::checkForClick(glm::vec2 mousePos) {

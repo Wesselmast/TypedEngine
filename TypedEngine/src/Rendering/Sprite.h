@@ -2,6 +2,7 @@
 
 #include "Core/Entity.h"
 #include "Texture.h"
+#include <cstring>
 
 class Sprite : public Entity {
  public:
@@ -10,7 +11,7 @@ class Sprite : public Entity {
   Sprite(Transform transform);
   Sprite(const char* texture);
   Sprite(Transform transform, const char* texture);
-  void setTexture(const char* texture);
+  bool setTexture(const char* texture);
   
   virtual int size() const override {
     return sizeof(Sprite);
@@ -20,7 +21,7 @@ class Sprite : public Entity {
   virtual bool checkForClick(glm::vec2 mousePos) override;
 public:
   Texture* texture;
-  const char* textureName;
+  char* textureName;
 private:
   void init();
 };

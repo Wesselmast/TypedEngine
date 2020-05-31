@@ -66,7 +66,7 @@ static void enterCommands(int numargs, ...) {
 static void listCommands() {
   printf("\nCommands: \n");
   for(auto& c : commands) {
-    printf("  %s\n", c.commandName);
+    printf("  %s : %d\n", c.commandName, c.argCount);
   }
 }
 

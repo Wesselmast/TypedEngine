@@ -10,6 +10,7 @@ public:
   virtual void bind(unsigned int slot = 0) = 0;
   virtual void unbind() = 0;
   
+  bool valid = false;
 protected:
   unsigned int rendererID;
   int width;

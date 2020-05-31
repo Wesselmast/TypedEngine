@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <cstring>
 
 bool consoleEnabled = false;
 glm::vec2 input = glm::vec2(0, 0);
@@ -21,7 +22,7 @@ glm::vec2 position = glm::vec3(0, 0, 0);
 const float zoomSpeed = 0.5f;
 const float panSpeed = 750.0f;
 
-Text* fpsCounter = new Text();
+Text* fpsCounter = new Text;
 Console* console;
 
 Entity* clickedObject = nullptr;
@@ -43,7 +44,7 @@ void App::tick(float deltaTime, float time) {
 
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
-
+  
   if(clickedObject) {
     clickedObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + clickedObject->offset;
   }

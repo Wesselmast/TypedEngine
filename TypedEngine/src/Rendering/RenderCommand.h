@@ -80,7 +80,7 @@ public:
     printf("Renderer: \n");
     printf("   Sprites: %d\n", renderer->sprites.size());
     for(auto e : renderer->sprites) {
-      printf("      %s: size: %d, tag: %d\n", e->name.c_str(), e->size(), e->tag);
+      printf("      %s: size: %d, tag: %d, tex: %s\n", e->name.c_str(), e->size(), e->tag, e->textureName);
     }
     printf("   Quads: %d\n", renderer->quads.size());
     for(auto e : renderer->quads) {

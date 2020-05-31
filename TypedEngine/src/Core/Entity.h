@@ -2,6 +2,7 @@
 
 #include "Transform.h"
 #include <string>
+#include <fstream>
 
 enum class Tag {
   PERMANENT,
@@ -41,7 +42,7 @@ class Entity {
   virtual int typeID() const {
     return -1;
   };
-  
+
 private:
   static int entityCount;
 };

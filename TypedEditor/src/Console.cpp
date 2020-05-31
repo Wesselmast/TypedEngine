@@ -42,7 +42,7 @@ void command_create(char** arguments) {
   if(!strcmp("quad", arguments[0])) {
     new Quad(hexToColor(arguments[1]));
   }
-  if(!strcmp("quad", arguments[0])) {
+  if(!strcmp("text", arguments[0])) {
     new Text(arguments[1]);
   }
 }

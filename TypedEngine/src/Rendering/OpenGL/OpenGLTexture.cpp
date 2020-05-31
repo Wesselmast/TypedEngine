@@ -20,9 +20,11 @@ OpenGLTexture::OpenGLTexture(const char * path) {
   if (data) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
+    valid = true;
   }
   else {
     fprintf(stderr, "Error: Texture at location %s is not valid!\n", path);
+    valid = false;
   }
   stbi_image_free(data);
 }

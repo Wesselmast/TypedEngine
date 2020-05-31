@@ -13,6 +13,46 @@
 #include <Windows.h>
 #endif
 
+template<typename T>
+T* loadEntity(std::ifstream& file) {
+  void* entity = (void*)malloc(sizeof(T));
+
+  int offset;
+  file.read((char*)&offset, sizeof(int));
+  file.read((char*)entity, offset); 
+
+  return (T*)entity;
+}
+
+
+void writeSprite(std::ofstream& file, Sprite* s) {
+  int len = strlen(s->textureName) + 1;
+  int typeID = s->typeID();
+  char* tn = s->textureName;
+  file.write((char*)&typeID, sizeof(int));
+  file.write((char*)s, sizeof(Sprite)); 
+  file.write((char*)&len, sizeof(int));
+  file.write((char*)&tn[0], len);
+
+  printf("SIZE OF FILE : %d\n", sizeof(int) + sizeof(Sprite) + sizeof(int) + len);
+}
+
+void readSprite(std::ifstream& file) {
+  Sprite* data = (Sprite*)malloc(sizeof(Sprite));
+  int len = 0;
+  
+  file.read((char*)data, sizeof(Sprite));
+  file.read((char*)&len, sizeof(int));
+  
+  printf("%d:::", len);
+  printf("SIZE OF FILE : %d\n", sizeof(int) + sizeof(Sprite) + sizeof(int) + len);
+
+  char* tn = (char*)malloc(len);
+  file.read((char*)&tn[0], len);
+
+  new(data) Sprite(data->transform, tn);
+}  
+
 int LevelManager::saveLevel(char* path) {
   char buf[1024];
   GetCurrentDirectoryA(256, buf);
@@ -29,13 +69,20 @@ int LevelManager::saveLevel(char* path) {
   std::vector<Entity*> entities;
   RenderCommand::getTagged(Tag::LEVEL, &entities);
   
-  for(int i = 0; i < entities.size(); i++) {
-    int entitySize = entities[i]->size();
-    int typeID = entities[i]->typeID();
-    file.write((char*)&typeID, sizeof(int));
-    file.write((char*)&entitySize, sizeof(int));
-    file.write((char*)entities[i], entitySize);
+  for(auto e : entities) {
+    if(e->typeID() == 1) {
+      writeSprite(file, (Sprite*)e);
+    }
   }
+
+
+  // for(int i = 0; i < entities.size(); i++) {
+  //   int entitySize = entities[i]->size();
+  //   int typeID = entities[i]->typeID();
+  //   file.write((char*)&typeID, sizeof(int));
+  //   file.write((char*)&entitySize, sizeof(int));
+  //   file.write((char*)entities[i], entitySize);
+  // }
   
   file.close();
 
@@ -47,39 +94,6 @@ int LevelManager::saveLevel(char* path) {
   printf("\nDONE SAVING LEVEL!\n\n");
   return 1;
 }
-
-Sprite* loadSprite(std::ifstream& file) {
-  Sprite* sprite = (Sprite*)malloc(sizeof(Sprite));
-
-  int offset;
-  file.read((char*)&offset, sizeof(int));
-  file.read((char*)sprite, offset);
-
-  return sprite;
-}
-
-Text* loadText(std::ifstream& file) {
-  Text* text = (Text*)malloc(sizeof(Text));
-
-  int offset;
-  file.read((char*)&offset, sizeof(int));
-  file.read((char*)text, offset); 
-
-  new(text) Text(text->transform, text->text);
-  return text;
-}
-
-template<typename T>
-T* loadEntity(std::ifstream& file) {
-  Entity* entity = (Entity*)malloc(sizeof(T));
-
-  int offset;
-  file.read((char*)&offset, sizeof(int));
-  file.read((char*)entity, offset); 
-
-  return (T*)entity;
-}
-
 
 int LevelManager::loadLevel(char* path) {
   char buf[1024];
@@ -102,25 +116,30 @@ int LevelManager::loadLevel(char* path) {
   
   int typeID;
   while (file.read((char*)&typeID, sizeof(int))) {
-    switch (typeID) {
-    case 0: texts.push_back(loadEntity<Text>(file));     break;
-    case 1: sprites.push_back(loadEntity<Sprite>(file)); break;
-    case 2: quads.push_back(loadEntity<Quad>(file));     break;
+    if(typeID == 1) {
+      readSprite(file);
     }
   }
+
+    //   switch (typeID) {
+  //   case 0: texts.push_back(loadEntity<Text>(file));     break;
+  //   case 1: sprites.push_back(loadEntity<Sprite>(file)); break;
+  //   case 2: quads.push_back(loadEntity<Quad>(file));     break;
+  //   }
+  // }
   
   file.close();
-  
-  for (auto& e : sprites) { 
-    new(e) Sprite(e->transform, e->textureName);
-  }
-  for (auto& e : texts) { 
-    new(e) Text(e->transform, e->text);
-  }
-  for (auto& e : quads) { 
-    new(e) Quad(e->transform, e->color);    
-  }
-  // maybe this below should happen after closing the file
+
+  //for (auto e : sprites) { 
+  //  printf("%s\n", e->textureName);
+  //  new(e) Sprite(e->transform, e->textureName);
+  //}
+  //for (auto e : texts) { 
+  //  new(e) Text(e->transform, e->text);
+  //}
+  //for (auto e : quads) { 
+  //  new(e) Quad(e->transform, e->color);    
+  //}
   
   printf("\nDONE! LEVEL CONTENTS: \n\n");
   RenderCommand::print();
