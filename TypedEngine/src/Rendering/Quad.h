@@ -12,7 +12,10 @@ class Quad : public Entity {
   Quad(Transform transform, const glm::vec4& color);
 
   virtual int typeID() const override { return 2; }; 
+
+  virtual bool checkForClick(glm::vec2 mousePos) override;
 public:
+  glm::vec2 size = { 512.0f, 512.0f };
   glm::vec4 color;
 private:
   void init();

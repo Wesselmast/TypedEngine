@@ -35,6 +35,10 @@ void OpenGLShader::setUniformFloat4(const char * name, glm::vec4 value) {
   glUniform4f(glGetUniformLocation(rendererID, name), value.x, value.y, value.z, value.w);
 }
 
+void OpenGLShader::setUniformFloat2(const char * name, glm::vec2 value) {
+  glUniform2f(glGetUniformLocation(rendererID, name), value.x, value.y);
+}
+
 void OpenGLShader::setUniformMat4(const char * name, glm::mat4 value) {
   glUniformMatrix4fv(glGetUniformLocation(rendererID, name), 1, GL_FALSE, &value[0][0]);
 }

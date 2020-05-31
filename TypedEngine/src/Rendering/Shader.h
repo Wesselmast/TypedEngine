@@ -21,6 +21,7 @@ public:
   virtual void unbind() = 0;
   
   virtual void setUniformFloat4(const char* name, glm::vec4 value) = 0;
+  virtual void setUniformFloat2(const char* name, glm::vec2 value) = 0;
   virtual void setUniformMat4(const char* name, glm::mat4 value) = 0;
   virtual void setUniformInt1(const char* name, int value) = 0;
   

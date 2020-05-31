@@ -229,8 +229,9 @@ void OpenGLRenderer::drawQuad(Quad* quad) {
 
   defaultQuadShader->bind();
   defaultQuadShader->setUniformFloat4("uColor", quad->color);
+  defaultQuadShader->setUniformFloat2("uSize", quad->size);
+  defaultQuadShader->setUniformInt1("uClicked", (int)quad->clicked);
   defaultQuadShader->setUniformMat4("uMvpMatrix", calculateMVPFromTransform(quad->transform, quad->screenPosition));
-  
   glDrawElements(GL_TRIANGLES, vertexArrayQ->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
 }
 
