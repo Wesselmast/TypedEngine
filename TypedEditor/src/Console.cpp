@@ -103,7 +103,22 @@ void command_printfiles(char** arguments) {
 void command_delete(char** arguments) {
   std::vector<Entity*> entities;
   RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) if(e->clicked) delete e;
+  if(arguments[0]) {
+    if(!strcmp(arguments[0], "all")) {
+      for(auto e : entities) delete e;
+    }
+    else {
+      printf("ERROR: '%s' is not a valid argument for delete\n", arguments[0]);
+    }
+    return;
+  }
+  for(auto e : entities) {
+    if(e->clicked) {
+      delete e;
+      return;
+    }
+  }
+  printf("ERROR: No entity is selected\n");
 }
 
 void command_size(char** arguments) {
@@ -115,8 +130,10 @@ void command_size(char** arguments) {
         stringToFloat(arguments[0]),
 	stringToFloat(arguments[1])
       };
+      return;
     }
   }
+  printf("ERROR: No entity is selected\n");
 }
 
 void command_position(char** arguments) {
@@ -128,8 +145,10 @@ void command_position(char** arguments) {
         stringToFloat(arguments[0]),
 	stringToFloat(arguments[1])
       };
+      return;
     }
   }
+  printf("ERROR: No entity is selected\n");
 }
 
 void command_rotation(char** arguments) {
@@ -139,7 +158,9 @@ void command_rotation(char** arguments) {
     if(e->clicked) {
       e->transform.rotation = stringToFloat(arguments[0]);
     }
+    return;
   }
+  printf("ERROR: No entity is selected\n");
 }
 
 
@@ -150,7 +171,7 @@ void command_add(char** arguments) {
     if(e->clicked) {
       if(!strcmp(arguments[0], "pos")) {
 	if(!arguments[2]) {
-	  printf("ERROR: '%s' needs 2 arguments!", arguments[0]);
+	  printf("ERROR: '%s' needs 2 arguments!\n", arguments[0]);
 	  return;
 	}
 	e->transform.position.x += stringToFloat(arguments[1]);
@@ -158,24 +179,26 @@ void command_add(char** arguments) {
       }
       else if(!strcmp(arguments[0], "rot")) {
 	if(arguments[2]) {
-	  printf("ERROR: '%s' needs 1 argument!", arguments[0]);
+	  printf("ERROR: '%s' needs 1 argument!\n", arguments[0]);
 	  return;
 	}
 	e->transform.rotation += stringToFloat(arguments[1]);
       }
       else if(!strcmp(arguments[0], "size")) {
 	if(!arguments[2]) {
-	  printf("ERROR: '%s' needs 2 arguments!", arguments[0]);
+	  printf("ERROR: '%s' needs 2 arguments!\n", arguments[0]);
 	  return;
 	}
 	e->transform.scale.x += stringToFloat(arguments[1]);
 	e->transform.scale.y += stringToFloat(arguments[2]);
       }
       else {
-	printf("ERROR: '%s' is not a valid argument for add", arguments[0]);
+	printf("ERROR: '%s' is not a valid argument for add\n", arguments[0]);
       }
+      return;
     }
   }
+  printf("ERROR: No entity is selected\n");
 }
 
 void command_copy(char** arguments) {
@@ -188,9 +211,10 @@ void command_copy(char** arguments) {
       case 1: new Sprite(e->transform, ((Sprite*)e)->textureName); break;
       case 2: new Quad(e->transform, ((Quad*)e)->color); break;
       }
-      break;
+      return;
     }
   }
+  printf("ERROR: No entity is selected\n");
 }
 
 glm::vec2 startSize;
@@ -204,7 +228,7 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_cls,	 "cls",	       0, 0, "Clears the terminal"                                                 },
     ConsoleCommand{ command_exit,	 "exit",       0, 0, "Exits the application"                                               },
     ConsoleCommand{ command_echo,	 "echo",       1, 99,"Print some words to the terminal!"                                   },
-    ConsoleCommand{ command_push,	 "push",       1, 1, "Pushes a Lua script to the game"                                     },
+    ConsoleCommand{ command_push,	 "push",       1, 1, "Pushes a Lua script to the game"                                     }, // @Note: I might want to change this logic.
     ConsoleCommand{ command_save_level,	 "save",       1, 1, "Saves the current level and gives it this name"                      },
     ConsoleCommand{ command_load_level,	 "open",       1, 1, "Opens a level by name and destroys the current one"                  },
     ConsoleCommand{ command_sprite,	 "sprite",     1, 1, "Creates a sprite entity. Input: texture path"                        },
