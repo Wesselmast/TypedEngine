@@ -13,18 +13,6 @@
 #include <Windows.h>
 #endif
 
-template<typename T>
-T* loadEntity(std::ifstream& file) {
-  void* entity = (void*)malloc(sizeof(T));
-
-  int offset;
-  file.read((char*)&offset, sizeof(int));
-  file.read((char*)entity, offset); 
-
-  return (T*)entity;
-}
-
-
 void writeSprite(std::ofstream& file, Sprite* s) {
   int len = strlen(s->textureName) + 1;
   int typeID = s->typeID();
@@ -48,6 +36,32 @@ void constructSprite(std::ifstream& file) {
   new(data) Sprite(data->transform, tn);
 }  
 
+void writeQuad(std::ofstream& file, Quad* q) {
+  int typeID = q->typeID();
+  file.write((char*)&typeID, sizeof(int));
+  file.write((char*)q, sizeof(Quad)); 
+}
+
+void constructQuad(std::ifstream& file) {
+  Quad* data = (Quad*)malloc(sizeof(Quad));
+  
+  file.read((char*)data, sizeof(Quad));
+  new(data) Quad(data->transform, data->color);
+}  
+
+void writeText(std::ofstream& file, Text* t) {
+  int typeID = t->typeID();
+  file.write((char*)&typeID, sizeof(int));
+  file.write((char*)t, sizeof(Text)); 
+}
+
+void constructText(std::ifstream& file) {
+  Text* data = (Text*)malloc(sizeof(Text));
+  
+  file.read((char*)data, sizeof(Text));
+  new(data) Text(data->transform, data->text, data->color);
+}
+
 int LevelManager::saveLevel(char* path) {
   char buf[1024];
   GetCurrentDirectoryA(256, buf);
@@ -66,7 +80,9 @@ int LevelManager::saveLevel(char* path) {
   
   for(auto e : entities) {
     switch(e->typeID()) {
+    case 0: writeText(file,   (Text*)e);   break;
     case 1: writeSprite(file, (Sprite*)e); break;
+    case 2: writeQuad(file,   (Quad*)e);   break;
     }
   }
 
@@ -99,7 +115,9 @@ int LevelManager::loadLevel(char* path) {
   int typeID;
   while (file.read((char*)&typeID, sizeof(int))) {
     switch(typeID) {
+    case 0: constructText(file);   break;
     case 1: constructSprite(file); break;
+    case 2: constructQuad(file);   break;
     }
   }
 
