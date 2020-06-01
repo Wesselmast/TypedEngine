@@ -17,6 +17,4 @@ class Quad : public Entity {
 public:
   glm::vec2 size = { 512.0f, 512.0f };
   glm::vec4 color;
-private:
-  void init();
 };
