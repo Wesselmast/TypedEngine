@@ -20,7 +20,7 @@ Quad::Quad(Transform transform, const glm::vec4& color) {
 bool Quad::checkForClick(glm::vec2 mousePos) {
   if(clickable) {
     glm::vec2 p0 = transform.position;
-    glm::vec2 p1 = transform.position + size;
+    glm::vec2 p1 = transform.position + size * transform.scale;
     
     if(mousePos.x > p0.x && mousePos.x < p1.x) {
       if(mousePos.y > p0.y && mousePos.y < p1.y) {
