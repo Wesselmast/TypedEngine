@@ -26,7 +26,7 @@ const float panSpeed = 750.0f;
 Text* fpsCounter = new Text;
 Console* console;
 
-Entity* clickedObject = nullptr;
+Entity* followObject = nullptr;
 
 void App::begin() {
   new Sprite("res/textures/T_Tree.png");
@@ -48,8 +48,8 @@ void App::tick(float deltaTime, float time) {
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
   
-  if(clickedObject) {
-    clickedObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + clickedObject->offset;
+  if(followObject) {
+    followObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + followObject->offset;
   }
 }
 
@@ -76,6 +76,11 @@ void App::onKeyPressed(Key key, Modifier mod) {
   case Key::S: input.y = -1.0f; break;
   case Key::D: input.x =  1.0f; break;
   case Key::F: position = {0.0f, 0.0f}; break;
+  case Key::DELETE: {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) if(e->clicked) delete e;
+  }
   }
 }
 
@@ -112,8 +117,9 @@ void App::onMousePressed(MouseButton button, Modifier mod) {
   std::vector<Entity*> entities;
   RenderCommand::getTagged(Tag::LEVEL, &entities);
   for(auto e : entities) {
+    e->clicked = false;
     if(e->checkForClick(mousePos)) {
-      clickedObject = e;
+      followObject = e;
       if(mod == Modifier::ALT) {
 	switch(e->typeID()) {
 	case 0: break;
@@ -128,12 +134,7 @@ void App::onMousePressed(MouseButton button, Modifier mod) {
 }
 
 void App::onMouseReleased(MouseButton button, Modifier mod) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    e->clicked = false;
-  }
-  clickedObject = nullptr;
+  followObject = nullptr;
 }
 
 Application* createApplication() {

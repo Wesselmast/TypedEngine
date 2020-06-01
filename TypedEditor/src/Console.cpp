@@ -35,16 +35,16 @@ void command_stop(char** arguments) {
   LuaCommand::quit();
 }
 
-void command_create(char** arguments) {
-  if(!strcmp("sprite", arguments[0])) {
-    new Sprite(arguments[1]);
-  }
-  if(!strcmp("quad", arguments[0])) {
-    new Quad(hexToColor(arguments[1]));
-  }
-  if(!strcmp("text", arguments[0])) {
-    new Text(arguments[1]);
-  }
+void command_sprite(char** arguments) {
+  new Sprite(arguments[0]);
+}
+
+void command_quad(char** arguments) {
+  new Quad(hexToColor(arguments[0]));  
+}
+
+void command_text(char** arguments) {
+  new Text(arguments[0], hexToColor(arguments[1]));
 }
 
 void command_help(char** arguments) {
@@ -87,6 +87,12 @@ void command_printfiles(char** arguments) {
   LuaCommand::printfiles();
 }
 
+void command_delete(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) if(e->clicked) delete e;
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
@@ -101,9 +107,12 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_push,        "push",       1  },
     ConsoleCommand{ command_save_level,  "save",       1  },
     ConsoleCommand{ command_load_level,  "open",       1  },
-    ConsoleCommand{ command_create,      "create",     2  },
+    ConsoleCommand{ command_sprite,      "sprite",     1  },
+    ConsoleCommand{ command_quad,        "quad",       1  },
+    ConsoleCommand{ command_text,        "text",       2  },
     ConsoleCommand{ command_printfiles,  "printf"         },
-    ConsoleCommand{ command_renderinfo,  "printr"         } 
+    ConsoleCommand{ command_renderinfo,  "printr"         }, 
+    ConsoleCommand{ command_delete,      "delete"         } 
  );
   
   command_window = window;
