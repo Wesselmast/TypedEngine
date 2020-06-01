@@ -48,6 +48,10 @@ void command_text(char** arguments) {
 }
 
 void command_help(char** arguments) {
+  if(arguments[0]) {
+    listCommand(arguments[0]);
+    return;
+  }
   listCommands();
 }
 
@@ -64,7 +68,16 @@ void command_cls(char** arguments) {
 }
 
 void command_echo(char** arguments) {
-  printf("\n%s\n", arguments[0]);
+  printf("\n");
+  for(int i = 0; i < 99; i++) {
+    if(arguments[i]) {
+      printf("%s ", arguments[i]);
+    }
+    else {
+      break;
+    }
+  }
+  printf("\n");
 }
 
 void command_save_level(char** arguments) {
@@ -129,29 +142,82 @@ void command_rotation(char** arguments) {
   }
 }
 
+
+void command_add(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->clicked) {
+      if(!strcmp(arguments[0], "pos")) {
+	if(!arguments[2]) {
+	  printf("ERROR: '%s' needs 2 arguments!", arguments[0]);
+	  return;
+	}
+	e->transform.position.x += stringToFloat(arguments[1]);
+	e->transform.position.y += stringToFloat(arguments[2]);
+      }
+      else if(!strcmp(arguments[0], "rot")) {
+	if(arguments[2]) {
+	  printf("ERROR: '%s' needs 1 argument!", arguments[0]);
+	  return;
+	}
+	e->transform.rotation += stringToFloat(arguments[1]);
+      }
+      else if(!strcmp(arguments[0], "size")) {
+	if(!arguments[2]) {
+	  printf("ERROR: '%s' needs 2 arguments!", arguments[0]);
+	  return;
+	}
+	e->transform.scale.x += stringToFloat(arguments[1]);
+	e->transform.scale.y += stringToFloat(arguments[2]);
+      }
+      else {
+	printf("ERROR: '%s' is not a valid argument for add", arguments[0]);
+      }
+    }
+  }
+}
+
+void command_copy(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->clicked) {
+      switch(e->typeID()) {
+      case 0: break;
+      case 1: new Sprite(e->transform, ((Sprite*)e)->textureName); break;
+      case 2: new Quad(e->transform, ((Quad*)e)->color); break;
+      }
+      break;
+    }
+  }
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
   CONSOLE_COMMANDS(
-    ConsoleCommand{ command_play,        "play"           },
-    ConsoleCommand{ command_stop,        "stop"           },
-    ConsoleCommand{ command_help,        "help"           },
-    ConsoleCommand{ command_ping,        "ping"           },
-    ConsoleCommand{ command_cls,         "cls"            },
-    ConsoleCommand{ command_exit,        "exit"           },
-    ConsoleCommand{ command_echo,        "echo",       1  },
-    ConsoleCommand{ command_push,        "push",       1  },
-    ConsoleCommand{ command_save_level,  "save",       1  },
-    ConsoleCommand{ command_load_level,  "open",       1  },
-    ConsoleCommand{ command_sprite,      "sprite",     1  },
-    ConsoleCommand{ command_quad,        "quad",       1  },
-    ConsoleCommand{ command_text,        "text",       2  },
-    ConsoleCommand{ command_printfiles,  "printf"         },
-    ConsoleCommand{ command_renderinfo,  "printr"         }, 
-    ConsoleCommand{ command_delete,      "delete"         }, 
-    ConsoleCommand{ command_size,        "size",       2  },
-    ConsoleCommand{ command_position,    "pos",        2  },
-    ConsoleCommand{ command_rotation,    "rot",        1  } 
+    ConsoleCommand{ command_play,	 "play",       0, 0, "Enters play mode."                                                   },
+    ConsoleCommand{ command_stop,	 "stop",       0, 0, "Stops play mode."                                                    },
+    ConsoleCommand{ command_help,	 "help",       0, 1, "Lists some helpful commands! Can also just list one"                 },
+    ConsoleCommand{ command_ping,	 "ping",       0, 0, "Pong!"	                                                           },
+    ConsoleCommand{ command_cls,	 "cls",	       0, 0, "Clears the terminal"                                                 },
+    ConsoleCommand{ command_exit,	 "exit",       0, 0, "Exits the application"                                               },
+    ConsoleCommand{ command_echo,	 "echo",       1, 99,"Print some words to the terminal!"                                   },
+    ConsoleCommand{ command_push,	 "push",       1, 1, "Pushes a Lua script to the game"                                     },
+    ConsoleCommand{ command_save_level,	 "save",       1, 1, "Saves the current level and gives it this name"                      },
+    ConsoleCommand{ command_load_level,	 "open",       1, 1, "Opens a level by name and destroys the current one"                  },
+    ConsoleCommand{ command_sprite,	 "sprite",     1, 1, "Creates a sprite entity. Input: texture path"                        },
+    ConsoleCommand{ command_quad,	 "quad",       1, 1, "Creates a quad entity. Input: color in hex"                          },
+    ConsoleCommand{ command_text,	 "text",       2, 2, "Creates a text entity. Input: text and color in hex"                 },
+    ConsoleCommand{ command_printfiles,	 "printf",     0, 0, "Prints all the active lua scripts"                                   },
+    ConsoleCommand{ command_renderinfo,	 "printr",     0, 0, "Prints all the actives entities in the scene"                        }, 
+    ConsoleCommand{ command_delete,	 "delete",     0, 1, "Deletes selected entity. Add 'all' to delete everything"             }, 
+    ConsoleCommand{ command_size,	 "size",       2, 2, "Sets the size of the selected entity"                                },
+    ConsoleCommand{ command_position,	 "pos",	       2, 2, "Sets the position of the selected entity"                            },
+    ConsoleCommand{ command_rotation,	 "rot",	       1, 1, "Sets the rotation of the selected entity"                            }, 
+    ConsoleCommand{ command_add,	 "add",	       2, 3, "Adds transformation to selected entity, add flag 'pos, rot or size'" },
+    ConsoleCommand{ command_copy,	 "cpy",	       0, 0, "Copies the selected entity"                                          } 
  );
   
   command_window = window;

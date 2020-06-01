@@ -11,7 +11,9 @@ typedef void(*fptr_Command)(char**);
 struct ConsoleCommand {
   fptr_Command command;
   const char* commandName;
-  unsigned int argCount = 0;
+  unsigned int argCountLow = 0;
+  unsigned int argCountHigh = 0;
+  const char* description = "No Description.";
 };
 
 static std::vector<ConsoleCommand> commands;
@@ -40,12 +42,26 @@ static void parseCommand(const char* command) {
   
   for(auto& c : commands) {
     if(!strcmp(c.commandName, firstCommand)) {
-      if(c.argCount == amt) {
+      if(amt >= c.argCountLow && amt <= c.argCountHigh) {
 	c.command(args);
 	return;
       }
       else {
-	printf("ERROR: Command '%s' wants %d arguments, %d were given\n", firstCommand, c.argCount, amt);
+	bool plural = amt > 1;
+	if(c.argCountLow == c.argCountHigh) {
+	  printf("ERROR: Command '%s' wants %d arguments, %d %s given\n",
+		 firstCommand,
+		 c.argCountLow,
+		 amt,
+		 plural ? "were" : "was");
+	  return;
+	}
+	printf("ERROR: Command '%s' wants between %d and %d arguments, %d %s given\n",
+	       firstCommand,
+	       c.argCountLow,
+	       c.argCountHigh,
+	       amt,
+	       plural ? "were" : "was");
 	return;
       }
     }
@@ -66,8 +82,20 @@ static void enterCommands(int numargs, ...) {
 static void listCommands() {
   printf("\nCommands: \n");
   for(auto& c : commands) {
-    printf("  %s : %d\n", c.commandName, c.argCount);
+    printf("  %s : %s\n", c.commandName, c.description);
   }
+}
+
+static void listCommand(const char* command) {
+  for(auto& c : commands) {
+    if(!strcmp(c.commandName, command)) {
+      printf("\nCommand %s:\n", c.commandName);
+      printf("  args(%d, %d)\n", c.argCountLow, c.argCountHigh);
+      printf("  %s\n",c.description);
+      return;
+    }
+  }
+  printf("ERROR: Command %s is unknown\n", command);
 }
 
 #define NUM_ARGS(...) std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value
