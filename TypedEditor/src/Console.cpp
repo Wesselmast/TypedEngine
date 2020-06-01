@@ -93,6 +93,42 @@ void command_delete(char** arguments) {
   for(auto e : entities) if(e->clicked) delete e;
 }
 
+void command_size(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->clicked) {
+      e->transform.scale = {
+        stringToFloat(arguments[0]),
+	stringToFloat(arguments[1])
+      };
+    }
+  }
+}
+
+void command_position(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->clicked) {
+      e->transform.position = {
+        stringToFloat(arguments[0]),
+	stringToFloat(arguments[1])
+      };
+    }
+  }
+}
+
+void command_rotation(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->clicked) {
+      e->transform.rotation = stringToFloat(arguments[0]);
+    }
+  }
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
@@ -112,7 +148,10 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_text,        "text",       2  },
     ConsoleCommand{ command_printfiles,  "printf"         },
     ConsoleCommand{ command_renderinfo,  "printr"         }, 
-    ConsoleCommand{ command_delete,      "delete"         } 
+    ConsoleCommand{ command_delete,      "delete"         }, 
+    ConsoleCommand{ command_size,        "size",       2  },
+    ConsoleCommand{ command_position,    "pos",        2  },
+    ConsoleCommand{ command_rotation,    "rot",        1  } 
  );
   
   command_window = window;

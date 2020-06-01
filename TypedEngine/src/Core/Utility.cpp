@@ -29,3 +29,13 @@ const char* colorToHex(const glm::vec4& color) {
   memcpy(tmp2, tmp.c_str(), strlen(tmp.c_str()) + 1);
   return tmp2;
 }
+
+float stringToFloat(const char* str) {
+  char* endptr;
+  float result = strtol(str, &endptr, 10);
+  if (*endptr) {
+    printf("Input %s is not a number!", str);
+    return 0;
+  }
+  return result;
+}
