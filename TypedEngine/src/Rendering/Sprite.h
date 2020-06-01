@@ -19,6 +19,4 @@ class Sprite : public Entity {
 public:
   Texture* texture;
   char* textureName;
-private:
-  void init();
 };

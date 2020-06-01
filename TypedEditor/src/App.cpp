@@ -115,7 +115,11 @@ void App::onMousePressed(MouseButton button, Modifier mod) {
     if(e->checkForClick(mousePos)) {
       clickedObject = e;
       if(mod == Modifier::ALT) {
-	Sprite* spawned = new Sprite(e->transform, ((Sprite*)e)->textureName);
+	switch(e->typeID()) {
+	case 0: break;
+	case 1: new Sprite(e->transform, ((Sprite*)e)->textureName); break;
+	case 2: new Quad(e->transform, ((Quad*)e)->color); break;
+	}
 	break;
       }
       break;

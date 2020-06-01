@@ -6,43 +6,20 @@
 const char* defaultPath = "res/textures/T_Default.jpg";
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 
 
-Sprite::Sprite() {
-  this->transform = defaultTransform;
-  unsigned int size = strlen(defaultPath) + 1;
-  textureName = new char[size];
-  memcpy(textureName, defaultPath, size);
-  init();
-}
-
-Sprite::Sprite(Transform transform) {
-  this->transform = transform;
-  unsigned int size = strlen(defaultPath) + 1;
-  textureName = new char[size];
-  memcpy(textureName, defaultPath, size);
-  init();
-}
-
-Sprite::Sprite(const char* texture) {
-  this->transform = defaultTransform;
-  unsigned int size = strlen(texture) + 1;
-  textureName = new char[size];
-  memcpy(textureName, texture, size);
-  init();
-}
+Sprite::Sprite() : Sprite(defaultTransform, defaultPath) {}
+Sprite::Sprite(Transform transform) : Sprite(transform, defaultPath) {}
+Sprite::Sprite(const char* texture) : Sprite(defaultTransform, texture) {}
 
 Sprite::Sprite(Transform transform, const char* texture) {
   this->transform = transform;
   unsigned int size = strlen(texture) + 1;
   textureName = new char[size];
   memcpy(textureName, texture, size);
-  init();
-}
-
-void Sprite::init() {
+  
   setName("Sprite");
-
-  if(setTexture(textureName)) {
-    RenderCommand::addSprite(this);  
+  
+  if(setTexture(this->textureName)) {
+    RenderCommand::addSprite(this);
     return;
   }
   delete this;
@@ -50,7 +27,7 @@ void Sprite::init() {
 
 bool Sprite::setTexture(const char* texture) {
   this->textureName = (char*)texture;
-  this->texture = RenderAPI::createTexture(texture);
+  this->texture = RenderAPI::createTexture(textureName);
   return this->texture->valid;
 }
   
