@@ -10,12 +10,12 @@ class Text : public Entity {
   ~Text();
   Text(Transform transform);
   Text(const std::string& text);
+  Text(const std::string& text, const glm::vec4& color);
   Text(Transform transform, const std::string& text);
+  Text(Transform transform, const std::string& text, const glm::vec4& color);
 
   virtual int typeID() const override { return 0; }; 
 public:
   glm::vec4 color;
   std::string text;
-private:
-  void init();
 };
