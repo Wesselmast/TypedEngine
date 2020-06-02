@@ -145,6 +145,7 @@ project "TEcore"  -- TypedEngine Core Library for Lua
 
 	links {
 		"TypedEngine",
+		"TELua",
 		"glad",
 		"freetype",
 		"lua",
