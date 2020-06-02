@@ -206,6 +206,7 @@ project "TypedEditor"
 
 	links {
 		"TypedEngine",
+		"TELua",
 		"glad",
 		"freetype",
 		"lua",
