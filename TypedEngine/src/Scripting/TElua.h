@@ -7,5 +7,3 @@ void print_lua_files();
 void close_lua();
 void tick_lua(float deltaTime, float time);
 void quit_lua();
-
-

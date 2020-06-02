@@ -31,6 +31,6 @@ class LuaCommand {
   inline static void quit() {
     lua->quitLua();
   }
- private:
+private:
   static LuaManager* lua;
 };

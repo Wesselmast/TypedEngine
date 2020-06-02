@@ -101,7 +101,6 @@ void push_lua(char* file) {
   strcpy(currentFile, filePath);
   strcat(currentFile, fileBuffer);
 
-
   FILE* l_file;
   if ((l_file = fopen(currentFile, "r"))) {
     fclose(l_file);
@@ -112,6 +111,7 @@ void push_lua(char* file) {
 
   fputs("require 'TEcore'\n\n", l_file);
   fputs("function begin()\n", l_file);
+  fputs("   print('Hello, World!')\n", l_file);
   fputs("end\n\n", l_file);
   fputs("function tick(deltaTime, time)\n", l_file);
   fputs("end\n\n", l_file);

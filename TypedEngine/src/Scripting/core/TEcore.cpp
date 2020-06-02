@@ -3,6 +3,9 @@
 #include "Rendering/Sprite.h"
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
+
+#include "Scripting/LuaCommand.h"
+
 #include <stdio.h>
 
 // TRANSFORM

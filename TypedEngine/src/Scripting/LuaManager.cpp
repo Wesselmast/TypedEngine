@@ -31,4 +31,3 @@ void LuaManager::tickLua(float deltaTime, float time) {
 void LuaManager::quitLua() {
   quit_lua();
 }
-
