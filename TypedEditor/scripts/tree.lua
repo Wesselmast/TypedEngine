@@ -1,26 +1,17 @@
 require "main"
 TE = require "TEcore";
 
-local tree = {
-   transform = TE.TETransform(),
-   sprite = TE.TESprite()
-}
+transform = TE.TETransform()
+sprite = TE.TESprite()
 
-tree.__index = tree
-
-function new()
-   local self = {}
-   return setmetatable(self, tree)
-end
- 
-function tree.begin(self)
-   tree.sprite:init("res/textures/T_Tree.png")
+function begin()
+   sprite:init("res/textures/T_Tree.png")
 end
 
-function tree.tick(self, deltaTime, time)
+function tick(deltaTime, time)
    print_that_it_works() -- Function from the main.lua file
 
-   self.transform.position.x = self.transform.position.x + (200 * deltaTime)
-   self.transform.rotation = self.transform.rotation + deltaTime
-   self.sprite:setTransform(self.transform)
+   transform.position.x = transform.position.x + (200 * deltaTime)
+   transform.rotation = transform.rotation + deltaTime
+   sprite:setTransform(transform)
 end

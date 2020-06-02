@@ -85,6 +85,7 @@ void command_save_level(char** arguments) {
 }
 
 void command_load_level(char** arguments) {
+  LuaCommand::push(arguments[0]);
   LevelCommand::loadLevel(arguments[0]);
 }
 

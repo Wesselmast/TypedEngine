@@ -3,7 +3,6 @@
 #include "GLFW/glfw3.h"
 
 int OpenGLInputManager::convertKeyToValue(Key key, Modifier mod) {
-
   if(mod == Modifier::SHIFT) {
     switch(key) {
     case Key::A:               return 65;
