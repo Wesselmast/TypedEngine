@@ -15,7 +15,6 @@
 #include <math.h>
 #include <cstring>
 
-bool consoleEnabled = false;
 glm::vec2 input = glm::vec2(0, 0);
 float zoom = 1;
 
@@ -46,21 +45,24 @@ void App::tick(float deltaTime, float time) {
   if(followObject) {
     followObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + followObject->offset;
   }
+//  printf("Current key that's down: %d\n", Input::isKeyDown(Key::W));
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {
+  Input::setKeyDown(key);
+
   if(key == Key::ESCAPE) {
     window->close(); 
     return;
   } 
   
   if(key == Key::GRAVE) {
-    consoleEnabled = !consoleEnabled;
-    console->setHidden(!consoleEnabled);
+    console->setHidden(!console->getHidden());
     return;
   }
 
-  if(consoleEnabled) {
+  bool consoleShouldRecieve = !console->getHidden() | console->playMode;
+  if(consoleShouldRecieve) {
     console->recieveKey(key, mod);
     return;
   }
@@ -80,6 +82,9 @@ void App::onKeyPressed(Key key, Modifier mod) {
 }
 
 void App::onKeyReleased(Key key, Modifier mod) {
+  if(Input::isKeyDown(key)) {
+    Input::setKeyDown(Key::NONE);
+  }
   switch (key) {
   case Key::W: input.y =  0.0f; break;
   case Key::A: input.x =  0.0f; break;

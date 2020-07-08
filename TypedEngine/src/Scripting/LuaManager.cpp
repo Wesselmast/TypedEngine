@@ -31,3 +31,7 @@ void LuaManager::tickLua(float deltaTime, float time) {
 void LuaManager::quitLua() {
   quit_lua();
 }
+
+void LuaManager::inputLua(const char* input) {
+  input_lua(input);
+} 

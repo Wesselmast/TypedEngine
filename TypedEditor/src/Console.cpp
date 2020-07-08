@@ -21,9 +21,14 @@
 
 Window* command_window;
 
+bool Console::playMode = false;
+static Console* currentConsole;
+
 void command_play(char** arguments) {
-  playMode = LuaCommand::run();
-  if(!playMode) {
+  Console::playMode = LuaCommand::run();
+  currentConsole->setHidden(true);
+  
+  if(!Console::playMode) {
     RenderCommand::removeTagged(Tag::PLAY_MODE);
     LuaCommand::quit();
   }
@@ -31,7 +36,7 @@ void command_play(char** arguments) {
 
 void command_stop(char** arguments) {
   // @CleanUp: Add condition to quit command. Nothing should happend if quitting fails
-  playMode = false;
+  Console::playMode = false;
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   LuaCommand::quit();
 }
@@ -246,6 +251,7 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_copy,	 "cpy",	       0, 0, "Copies the selected entity"                                          } 
  );
   
+  currentConsole = this;
   command_window = window;
   
   text = new Text("");
@@ -291,9 +297,18 @@ void Console::setHidden(bool hidden) {
   topBar->hidden = hidden;
   topText->hidden = hidden;
   panel->hidden = hidden;
+  this->hidden = hidden;
+}
+
+bool Console::getHidden() const {
+  return hidden;
 }
 
 void Console::recieveKey(Key key, Modifier mod) {
+  if(playMode) {
+    LuaCommand::input(key);
+  }
+
   if(key == Key::ENTER) {
     parseCommand(text->text.c_str());
     text->text.clear();

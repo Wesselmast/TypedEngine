@@ -5,3 +5,4 @@
 #include "OpenGL/OpenGLInputManager.h"
 
 InputManager* Input::inputManager = new OpenGLInputManager();
+Key Input::currentKeyDown = Key::NONE;

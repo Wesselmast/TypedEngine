@@ -12,4 +12,5 @@ class LuaManager {
   void tickLua(float deltaTime, float time);
   void quitLua();
   char* currentLuaFile();
+  void inputLua(const char* input);
 };

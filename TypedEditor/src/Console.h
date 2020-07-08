@@ -11,8 +11,9 @@ class Console {
   void refresh();
   void recieveKey(Key key, Modifier mod);
   void setHidden(bool hidden);
+  bool getHidden() const;
 
-  bool playMode = false;
+  static bool playMode;
   
   Console(Window* window);
   ~Console();
@@ -22,4 +23,5 @@ class Console {
   Text* topText;
   Quad* panel;
   Window* window;
+  bool hidden = true;
 };

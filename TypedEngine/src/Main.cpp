@@ -3,6 +3,7 @@
 #include "Rendering/RenderAPI.h"
 #include "Rendering/RenderCommand.h"
 #include "Scripting/LuaCommand.h"
+#include "Input/Input.h"
 
 Application* app;
 Window* window;

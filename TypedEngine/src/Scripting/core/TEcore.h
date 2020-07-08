@@ -77,3 +77,4 @@ public:
   TEQuad* init(TETransform* transform, const color& color);
   void setColor(const color& color);
 };
+
