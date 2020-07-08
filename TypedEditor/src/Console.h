@@ -11,6 +11,8 @@ class Console {
   void refresh();
   void recieveKey(Key key, Modifier mod);
   void setHidden(bool hidden);
+
+  bool playMode = false;
   
   Console(Window* window);
   ~Console();

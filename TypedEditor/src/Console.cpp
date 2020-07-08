@@ -17,13 +17,13 @@
 #include "ConsoleCommands.h"
 #include "Core/LevelCommand.h"
 
-std::future<void> luaFuture;
+//std::future<void> luaFuture;
 
 Window* command_window;
 
 void command_play(char** arguments) {
-  //luaFuture = std::async(std::launch::async, &LuaCommand::run);             //@Volatile: Async works, but textures dont render, also race conditions?!          
-  if(!LuaCommand::run()) {
+  playMode = LuaCommand::run();
+  if(!playMode) {
     RenderCommand::removeTagged(Tag::PLAY_MODE);
     LuaCommand::quit();
   }
@@ -31,6 +31,7 @@ void command_play(char** arguments) {
 
 void command_stop(char** arguments) {
   // @CleanUp: Add condition to quit command. Nothing should happend if quitting fails
+  playMode = false;
   RenderCommand::removeTagged(Tag::PLAY_MODE);
   LuaCommand::quit();
 }

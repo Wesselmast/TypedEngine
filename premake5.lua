@@ -1,6 +1,7 @@
 workspace "TypedEngine"
 	architecture "x86_64"
 	startproject "TypedEditor"
+	toolset "gcc"
 	gccprefix "ccache "
 	
 	configurations {
