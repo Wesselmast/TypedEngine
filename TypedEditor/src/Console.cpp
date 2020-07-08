@@ -305,8 +305,10 @@ bool Console::getHidden() const {
 }
 
 void Console::recieveKey(Key key, Modifier mod) {
-  if(playMode) {
+  bool inputToLua = playMode & getHidden();
+  if(inputToLua) {
     LuaCommand::input(key);
+    return;
   }
 
   if(key == Key::ENTER) {
