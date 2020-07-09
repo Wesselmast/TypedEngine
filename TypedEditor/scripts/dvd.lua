@@ -26,8 +26,5 @@ function key_down(key)
       input.position.y = -1 
    elseif key == "D" then 
       input.position.x =  1 
-   else
-      input.position.x =  0
-      input.position.y =  0
    end
 end

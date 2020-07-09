@@ -42,6 +42,11 @@ void App::tick(float deltaTime, float time) {
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
   
+  if(console->playMode) {
+    zoom = 1.0f;
+    position = glm::vec3(0, 0, 0);
+  }
+
   if(followObject) {
     followObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + followObject->offset;
   }
@@ -82,6 +87,11 @@ void App::onKeyPressed(Key key, Modifier mod) {
 }
 
 void App::onKeyReleased(Key key, Modifier mod) {
+  bool consoleShouldRecieve = console->getHidden() & console->playMode;
+  if(consoleShouldRecieve) {
+    console->recieveKey(Key::NONE, mod);
+    return;
+  }
   if(Input::isKeyDown(key)) {
     Input::setKeyDown(Key::NONE);
   }
@@ -94,6 +104,9 @@ void App::onKeyReleased(Key key, Modifier mod) {
 }
 
 void App::onMouseScrolled(float offsetX, float offsetY) {
+  if(console->playMode) {
+    return;
+  }  
   zoom += -offsetY * zoomSpeed;
   if (zoom <= 0.01f) {
     zoom = 0.1f;
