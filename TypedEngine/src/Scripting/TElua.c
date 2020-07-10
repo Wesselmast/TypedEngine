@@ -181,6 +181,20 @@ void tick_lua(float deltaTime, float time) {
   }
 }
 
+void input_lua(const char* input) {
+  if(closedLua || !compiled || !currentFile) return;
+  
+  lua_getglobal(L, "key_down");
+  
+  if (lua_isfunction(L, -1)) {
+    lua_pushstring(L, input);
+    if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+      printf("%s\n", lua_tostring(L, -1));
+      return;
+    }
+  }
+}
+
 void quit_lua() {
   if(!compiled) {
     printf("ERROR: Can't stop when you're not running!\n");
@@ -194,18 +208,4 @@ void close_lua() {
   if(closedLua) return;
   closedLua = 1;
   lua_close(L);
-}
-
-void input_lua(const char* input) {
-  if(closedLua || !compiled || !currentFile) return;
-  
-  lua_getglobal(L, "key_down");
-  
-  if (lua_isfunction(L, -1)) {
-    lua_pushstring(L, input);
-    if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
-      printf("%s\n", lua_tostring(L, -1));
-      return;
-    }
-  }
 }

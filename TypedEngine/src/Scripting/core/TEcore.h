@@ -31,16 +31,12 @@ struct TETransform {
   TETransform();
   TETransform(vec2 position, float rotation, vec2 scale);
 
-  ~TETransform();
-
   vec2 position;
   float rotation;
   vec2 scale;
 private:
   Transform* ref = nullptr;
 };
-
-// @CleanUp: CONSTRUCTORS ARE BROKEN! WE NEED THEM
 
 class TEEntity {
 public:
@@ -57,6 +53,7 @@ public:
   TESprite* init(const char* texture);
   TESprite* init(TETransform* transform, const char* texture);
   void setTexture(const char* texture);
+  bool overlaps(vec2 point);
 };
 
 class TEText : public TEEntity {
@@ -76,5 +73,5 @@ public:
   TEQuad* init(const color& color);
   TEQuad* init(TETransform* transform, const color& color);
   void setColor(const color& color);
+  bool overlaps(vec2 point);
 };
-

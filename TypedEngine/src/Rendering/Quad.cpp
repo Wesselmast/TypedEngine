@@ -2,6 +2,7 @@
 
 #include "RenderCommand.h"
 #include "RenderAPI.h"
+#include <math.h>
 
 const glm::vec4 defaultColor = { 1.0f, 1.0f, 1.0f, 1.0f};
 const Transform defaultTransform = { {0.0f, 0.0f}, 0.0f, {1.0f, 1.0f} }; 

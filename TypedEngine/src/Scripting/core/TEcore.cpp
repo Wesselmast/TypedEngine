@@ -3,6 +3,8 @@
 #include "Rendering/Sprite.h"
 #include "Rendering/Text.h"
 #include "Rendering/Quad.h"
+#include "Rendering/RenderCommand.h"
+#include "Scripting/LuaCommand.h"
 
 #include <stdio.h>
 
@@ -28,10 +30,6 @@ TETransform::TETransform(vec2 position, float rotation, vec2 scale) {
   this->position = { ref->position.x, ref->position.y };
   this->rotation = ref->rotation;
   this->scale = { ref->scale.x, ref->scale.y };
-}
-
-TETransform::~TETransform() {
-  delete ref;
 }
 
 // ENTITY
@@ -72,6 +70,10 @@ TESprite* TESprite::init(TETransform* transform, const char* texture) {
 
 void TESprite::setTexture(const char* texture) {
   ((Sprite*)ref)->setTexture(texture);
+}
+
+bool TESprite::overlaps(vec2 point) {
+  return ((Sprite*)ref)->checkForClick({point.x, point.y});
 }
 
 //  TEXT
@@ -138,4 +140,9 @@ TEQuad* TEQuad::init(TETransform* transform, const color& color) {
 
 void TEQuad::setColor(const color& color) {
   ((Quad*)ref)->color = {color.r, color.g, color.b, color.a};  
+}
+
+bool TEQuad::overlaps(vec2 point) {
+  if(!ref) return false;
+  return ((Quad*)ref)->checkForClick({point.x, point.y});
 }
