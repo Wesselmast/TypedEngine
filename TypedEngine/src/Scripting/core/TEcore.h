@@ -75,3 +75,5 @@ public:
   void setColor(const color& color);
   bool overlaps(vec2 point);
 };
+
+const char* addNumberToText(const char* text, int number);

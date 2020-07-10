@@ -7,6 +7,7 @@ local jump = 0
 local velocity = TEcore.vec2()
 local mass = 5
 local dead = 0
+local score = 0
 
 function begin()
    player:init("res/textures/T_Bird.png")
@@ -31,6 +32,7 @@ function tick(deltaTime, time)
    if dead == 1 then
       transform.rotation = transform.rotation + (7 * deltaTime)
    else
+      score = score + deltaTime
       if tickMap(deltaTime, newPos) == 1 then
    	 die()
       end
@@ -45,12 +47,23 @@ end
 
 function die() 
    local dietext = TEcore.TEText()
-   local dietrans = TEcore.TETransform()
-   dietrans.position.x = -155
-   dietrans.scale.x = 2.0
-   dietrans.scale.y = 2.0
-   dietext:init(dietrans, "YOU DIED!")
+   local scoreDisplay = TEcore.TEText()
+   local dieT = TEcore.TETransform()
+   local scoreT = TEcore.TETransform()
+   dieT.position.x = -155
+   scoreT.position.x = -155 * 0.5
+   scoreT.position.y = -50
+   scoreT.scale.x = 1.25
+   scoreT.scale.y = 1.25
+   dieT.scale.x = 2.0
+   dieT.scale.y = 2.0
+   local text = TEcore.addNumberToText("Time: ", score)
+   text = text .. "s"
+   scoreDisplay:init(scoreT, text)
+   dietext:init(dieT, "YOU DIED!")
    dietext:setColor(TEcore.color(0.8, 0.6, 0.1, 1.0))
+   scoreDisplay:setColor(TEcore.color(0.8, 0.6, 0.1, 1.0))
+   diedMap()
    dead = 1
 end
 
@@ -69,7 +82,7 @@ end
 
 local topPipes = {}
 local bottomPipes = {}
-local amt = 7
+local amt = 10
 local distance = 500
 
 function generatePipe(i, y) 
@@ -129,4 +142,13 @@ function tickMap(deltaTime, playerPos)
    end
 
    return 0
+end
+
+function diedMap() 
+   for p in ipairs(topPipes) do
+      local s1 = topPipes[p][1]
+      local s2 = bottomPipes[p][1]
+      s1:setColor(TEcore.color(0.1, 0.8, 0.0, 0.2))
+      s2:setColor(TEcore.color(0.1, 0.8, 0.0, 0.2))
+   end
 end

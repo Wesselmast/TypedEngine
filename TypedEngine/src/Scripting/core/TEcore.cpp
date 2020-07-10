@@ -146,3 +146,12 @@ bool TEQuad::overlaps(vec2 point) {
   if(!ref) return false;
   return ((Quad*)ref)->checkForClick({point.x, point.y});
 }
+
+const char* addNumberToText(const char* text, int number) {
+  char* result = (char*)malloc(sizeof(char) * 512);
+  strcpy(result, text);
+  char numberS[256];
+  itoa(number, ((char*)&numberS), 10);
+  strcat(result, numberS);
+  return result;
+}
