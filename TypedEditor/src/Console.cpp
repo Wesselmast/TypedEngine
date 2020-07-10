@@ -42,15 +42,30 @@ void command_stop(char** arguments) {
 }
 
 void command_sprite(char** arguments) {
-  new Sprite(arguments[0]);
+  if(!Console::playMode) {
+    new Sprite(arguments[0]);
+  }
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_quad(char** arguments) {
-  new Quad(hexToColor(arguments[0]));  
+  if(!Console::playMode) {
+    new Quad(hexToColor(arguments[0]));  
+  }
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_text(char** arguments) {
-  new Text(arguments[0], hexToColor(arguments[1]));
+   if(!Console::playMode) {
+     new Text(arguments[0], hexToColor(arguments[1]));
+   }
+   else {
+     printf("this command is not usable in play mode!\n");
+   }
 }
 
 void command_help(char** arguments) {
@@ -87,12 +102,22 @@ void command_echo(char** arguments) {
 }
 
 void command_save_level(char** arguments) {
-  LevelCommand::saveLevel(arguments[0]);
+  if(!Console::playMode) {
+    LevelCommand::saveLevel(arguments[0]);
+  }
+  else {
+    printf("Cannot save the level while in play mode!\n");
+  }
 }
 
 void command_load_level(char** arguments) {
-  LuaCommand::push(arguments[0]);
-  LevelCommand::loadLevel(arguments[0]);
+  if(!Console::playMode) {
+    LuaCommand::push(arguments[0]);
+    LevelCommand::loadLevel(arguments[0]);
+  }
+  else {
+    printf("Cannot open other levels while in play mode!\n");
+  }
 }
 
 void command_renderinfo(char** arguments) {
@@ -104,132 +129,167 @@ void command_printfiles(char** arguments) {
 }
 
 void command_delete(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  if(arguments[0]) {
-    if(!strcmp(arguments[0], "all")) {
-      for(auto e : entities) delete e;
-    }
-    else {
-      printf("ERROR: '%s' is not a valid argument for delete\n", arguments[0]);
-    }
-    return;
-  }
-  for(auto e : entities) {
-    if(e->clicked) {
-      delete e;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    if(arguments[0]) {
+      if(!strcmp(arguments[0], "all")) {
+	for(auto e : entities) delete e;
+      }
+      else {
+	printf("ERROR: '%s' is not a valid argument for delete\n", arguments[0]);
+      }
       return;
     }
+    for(auto e : entities) {
+      if(e->clicked) {
+	delete e;
+	return;
+      }
+    }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_size(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    if(e->clicked) {
-      e->transform.scale = {
-        stringToFloat(arguments[0]),
-	stringToFloat(arguments[1])
-      };
-      return;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) {
+      if(e->clicked) {
+	e->transform.scale = {
+          stringToFloat(arguments[0]),
+	  stringToFloat(arguments[1])
+	};
+	return;
+      }
     }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_position(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    if(e->clicked) {
-      e->transform.position = {
-        stringToFloat(arguments[0]),
-	stringToFloat(arguments[1])
-      };
-      return;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) {
+      if(e->clicked) {
+	e->transform.position = {
+          stringToFloat(arguments[0]),
+          stringToFloat(arguments[1])
+	};
+	return;
+      }
     }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_rotation(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    if(e->clicked) {
-      e->transform.rotation = stringToFloat(arguments[0]);
-      return;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) {
+      if(e->clicked) {
+	e->transform.rotation = stringToFloat(arguments[0]);
+	return;
+      }
     }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 
 void command_add(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    if(e->clicked) {
-      if(!strcmp(arguments[0], "pos")) {
-	if(!arguments[2]) {
-	  printf("ERROR: '%s' needs 2 arguments!\n", arguments[0]);
-	  return;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) {
+      if(e->clicked) {
+	if(!strcmp(arguments[0], "pos")) {
+	  if(!arguments[2]) {
+	    printf("ERROR: '%s' needs 2 arguments!\n", arguments[0]);
+	    return;
+	  }
+	  e->transform.position.x += stringToFloat(arguments[1]);
+	  e->transform.position.y += stringToFloat(arguments[2]);
 	}
-	e->transform.position.x += stringToFloat(arguments[1]);
-	e->transform.position.y += stringToFloat(arguments[2]);
-      }
-      else if(!strcmp(arguments[0], "rot")) {
-	if(arguments[2]) {
-	  printf("ERROR: '%s' needs 1 argument!\n", arguments[0]);
-	  return;
+	else if(!strcmp(arguments[0], "rot")) {
+	  if(arguments[2]) {
+	    printf("ERROR: '%s' needs 1 argument!\n", arguments[0]);
+	    return;
+	  }
+	  e->transform.rotation += stringToFloat(arguments[1]);
 	}
-	e->transform.rotation += stringToFloat(arguments[1]);
-      }
-      else if(!strcmp(arguments[0], "size")) {
-	if(!arguments[2]) {
-	  printf("ERROR: '%s' needs 2 arguments!\n", arguments[0]);
-	  return;
+	else if(!strcmp(arguments[0], "size")) {
+	  if(!arguments[2]) {
+	    printf("ERROR: '%s' needs 2 arguments!\n", arguments[0]);
+	    return;
+	  }
+	  e->transform.scale.x += stringToFloat(arguments[1]);
+	  e->transform.scale.y += stringToFloat(arguments[2]);
 	}
-	e->transform.scale.x += stringToFloat(arguments[1]);
-	e->transform.scale.y += stringToFloat(arguments[2]);
+	else {
+	  printf("ERROR: '%s' is not a valid argument for add\n", arguments[0]);
+	}
+	return;
       }
-      else {
-	printf("ERROR: '%s' is not a valid argument for add\n", arguments[0]);
-      }
-      return;
     }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_copy(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    if(e->clicked) {
-      switch(e->typeID()) {
-      case 0: break;
-      case 1: new Sprite(e->transform, ((Sprite*)e)->textureName); break;
-      case 2: new Quad(e->transform, ((Quad*)e)->color); break;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) {
+      if(e->clicked) {
+	switch(e->typeID()) {
+	case 0: break;
+	case 1: new Sprite(e->transform, ((Sprite*)e)->textureName); break;
+	case 2: new Quad(e->transform, ((Quad*)e)->color); break;
+	}
+	return;
       }
-      return;
     }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 void command_zoff(char** arguments) {
-  std::vector<Entity*> entities;
-  RenderCommand::getTagged(Tag::LEVEL, &entities);
-  for(auto e : entities) {
-    if(e->clicked) {
-      e->transform.zOffset = (int)stringToFloat(arguments[0]);
-      return;
+  if(!Console::playMode) {
+    std::vector<Entity*> entities;
+    RenderCommand::getTagged(Tag::LEVEL, &entities);
+    for(auto e : entities) {
+      if(e->clicked) {
+	e->transform.zOffset = (int)stringToFloat(arguments[0]);
+	return;
+      }
     }
+    printf("ERROR: No entity is selected\n");
   }
-  printf("ERROR: No entity is selected\n");
+  else {
+    printf("this command is not usable in play mode!\n");
+  }
 }
 
 glm::vec2 startSize;
