@@ -113,7 +113,7 @@ void push_lua(char* file) {
   fputs("function begin()\n", l_file);
   fputs("   print('Hello, World!')\n", l_file);
   fputs("end\n\n", l_file);
-  fputs("function tick(deltaTime, time)\n", l_file);
+  fputs("function tick(deltaTime)\n", l_file);
   fputs("end\n\n", l_file);
 
   printf("Created %s because it didn't exist!", currentFile);
@@ -173,8 +173,7 @@ void tick_lua(float deltaTime, float time) {
   
   if (lua_isfunction(L, -1)) {
     lua_pushnumber(L, deltaTime);
-    lua_pushnumber(L, time);
-    if (lua_pcall(L, 2, 0, 0) != LUA_OK) {
+    if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
       printf("%s\n", lua_tostring(L, -1));
       return;
     }

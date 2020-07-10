@@ -26,6 +26,8 @@ Text* fpsCounter = new Text;
 Console* console;
 
 Entity* followObject = nullptr;
+Entity* lastClicked = nullptr;
+bool firstPlayMode = true;
 
 void App::begin() {
   console = new Console(window);
@@ -41,16 +43,22 @@ void App::tick(float deltaTime, float time) {
 
   fpsCounter->color = { 0.0f, 0.0f, 0.0f, 1.0f };
   fpsCounter->text = "FPS: " + std::to_string((int)(1/deltaTime));
-  
+
   if(console->playMode) {
-    zoom = 1.0f;
-    position = glm::vec3(0, 0, 0);
+    if(firstPlayMode) {
+      zoom = 1.0f;
+      position = glm::vec3(0, 0, 0);
+      if(lastClicked) lastClicked->clicked = false;
+      firstPlayMode = false;
+    }
+  }
+  else {
+    firstPlayMode = true;
   }
 
   if(followObject) {
     followObject->transform.position = screenToWorld(camera, window, window->getMousePosition()) + followObject->offset;
   }
-//  printf("Current key that's down: %d\n", Input::isKeyDown(Key::W));
 }
 
 void App::onKeyPressed(Key key, Modifier mod) {
@@ -125,28 +133,39 @@ void App::onWindowRefreshed() {
 }
 
 void App::onMousePressed(MouseButton button, Modifier mod) {
+  if(console->playMode) {
+    return;
+  }  
+
   glm::vec2 mousePos = screenToWorld(camera, window, window->getMousePosition());
 
   std::vector<Entity*> entities;
   RenderCommand::getTagged(Tag::LEVEL, &entities);
+  bool picked = false;
+
   for(auto e : entities) {
     e->clicked = false;
+    if(picked) continue;
     if(e->checkForClick(mousePos)) {
-      followObject = e;
+      lastClicked = e;
+      followObject = lastClicked;
       if(mod == Modifier::ALT) {
 	switch(e->typeID()) {
 	case 0: break;
 	case 1: new Sprite(e->transform, ((Sprite*)e)->textureName); break;
 	case 2: new Quad(e->transform, ((Quad*)e)->color); break;
 	}
-	break;
       }
-      break;
+      e->clicked = true;
+      picked = true;
     }
   }
 }
 
 void App::onMouseReleased(MouseButton button, Modifier mod) {
+  if(console->playMode) {
+    return;
+  }  
   followObject = nullptr;
 }
 

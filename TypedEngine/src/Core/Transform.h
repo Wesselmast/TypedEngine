@@ -12,4 +12,5 @@ struct Transform {
   glm::vec2 position;
   float rotation;
   glm::vec2 scale;
+  int zOffset = 0;
 };

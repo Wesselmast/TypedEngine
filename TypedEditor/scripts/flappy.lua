@@ -8,6 +8,7 @@ local velocity = TEcore.vec2()
 local mass = 5
 local dead = 0
 local score = 0
+local difficulty = 1.0
 
 function begin()
    player:init("res/textures/T_Bird.png")
@@ -15,7 +16,7 @@ function begin()
    generateMap(250)
 end
 
-function tick(deltaTime, time)
+function tick(deltaTime)
    transform.position.y = transform.position.y + (velocity.y * deltaTime)
    if jump == 1 then
       velocity.y = 750
@@ -33,7 +34,11 @@ function tick(deltaTime, time)
       transform.rotation = transform.rotation + (7 * deltaTime)
    else
       score = score + deltaTime
-      if tickMap(deltaTime, newPos) == 1 then
+
+      if score % 5 < deltaTime then 
+	 difficulty = difficulty + 0.1
+      end
+      if tickMap(deltaTime * difficulty, newPos) == 1 then
    	 die()
       end
    end
@@ -84,12 +89,13 @@ local topPipes = {}
 local bottomPipes = {}
 local amt = 10
 local distance = 500
+local pipeColor = TEcore.color(0.8, 0.25, 0.0, 1.0)
 
 function generatePipe(i, y) 
    local s = TEcore.TEQuad()
    local t = TEcore.TETransform()
    s:init()
-   s:setColor(TEcore.color(0.1, 0.8, 0.0, 1.0))
+   s:setColor(pipeColor)
    
    t.scale.x = 0.2
    t.position.x = (i - 1) * distance
@@ -148,7 +154,7 @@ function diedMap()
    for p in ipairs(topPipes) do
       local s1 = topPipes[p][1]
       local s2 = bottomPipes[p][1]
-      s1:setColor(TEcore.color(0.1, 0.8, 0.0, 0.2))
-      s2:setColor(TEcore.color(0.1, 0.8, 0.0, 0.2))
+      s1:setColor(TEcore.color(pipeColor.r, pipeColor.g, pipeColor.b, 0.2))
+      s2:setColor(TEcore.color(pipeColor.r, pipeColor.g, pipeColor.b, 0.2))
    end
 end

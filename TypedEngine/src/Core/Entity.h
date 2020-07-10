@@ -33,9 +33,7 @@ class Entity {
   bool clickable = true;
   bool clicked = false;
   bool hidden = false;
-
-  int zOffset = 0;
-  
+ 
   virtual bool checkForClick(glm::vec2 mousePos) { return false; }
   
   virtual int typeID() const {

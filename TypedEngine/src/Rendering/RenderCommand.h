@@ -74,21 +74,24 @@ public:
     v->insert(v->end(), a.begin(), a.end());
     v->insert(v->end(), b.begin(), b.end());
     v->insert(v->end(), c.begin(), c.end());    
+    std::sort(v->begin(), v->end(), [](Entity* e1, Entity* e2) -> bool {
+       return e1->transform.zOffset > e2->transform.zOffset;
+    });
   }
 
   inline static void print() {
     printf("Renderer: \n");
     printf("   Sprites: %d\n", renderer->sprites.size());
     for(auto e : renderer->sprites) {
-      printf("      %s: size: %d, tag: %d, tex: %s\n", e->name.c_str(), sizeof(e), e->tag, e->textureName);
+      printf("      %s: size: %d, tag: %d, tex: %s, zoff: %d\n", e->name.c_str(), sizeof(e), e->tag, e->textureName, e->transform.zOffset);
     }
     printf("   Quads: %d\n", renderer->quads.size());
     for(auto e : renderer->quads) {
-      printf("      %s: size: %d, tag: %d\n", e->name.c_str(), sizeof(e), e->tag);
+      printf("      %s: size: %d, tag: %d, zoff: %d\n", e->name.c_str(), sizeof(e), e->tag, e->transform.zOffset);
     }
     printf("   Texts: %d\n", renderer->texts.size());
     for(auto e : renderer->texts) {
-      printf("      %s: size: %d, tag: %d\n", e->name.c_str(), sizeof(e), e->tag);
+      printf("      %s: size: %d, tag: %d, zoff: %d\n", e->name.c_str(), sizeof(e), e->tag, e->transform.zOffset);
     }
   }
   

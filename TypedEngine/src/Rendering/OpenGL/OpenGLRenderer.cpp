@@ -26,6 +26,7 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <algorithm>
 
 //@CleanUp: This text stuff all has to be abstracted, for now this is where it'll live!
 
@@ -154,18 +155,24 @@ void OpenGLRenderer::init(Camera* camera) {
   vertexArrayQ->bind();
 }
 
+bool sortByZOffset(Entity* e1, Entity* e2) {
+  return e1->transform.zOffset < e2->transform.zOffset;
+}
+
 void OpenGLRenderer::run() {
-  for(auto s : sprites) {
-    if(s->hidden) continue;
-    drawSprite(s);
-  }
-  for(auto q : quads) {
-    if(q->hidden) continue;
-    drawQuad(q);
-  }
-  for(auto t : texts) {
-    if(t->hidden) continue;
-    drawText(t);
+  std::vector<Entity*> entities;
+  entities.insert(entities.end(), sprites.begin(), sprites.end());
+  entities.insert(entities.end(), quads.begin(), quads.end());
+  entities.insert(entities.end(), texts.begin(), texts.end());
+  std::sort(entities.begin(), entities.end(), sortByZOffset);
+
+  for(auto e : entities) {
+    if(e->hidden) continue;
+    switch(e->typeID()) {
+      case 0: drawText((Text*)e);     break;
+      case 1: drawSprite((Sprite*)e); break;
+      case 2: drawQuad((Quad*)e);     break;
+    }
   }
 }
 

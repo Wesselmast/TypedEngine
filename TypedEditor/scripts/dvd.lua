@@ -10,7 +10,7 @@ function begin()
    transform.scale.y = 0.25
 end
 
-function tick(deltaTime, time)
+function tick(deltaTime)
    transform.position.x = transform.position.x + (input.position.x * 200 * deltaTime)
    transform.position.y = transform.position.y + (input.position.y * 200 * deltaTime)
 

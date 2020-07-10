@@ -95,10 +95,6 @@ void command_load_level(char** arguments) {
   LevelCommand::loadLevel(arguments[0]);
 }
 
-void command_push(char** arguments) {
-  LuaCommand::push(arguments[0]);
-}
-
 void command_renderinfo(char** arguments) {
   RenderCommand::print();
 }
@@ -164,8 +160,8 @@ void command_rotation(char** arguments) {
   for(auto e : entities) {
     if(e->clicked) {
       e->transform.rotation = stringToFloat(arguments[0]);
+      return;
     }
-    return;
   }
   printf("ERROR: No entity is selected\n");
 }
@@ -224,6 +220,18 @@ void command_copy(char** arguments) {
   printf("ERROR: No entity is selected\n");
 }
 
+void command_zoff(char** arguments) {
+  std::vector<Entity*> entities;
+  RenderCommand::getTagged(Tag::LEVEL, &entities);
+  for(auto e : entities) {
+    if(e->clicked) {
+      e->transform.zOffset = (int)stringToFloat(arguments[0]);
+      return;
+    }
+  }
+  printf("ERROR: No entity is selected\n");
+}
+
 glm::vec2 startSize;
 
 Console::Console(Window* window) : window(window) {
@@ -235,7 +243,6 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_cls,	 "cls",	       0, 0, "Clears the terminal"                                                 },
     ConsoleCommand{ command_exit,	 "exit",       0, 0, "Exits the application"                                               },
     ConsoleCommand{ command_echo,	 "echo",       1, 99,"Print some words to the terminal!"                                   },
-    ConsoleCommand{ command_push,	 "push",       1, 1, "Pushes a Lua script to the game"                                     }, // @Note: I might want to change this logic.
     ConsoleCommand{ command_save_level,	 "save",       1, 1, "Saves the current level and gives it this name"                      },
     ConsoleCommand{ command_load_level,	 "open",       1, 1, "Opens a level by name and destroys the current one"                  },
     ConsoleCommand{ command_sprite,	 "sprite",     1, 1, "Creates a sprite entity. Input: texture path"                        },
@@ -248,35 +255,34 @@ Console::Console(Window* window) : window(window) {
     ConsoleCommand{ command_position,	 "pos",	       2, 2, "Sets the position of the selected entity"                            },
     ConsoleCommand{ command_rotation,	 "rot",	       1, 1, "Sets the rotation of the selected entity"                            }, 
     ConsoleCommand{ command_add,	 "add",	       2, 3, "Adds transformation to selected entity, add flag 'pos, rot or size'" },
+    ConsoleCommand{ command_zoff,	 "zoff",       1, 1, "Gives the object a z offset from the rest of the objects"            },
     ConsoleCommand{ command_copy,	 "cpy",	       0, 0, "Copies the selected entity"                                          } 
  );
   
   currentConsole = this;
   command_window = window;
 
-  int zoff = -1;
-
   text = new Text("");
   text->tag = Tag::PERMANENT;
   text->useScreenPosition(true);
-  text->zOffset = zoff;
+  text->transform.zOffset = 30;
   text->transform.scale = { 0.75f, 0.75f };
   text->color = {220 / 255.0f, 220 / 255.0f, 204 / 255.0f, 1.0f};
 
   topText = new Text("console");
   topText->tag = Tag::PERMANENT;
   topText->useScreenPosition(true);
-  topText->zOffset = zoff;
+  topText->transform.zOffset = 30;
   topText->transform.scale = { 0.66f, 0.66f };
   topText->color = {240 / 255.0f, 223 / 255.0f, 175 / 255.0f, 1.0f};
   
   panel = new Quad({ 63/255.0f, 63/255.0f, 63/255.0f, 1.0f });
-  panel->zOffset = zoff;
+  panel->transform.zOffset = 28;
   panel->tag = Tag::PERMANENT;
   panel->useScreenPosition(true);
 
   topBar = new Quad({ 48/255.0f, 48/255.0f, 48/255.0f, 1.0f });
-  topBar->zOffset = zoff;
+  topBar->transform.zOffset = 29;
   topBar->tag = Tag::PERMANENT;
   topBar->useScreenPosition(true);
 
