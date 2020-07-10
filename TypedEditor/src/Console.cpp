@@ -253,24 +253,30 @@ Console::Console(Window* window) : window(window) {
   
   currentConsole = this;
   command_window = window;
-  
+
+  int zoff = -1;
+
   text = new Text("");
   text->tag = Tag::PERMANENT;
   text->useScreenPosition(true);
+  text->zOffset = zoff;
   text->transform.scale = { 0.75f, 0.75f };
   text->color = {220 / 255.0f, 220 / 255.0f, 204 / 255.0f, 1.0f};
 
   topText = new Text("console");
   topText->tag = Tag::PERMANENT;
   topText->useScreenPosition(true);
+  topText->zOffset = zoff;
   topText->transform.scale = { 0.66f, 0.66f };
   topText->color = {240 / 255.0f, 223 / 255.0f, 175 / 255.0f, 1.0f};
   
   panel = new Quad({ 63/255.0f, 63/255.0f, 63/255.0f, 1.0f });
+  panel->zOffset = zoff;
   panel->tag = Tag::PERMANENT;
   panel->useScreenPosition(true);
 
   topBar = new Quad({ 48/255.0f, 48/255.0f, 48/255.0f, 1.0f });
+  topBar->zOffset = zoff;
   topBar->tag = Tag::PERMANENT;
   topBar->useScreenPosition(true);
 
